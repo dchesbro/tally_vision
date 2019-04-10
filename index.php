@@ -258,8 +258,20 @@
 		<meta charset="utf-8">
 		<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
 		<link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
-		<link href="./css/flags/flags.min.css" rel="stylesheet">
+		<link href="./css/flag-icon.min.css" rel="stylesheet">
 		<style>
+			#item-list table {
+				margin-bottom: 0;
+			}
+			
+			#item-list table tbody tr td, #item-list table thead tr th.col-votes, #item-list table thead tr th.col-score {
+				text-align: center;
+			}
+			
+			#item-list table thead tr th {
+				white-space: nowrap;
+			}
+			
 			.card {
 				overflow: hidden;
 			}
@@ -282,18 +294,35 @@
 					
 					<!-- Song list -->
 					<div class="card">
-						<div class="card-header">
-							Eurovision Song Contest 2019
+						
+						<!-- Title and description -->
+						<div class="card-body">
+							<img alt="Eurovision logo" src="./img/eurovision-logo.svg">
 						</div>
-						<div class="list-group list-group-flush">
-							
-							<?php foreach( $songs as $song ) : ?>
-									
-								<a class="list-group-item list-group-item-action text-truncate" href="#"><?php printf( '%s: %s – "%s"', $song['country'], $song['artist'], $song['title'] ); ?></a>
+						
+						<!-- ... -->
+						<table class="table table-hover">
+							<thead class="thead-light">
+								<tr>
+									<th class="col-entry" scope="col">Contestant</th>
+									<th class="col-votes" scope="col"># Votes</th>
+									<th class="col-score" scope="col">Score</th>
+								</tr>
+							</thead>
+							<tbody>
 								
-							<?php endforeach; ?>
-							
-						</div>
+								<?php foreach( $songs as $song ) : ?>
+									
+									<tr>
+										<th scope="row"><?php printf( '%s: %s – "%s"', $song['country'], $song['artist'], $song['title'] ); ?></th>
+										<td>8</td>
+										<td>160</td>
+									</tr>
+									
+								<?php endforeach; ?>
+								
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</section>
@@ -311,12 +340,12 @@
 						<!-- Title and description -->
 						<div class="card-body">
 							<h3 class="card-title">
-								<img alt="Country flag icon" class="flag <?php printf( 'flag-%s', $songs[40]['code'] ); ?>" src="./css/flags/blank.gif">
+								<span class="flag-icon <?php printf( 'flag-icon-%s', $songs[40]['code'] ); ?>"></span>
 								
 								<?php printf( '%s: %s – "%s"', $songs[40]['country'], $songs[40]['artist'], $songs[40]['title'] ); ?>
 								
 							</h3>
-							<p class="card-text text-muted">Cast your vote in the categories below</p>
+							<p class="card-text text-muted">Rock the vote in each category below</p>
 						</div>
 						
 						<!-- Ballot form -->
