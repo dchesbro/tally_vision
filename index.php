@@ -6,6 +6,15 @@
 		<link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
 		<link href="/css/flags/flags.min.css" rel="stylesheet">
 		<style>
+			.card {
+				overflow: hidden;
+			}
+			
+			.card form button[type='submit'] {
+				border: none;
+				border-radius: 0;
+			}
+			
 			.card-title .flag {
 				vertical-align: text-bottom;
 			}
@@ -29,75 +38,77 @@
 							<p class="card-text text-muted">Cast your vote in the categories below and tap submit</p>
 						</div>
 						
-						<!-- Voting categories -->
-						<ul class="list-group list-group-flush">
-						
-						<?php
+						<!-- Ballot form -->
+						<form action="" method="get">
+							<ul class="list-group list-group-flush">
 							
-							$categories = array(
-								array(
-									'title'   => 'Category 1',
-									'label_0' => 'My freakin\' ears',
-									'label_5' => '100% certified banger'
-								),
-								array(
-									'title'   => 'Category 2',
-									'label_0' => 'Dead fish',
-									'label_5' => 'Hot stuff'
-								),
-								array(
-									'title'   => 'Category 3',
-									'label_0' => 'Your shirt looks like a dish rag',
-									'label_5' => 'Dolce Gabbana with a few gold chains'
-								),
-								array(
-									'title'   => 'Category 4',
-									'label_0' => 'Middle School play',
-									'label_5' => 'Future of live stage performance'
-								),
-								array(
-									'title'   => 'Graham Norton Bitch Quota',
-									'label_0' => 'You asked for Eurovision, you got Eurovision',
-									'label_5' => 'There is a slight smell of wet dog in the arena'
-								)
-							);
+							<?php
+								
+								$categories = array(
+									array(
+										'title'   => 'Category 1',
+										'label_0' => 'My freakin\' ears',
+										'label_5' => '100% certified banger'
+									),
+									array(
+										'title'   => 'Category 2',
+										'label_0' => 'Dead fish',
+										'label_5' => 'Hot stuff'
+									),
+									array(
+										'title'   => 'Category 3',
+										'label_0' => 'Your shirt looks like a dish rag',
+										'label_5' => 'Dolce Gabbana with a few gold chains'
+									),
+									array(
+										'title'   => 'Category 4',
+										'label_0' => 'Middle School play',
+										'label_5' => 'Future of live stage performance'
+									),
+									array(
+										'title'   => 'Graham Norton Bitch Quota',
+										'label_0' => 'You asked for Eurovision, you got Eurovision',
+										'label_5' => 'There is a slight smell of wet dog in the arena'
+									)
+								);
+								
+							?>
+								
+							<?php foreach( $categories as $key => $category ) : ?>
+								
+								<li class="list-group-item">
+									<h5><?php printf( '%d. %s', $key + 1, $category['title'] ); ?></h5>
+									<div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+										<label class="btn btn-outline-primary">
+											<input autocomplete="off" id="option1" name="options" type="radio"> 0
+										</label>
+										<label class="btn btn-outline-primary">
+											<input autocomplete="off" id="option1" name="options" type="radio"> 1
+										</label>
+										<label class="btn btn-outline-primary">
+											<input autocomplete="off" id="option1" name="options" type="radio"> 2
+										</label>
+										<label class="btn btn-outline-primary">
+											<input autocomplete="off" id="option1" name="options" type="radio"> 3
+										</label>
+										<label class="btn btn-outline-primary">
+											<input autocomplete="off" id="option1" name="options" type="radio"> 4
+										</label>
+										<label class="btn btn-outline-primary">
+											<input autocomplete="off" id="option1" name="options" type="radio"> 5
+										</label>
+									</div>
+									<div class="d-flex justify-content-between">
+										<small class="form-text text-muted"><?php printf( '"%s"', $category['label_0'] ); ?></small>
+										<small class="form-text text-muted"><?php printf( '"%s"', $category['label_5'] ); ?></small>
+									</div>
+								</li>
+								
+							<?php endforeach; ?>
 							
-						?>
-							
-						<?php foreach( $categories as $key => $category ) : ?>
-							
-							<li class="list-group-item">
-								<h5><?php printf( '%d. %s', $key + 1, $category['title'] ); ?></h5>
-								<div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
-									<label class="btn btn-outline-primary">
-										<input autocomplete="off" id="option1" name="options" type="radio"> 0
-									</label>
-									<label class="btn btn-outline-primary">
-										<input autocomplete="off" id="option1" name="options" type="radio"> 1
-									</label>
-									<label class="btn btn-outline-primary">
-										<input autocomplete="off" id="option1" name="options" type="radio"> 2
-									</label>
-									<label class="btn btn-outline-primary">
-										<input autocomplete="off" id="option1" name="options" type="radio"> 3
-									</label>
-									<label class="btn btn-outline-primary">
-										<input autocomplete="off" id="option1" name="options" type="radio"> 4
-									</label>
-									<label class="btn btn-outline-primary">
-										<input autocomplete="off" id="option1" name="options" type="radio"> 5
-									</label>
-								</div>
-								<div class="d-flex justify-content-between">
-									<small class="form-text text-muted"><?php printf( '"%s"', $category['label_0'] ); ?></small>
-									<small class="form-text text-muted"><?php printf( '"%s"', $category['label_5'] ); ?></small>
-								</div>
-							</li>
-							
-						<?php endforeach; ?>
-						
-						</ul>
-						<button class="btn btn-lg btn-block btn-primary" type="button" disabled>Submit</button>
+							</ul>
+							<button class="btn btn-lg btn-block btn-primary" type="submit" disabled>Submit</button>
+						</form>
 					</div>
 					
 				</div>
