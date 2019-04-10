@@ -272,6 +272,10 @@
 				white-space: nowrap;
 			}
 			
+			#item-list .card-body img {
+				margin-bottom: .75rem;
+			}
+			
 			.card {
 				overflow: hidden;
 			}
@@ -279,10 +283,6 @@
 			.card form button[type='submit'] {
 				border: none;
 				border-radius: 0;
-			}
-			
-			.card .card-title .flag {
-				vertical-align: text-bottom;
 			}
 		</style>
 		<title>TALLY VISION</title>
@@ -298,10 +298,11 @@
 						<!-- Title and description -->
 						<div class="card-body">
 							<img alt="Eurovision logo" src="./img/eurovision-logo.svg">
+							<p class="card-text text-muted">Select a contestant to initiate voting</p>
 						</div>
 						
 						<!-- ... -->
-						<table class="table table-hover">
+						<table class="table">
 							<thead class="thead-light">
 								<tr>
 									<th class="col-entry" scope="col">Contestant</th>
@@ -311,10 +312,10 @@
 							</thead>
 							<tbody>
 								
-								<?php foreach( $songs as $song ) : ?>
+								<?php foreach( $songs as $key => $song ) : ?>
 									
 									<tr>
-										<th scope="row"><?php printf( '%s: %s – "%s"', $song['country'], $song['artist'], $song['title'] ); ?></th>
+										<th scope="row"><?php printf( '<a href="#">%s: %s – "%s"</a>', $song['country'], $song['artist'], $song['title'] ); ?></th>
 										<td>8</td>
 										<td>160</td>
 									</tr>
@@ -340,9 +341,9 @@
 						<!-- Title and description -->
 						<div class="card-body">
 							<h3 class="card-title">
-								<span class="flag-icon <?php printf( 'flag-icon-%s', $songs[40]['code'] ); ?>"></span>
+								<span class="flag-icon <?php printf( 'flag-icon-%s', $songs[38]['code'] ); ?>"></span>
 								
-								<?php printf( '%s: %s – "%s"', $songs[40]['country'], $songs[40]['artist'], $songs[40]['title'] ); ?>
+								<?php printf( '%s: %s – "%s"', $songs[38]['country'], $songs[38]['artist'], $songs[38]['title'] ); ?>
 								
 							</h3>
 							<p class="card-text text-muted">Rock the vote in each category below</p>
