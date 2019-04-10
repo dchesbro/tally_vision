@@ -4,6 +4,12 @@
 		<meta charset="utf-8">
 		<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
 		<link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+		<link href="/css/flags/flags.min.css" rel="stylesheet">
+		<style>
+			.card-title .flag {
+				vertical-align: text-bottom;
+			}
+		</style>
 		<title>TALLY VISION</title>
 	</head>
 	<body>
@@ -16,7 +22,10 @@
 						
 						<!-- Title and description -->
 						<div class="card-body">
-							<h3 class="card-title">Country: "Song Title"</h3>
+							<h3 class="card-title">
+								<img alt="Country flag icon" class="flag flag-eu" src="/css/flags/blank.gif">
+								Country: "Song Title"
+							</h3>
 							<p class="card-text text-muted">Cast your vote in the categories below and tap submit</p>
 						</div>
 						
@@ -28,8 +37,8 @@
 							$categories = array(
 								array(
 									'title'   => 'Category 1',
-									'label_0' => 'What the fuck',
-									'label_5' => 'This is a banger'
+									'label_0' => 'My freakin\' ears',
+									'label_5' => '100% certified banger'
 								),
 								array(
 									'title'   => 'Category 2',
@@ -43,8 +52,8 @@
 								),
 								array(
 									'title'   => 'Category 4',
-									'label_0' => 'Jr High School PowerPoint',
-									'label_5' => 'Future of live performance'
+									'label_0' => 'Middle School play',
+									'label_5' => 'Future of live stage performance'
 								),
 								array(
 									'title'   => 'Graham Norton Bitch Quota',
