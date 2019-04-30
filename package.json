@@ -1,0 +1,25 @@
+{
+  "name": "tallyvision",
+  "version": "1.0.0",
+  "description": "...",
+  "main": "tallyvision.js",
+  "scripts": {
+    "test": "..."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dchesbro/tallyvision.git"
+  },
+  "keywords": [
+    "..."
+  ],
+  "author": "Dwight Chesbro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dchesbro/tallyvision/issues"
+  },
+  "homepage": "https://github.com/dchesbro/tallyvision#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}

@@ -297,7 +297,7 @@
 						
 						<!-- Title and description -->
 						<div class="card-body">
-							<img alt="Eurovision logo" src="./img/eurovision-logo.svg">
+							<img alt="Eurovision logo" src="/img/eurovision-logo.svg">
 							<p class="card-text text-muted">Select a contestant to initiate voting</p>
 						</div>
 						
@@ -317,7 +317,7 @@
 									<tr>
 										<th scope="row"><?php printf( '<a href="#">%s: %s – "%s"</a>', $song['country'], $song['artist'], $song['title'] ); ?></th>
 										<td>8</td>
-										<td>160</td>
+										<td>200 / 200</td>
 									</tr>
 									
 								<?php endforeach; ?>
