@@ -5,16 +5,20 @@ block content
 		section(class='row justify-content-center')
 			div(class='col')
 
-				// User registration
+				// User heading
+				h1
+
+				// User registration form
 				div#user-registration(class='card')
-					div(class='card-body')
-						form
+					form
+						div(class='card-body')
 							div(class='form-group')
-								label(for='username') Label
+								label(for='username') ...
 								input(class='form-control', id='username', name='username', type='text')
+						button(class='btn btn-lg btn-block btn-primary', type='submit') Join
 
 				// Contestants table
-				div#contestants-table(class='card')
+				div#contestants(class='card')
 					div(class='card-body')
 						img(alt='Eurovision logo', src='/images/eurovision-logo.svg')
 					table(class='table')
@@ -28,14 +32,57 @@ block content
 									th(scope='row')=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
 									td
 
+				// Contestant ballot
+				div#contestant-ballot(class='card')
+					div(class='card-body')
+						div(class='media')
+							span(class='flag-icon')
+							div(class='media-body')
+								h3
+								span(class='card-text text-muted')
+					form
+						input(id='contestant-code', name='contestant-code', type='hidden', value='')
+						ul(class='list-group list-group-flush')
+							each category, index in categories
+								
+								- var displayIndex = index + 1;
+								
+								li(class='list-group-item')
+									h6=displayIndex + '. ' + category.title
+									div(class='btn-group btn-group-toggle w-100', data-toggle='buttons')
+										label(class='btn btn-outline-primary')
+											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='0', required)
+											=0
+										label(class='btn btn-outline-primary')
+											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='1')
+											=1
+										label(class='btn btn-outline-primary')
+											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='2')
+											=2
+										label(class='btn btn-outline-primary')
+											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='3')
+											=3
+										label(class='btn btn-outline-primary')
+											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='4')
+											=4
+										label(class='btn btn-outline-primary')
+											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='5')
+											=5
+									div(class='d-flex justify-content-between')
+										small(class='form-text text-muted')=category.label0
+										small(class='form-text text-muted')=category.label5
+						button(class='btn btn-lg btn-block btn-primary', type='submit') Vote
+
 block footer
 	script.
 		$(function(){
 			var socket = io();
 
 			// ...
-			$('#username').focus();
-			$('#contestants-table').hide();
+			$('#contestants').hide();
+			$('#contestant-ballot').hide();
+			$('#user-registration :input').focus();
+			$('#user-registration :submit').attr('disabled', 'disabled');
 
 			// ...
 			$('#user-registration form').submit(function(event){
@@ -44,8 +91,27 @@ block footer
 			});
 
 			// ...
+			$('#user-registration form').change(function(event){
+				if($('#username').val()){
+					$('#user-registration :submit').attr('disabled', 'disabled');
+				}
+			});
+
+			// ...
+			socket.on('ballot-init', function(contestant){
+				$('#contestants').hide();
+				$('#contestant-ballot').show();
+				
+				$('#contestant-ballot span.flag-icon').removeClass().addClass('flag-icon flag-icon-' + contestant.code);
+				$('#contestant-ballot h3').text(contestant.country);
+				$('#contestant-ballot span.card-text').text(contestant.artist + ' – "' + contestant.title + '"');
+				$('#contestant-ballot input#contestant-code').val(contestant.code);
+			});
+
+			// ...
 			socket.on('user-register', function(username){
-				$('#user-registration').html('<h1>' + username + '</h1>').removeClass('card');
-				$('#contestants-table').show();
+				$('h1').text(username);
+				$('#contestants').show();
+				$('#user-registration').hide();
 			});
 		});

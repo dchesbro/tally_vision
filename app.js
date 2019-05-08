@@ -328,8 +328,11 @@ io.on('connection', function(socket){
 	socket.on('ballot-init', function(id){
 
 		// ...
-		console.log('IO Initiating vote for ballot ID: ' + id );
-		io.emit('ballot-init', id);
+		var contestant = app.get('contestants')[id];
+
+		// ...
+		console.log('IO Initiating vote for ' + contestant.country );
+		io.emit('ballot-init', contestant);
 	});
 
 	// ...

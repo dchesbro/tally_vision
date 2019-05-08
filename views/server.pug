@@ -57,8 +57,8 @@ block footer
 			});
 
 			// ...
-			socket.on('ballot-init', function(id){
-				$('#stats-ballot').text('ID: ' + id);
+			socket.on('ballot-init', function(contestant){
+				$('#stats-ballot').text(contestant.country);
 			});
 			
 			// ...

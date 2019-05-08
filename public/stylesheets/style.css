@@ -2,15 +2,12 @@ body {
   margin-top: 2rem;
   margin-bottom: 2rem; }
 
-#item-list table {
+#contestants table {
   margin-bottom: 0; }
-  #item-list table tbody tr td, #item-list table thead tr th.col-votes, #item-list table thead tr th.col-score {
+  #contestants table tbody tr td, #contestants table thead tr th.col-votes, #contestants table thead tr th.col-score {
     text-align: center; }
-  #item-list table thead tr th {
+  #contestants table thead tr th {
     white-space: nowrap; }
-
-.card-body img + p {
-  margin-bottom: 0.75rem; }
 
 .card-body .media .flag-icon {
   font-size: 4rem;
@@ -21,11 +18,5 @@ body {
   .card form button[type="submit"] {
     border: none;
     border-radius: 0; }
-
-.flag-icon {
-  margin-right: 0.5rem; }
-
-.row.justify-content-center > .col {
-  max-width: 605px; }
 
 /*# sourceMappingURL=style.css.map */

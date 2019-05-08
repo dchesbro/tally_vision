@@ -3,7 +3,7 @@ body {
 	margin-bottom: 2rem;
 }
 
-#item-list {
+#contestants {
 	table {
 		margin-bottom: 0;
 		
@@ -15,10 +15,6 @@ body {
 			white-space: nowrap;
 		}
 	}
-}
-
-.card-body img + p {
-	margin-bottom: 0.75rem;
 }
 
 .card-body .media {
@@ -34,15 +30,5 @@ body {
 	form button[type="submit"] {
 		border: none;
 		border-radius: 0;
-	}
-}
-
-.flag-icon {
-	margin-right: 0.5rem;
-}
-
-.row {
-	&.justify-content-center > .col {
-		max-width: 605px;
 	}
 }
