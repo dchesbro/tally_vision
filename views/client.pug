@@ -1,13 +1,21 @@
 extends layout
 
 block content
-	main#item-list(class='container')
+	main(class='container')
 		section(class='row justify-content-center')
 			div(class='col')
-				
-				// ...
-				div(class='card')
-					div(class='card-body text-center')
+
+				// User registration
+				div#user-registration(class='card')
+					div(class='card-body')
+						form
+							div(class='form-group')
+								label(for='username') Label
+								input(class='form-control', id='username', name='username', type='text')
+
+				// Contestants table
+				div#contestants-table(class='card')
+					div(class='card-body')
 						img(alt='Eurovision logo', src='/images/eurovision-logo.svg')
 					table(class='table')
 						thead(class='thead-light')
@@ -22,9 +30,22 @@ block content
 
 block footer
 	script.
-		$(function () {
+		$(function(){
 			var socket = io();
-			socket.on('ballot-init', function(id){
-				window.location.replace('/' + id + '/ballot/');
+
+			// ...
+			$('#username').focus();
+			$('#contestants-table').hide();
+
+			// ...
+			$('#user-registration form').submit(function(event){
+				event.preventDefault();
+				socket.emit('user-register', $('#username').val());
+			});
+
+			// ...
+			socket.on('user-register', function(username){
+				$('#user-registration').html('<h1>' + username + '</h1>').removeClass('card');
+				$('#contestants-table').show();
 			});
 		});

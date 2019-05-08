@@ -17,9 +17,6 @@ var app            = express();
 var server         = require('http').Server(app);
 var io             = require('socket.io')(server);
 
-// Set array of users.
-var users = [];
-
 // Set array of contestants.
 app.set('contestants', [
 	{
@@ -299,6 +296,9 @@ app.set('ballot-categories', [
 	}
 ]);
 
+// Initialize array of users.
+var users = [];
+
 /* ...
 app.use(function(req, res, next){
 	res.io = io;
@@ -307,7 +307,18 @@ app.use(function(req, res, next){
 
 // Client Socket.IO event handlers.
 io.on('connection', function(socket){
-	
+
+	// Initiate voting.
+	socket.on('user-register', function(username){
+
+		// ...
+		console.log('IO Registering socket ID: ' + socket.id + ' as user "' + username + '"');
+		users[username] = socket.id;
+		
+		// ...
+		console.log(users);
+		io.emit('user-register', username);
+	});
 });
 
 // Server Socket.IO event handlers.
