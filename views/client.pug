@@ -1,0 +1,30 @@
+extends layout
+
+block content
+	main#item-list(class='container')
+		section(class='row justify-content-center')
+			div(class='col')
+				
+				// ...
+				div(class='card')
+					div(class='card-body text-center')
+						img(alt='Eurovision logo', src='/images/eurovision-logo.svg')
+					table(class='table')
+						thead(class='thead-light')
+							tr
+								th(class='col-entry', scope='col') Contestant
+								th(class='col-score', scope='col') Score
+						tbody
+							each contestant, index in contestants
+								tr
+									th(scope='row')=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
+									td
+
+block footer
+	script.
+		$(function () {
+			var socket = io();
+			socket.on('ballot-init', function(id){
+				window.location.replace('/' + id + '/ballot/');
+			});
+		});

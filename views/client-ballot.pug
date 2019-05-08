@@ -1,0 +1,65 @@
+extends layout
+
+block content
+	
+	- var contestant = contestants[ID];
+	
+	main#item-list(class='container')
+		section(class='row justify-content-center')
+			div(class='col')
+				
+				// Voting ballot
+				div(class='card')
+					
+					// Ballot heading
+					div(class='card-body')
+						div(class='media')
+							span(class='flag-icon flag-icon-' + contestant.code)
+							div(class='media-body')
+								h3=contestant.country
+								span(class='card-text text-muted')=contestant.artist + ' – "' + contestant.title + '"'
+					
+					// Ballot form
+					form(action='/server/' + songID + '/vote/', method='post')
+						input(id='songID', name='songID', type='hidden', value=songID)
+						ul(class='list-group list-group-flush')
+							each category, index in categories
+								
+								- var displayIndex = index + 1;
+								
+								li(class='list-group-item')
+									h6=displayIndex + '. ' + category.title
+									div(class='btn-group btn-group-toggle w-100', data-toggle='buttons')
+										label(class='btn btn-outline-primary')
+											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='0', required)
+											=0
+										label(class='btn btn-outline-primary')
+											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='1')
+											=1
+										label(class='btn btn-outline-primary')
+											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='2')
+											=2
+										label(class='btn btn-outline-primary')
+											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='3')
+											=3
+										label(class='btn btn-outline-primary')
+											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='4')
+											=4
+										label(class='btn btn-outline-primary')
+											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='5')
+											=5
+									div(class='d-flex justify-content-between')
+										small(class='form-text text-muted')=category.label0
+										small(class='form-text text-muted')=category.label5
+						button(class='btn btn-lg btn-block btn-primary', type='submit') Vote
+
+block footer
+	script.
+		$(function () {
+			var socket = io();
+			socket.on('ballot-init', function(id){
+				
+				// Refresh page with new ballot.
+				window.location.replace('/' + id + '/ballot/');
+			});
+		});
