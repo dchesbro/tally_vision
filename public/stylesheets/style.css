@@ -9,6 +9,9 @@ body {
   #contestants table thead tr th {
     white-space: nowrap; }
 
+#user-heading {
+  text-align: center; }
+
 .card-body .media .flag-icon {
   font-size: 4rem;
   margin-right: 0.75rem; }

@@ -312,7 +312,7 @@ io.on('connection', function(socket){
 	socket.on('user-register', function(username){
 
 		// ...
-		console.log('IO Registering socket ID: ' + socket.id + ' as user "' + username + '"');
+		console.log('IO Registering socket ID ' + socket.id + ' as user "' + username + '"');
 		users[username] = socket.id;
 		
 		// ...
@@ -331,16 +331,16 @@ io.on('connection', function(socket){
 		var contestant = app.get('contestants')[id];
 
 		// ...
-		console.log('IO Initiating vote for ' + contestant.country );
+		console.log('IO Initiating vote for ' + contestant.country);
 		io.emit('ballot-init', contestant);
 	});
 
 	// ...
-	socket.on('ballot-submit', function(vote){
-		
+	socket.on('ballot-vote', function(vote){
+		console.log(vote);
 	});
 
-	console.log('IO Connection from socket ID: ' + socket.id);
+	console.log('IO Connection from socket ID ' + socket.id);
 
 	// Get current number of connections.
 	var connections = socket.client.conn.server.clientsCount;
