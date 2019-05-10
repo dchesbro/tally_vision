@@ -108,8 +108,8 @@ $(function(){
         // Show ballot form.
         $('#ballot form').show();
 
-        // Set current ballot to contestant country code.
-        currentBallot = contestant.code;
+        // Set current ballot to contestant country.
+        currentBallot = contestant.country;
 
         // Shuffle to ballot card view.
         shuffleCard('#ballot');

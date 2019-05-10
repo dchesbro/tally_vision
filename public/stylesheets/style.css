@@ -1,4 +1,8 @@
-#client-views #ballot, #client-views #contestants, #client-views #user-heading, #client-views #voted{
+#client-cards {
+    max-width: 640px;
+}
+
+#client-cards #ballot, #client-cards #contestants, #client-cards #user-heading, #client-cards #voted{
     display: none;
 }
 

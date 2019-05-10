@@ -332,35 +332,45 @@ app.set('contestants', contestants);
 
 // Client Socket.IO event handlers.
 io.on('connection', function(socket){
-
-	/**
-	 * ...
-	 */
-    socket.on('ballot-close', function(){
-
-        // Set current contestant.
-        contestant = null;
-
-        // Return 'ballot-display' event (everyone).
-		io.sockets.emit('ballot-display', contestant);
-		
-		// Print debug message(s).
-        console.log('IO Initiating vote for ' + contestant.country + ' (ID ' + id + ')');
-    });
 	
 	/**
 	 * ...
 	 */
-    socket.on('ballot-init', function(id){
+    socket.on('ballot-init', function(index){
 
-        // Set contestant from defined contestant ID.
-        contestant = contestants[id];
+		// If contestant set, return.
+		if(contestant){
+			return;
+		}
+
+        // Set contestant using contestant index number.
+        contestant = contestants[index];
 
         // Return 'ballot-open' event (everyone).
 		io.sockets.emit('ballot-open', contestant);
 		
 		// Print debug message(s).
-        console.log('IO Initiating vote for ' + contestant.country + ' (ID ' + id + ')');
+        console.log('IO Opening ballot for ' + contestant.country);
+	});
+	
+	/**
+	 * ...
+	 */
+    socket.on('ballot-kill', function(){
+
+        // If contestant not set, return.
+		if(!contestant){
+			return;
+		}
+
+        // Return 'ballot-close' event (everyone).
+		io.sockets.emit('ballot-close');
+		
+		// Print debug message(s).
+		console.log('IO Closing ballot for ' + contestant.country);
+		
+		// Set contestant to null.
+		contestant = null;
     });
 
     /**
@@ -429,7 +439,7 @@ io.on('connection', function(socket){
 		io.sockets.emit('client-voted');
 
 		// Print debug message(s).
-		console.log('IO Registered user "' + username + '" submitted vote:');
+		console.log('IO Registered user "' + username + '" submitted ballot:');
 		console.log(vote);
 	});
 });

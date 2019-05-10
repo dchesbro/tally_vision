@@ -3,9 +3,6 @@ $(function(){
     // Initialize Socket.IO instance.
     var socket = io();
     
-    // Set local server variables.
-    var id;
-    
     /**
 	 * ...
 	 */
@@ -14,13 +11,34 @@ $(function(){
         // Prevent jump to anchor reference.
         event.preventDefault();
 
-        // Set contestant ID.
-        id = $(this).attr('id');
+        // Set contestant index number.
+        var index = $(this).attr('id');
 
-        // If contestant ID set, return 'ballot-init' event.
-        if(id){
-            socket.emit('ballot-init', id);
+        // If contestant index number set, return 'server-ballot-open' event.
+        if(index){
+            socket.emit('ballot-init', index);
         }
+    });
+
+    /**
+	 * ...
+	 */
+    $('.ballot-link.kill').on('click', function(event){
+
+        // Prevent jump to anchor reference.
+        event.preventDefault();
+
+        // Return 'server-ballot-kill' event.
+        socket.emit('ballot-kill');
+    });
+
+    /**
+	 * ...
+	 */
+    socket.on('ballot-close', function(contestant){
+
+        // Update current ballot display.
+        $('#stats-ballot').text('--');
     });
 
     /**
