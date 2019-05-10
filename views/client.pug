@@ -1,126 +1,63 @@
 extends layout
 
 block content
-	main(class='container')
-		section(class='row justify-content-center')
-			div(class='col')
+    main#client-views(class='container')
+        section(class='row justify-content-center')
+            div(class='col')
+                h1#user-heading
 
-				// Username
-				h1#user-heading
+                // User registration form
+                div#user-registration(class='card shadow-lg')
+                    form
+                        div(class='card-body form-group')
+                            label(for='username') Choose a name to join or reconnect:
+                            input(class='form-control', id='username', name='username', type='text', required)
+                        button(class='btn btn-lg btn-block btn-primary', type='submit') Join
+                
+                // Contestants table
+                div#contestants(class='card shadow-lg')
+                    table(class='table')
+                        thead(class='thead-dark')
+                            tr
+                                th(class='col-contestant', scope='col') Contestant
+                                th(class='col-score', scope='col') Score
+                        tbody
+                            each contestant, index in contestants
+                                tr
+                                    td(class='col-contestant', scope='row')=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
+                                    td(class='col-score') ...
 
-				// User registration form
-				div#user-registration(class='card')
-					form
-						div(class='card-body')
-							div(class='form-group')
-								label(for='username')
-								input(class='form-control', id='username', name='username', type='text', required)
-						button(class='btn btn-lg btn-block btn-primary', type='submit') Join
+                // Ballot form
+                div#ballot(class='card shadow-lg')
+                    div(class='card-body')
+                        h3#contestant-country
+                        span#contestant-details
+                        span#contestant-score
+                    form
+                        ul(class='list-group list-group-flush')
+                            each category, index in categories
 
-				// Contestants table
-				div#contestants(class='card')
-					div(class='card-body')
-						img(alt='Eurovision logo', src='/images/eurovision-logo.svg')
-					table(class='table')
-						thead(class='thead-light')
-							tr
-								th(class='col-entry', scope='col') Contestant
-								th(class='col-score', scope='col') Score
-						tbody
-							each contestant, index in contestants
-								tr
-									th(scope='row')=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
-									td
+                                - var displayIndex = index + 1;
 
-				// Contestant ballot
-				div#contestant-ballot(class='card')
-					div(class='card-body')
-						div(class='media')
-							span(class='flag-icon')
-							div(class='media-body')
-								h3
-								span(class='card-text text-muted')
-					form
-						input(id='user', name='user', type='hidden', value='')
-						input(id='contestant-code', name='contestant-code', type='hidden', value='')
-						ul(class='list-group list-group-flush')
-							each category, index in categories
-								
-								- var displayIndex = index + 1;
-								
-								li(class='list-group-item')
-									h6=displayIndex + '. ' + category.title
-									div(class='btn-group btn-group-toggle w-100', data-toggle='buttons')
-										label(class='btn btn-outline-primary')
-											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='0', required)
-											=0
-										label(class='btn btn-outline-primary')
-											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='1')
-											=1
-										label(class='btn btn-outline-primary')
-											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='2')
-											=2
-										label(class='btn btn-outline-primary')
-											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='3')
-											=3
-										label(class='btn btn-outline-primary')
-											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='4')
-											=4
-										label(class='btn btn-outline-primary')
-											input(autocomplete='off', id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='5')
-											=5
-									div(class='d-flex justify-content-between')
-										small(class='form-text text-muted')=category.label0
-										small(class='form-text text-muted')=category.label5
-						button(class='btn btn-lg btn-block btn-primary', type='submit') Vote
+                                li(class='list-group-item')
+                                    h6=displayIndex + '. ' + category.title
+                                    div(class='btn-group btn-group-toggle w-100', data-toggle='buttons')
+                                        label(class='btn btn-outline-primary') 0
+                                            input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='0', required)
+                                        label(class='btn btn-outline-primary') 1
+                                            input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='1')
+                                        label(class='btn btn-outline-primary') 2
+                                            input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='2')
+                                        label(class='btn btn-outline-primary') 3
+                                            input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='3')
+                                        label(class='btn btn-outline-primary') 4
+                                            input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='4')
+                                        label(class='btn btn-outline-primary') 5
+                                            input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='5')
+                                    div(class='d-flex justify-content-between')
+                                        small(class='form-text text-muted')=category.label0
+                                        small(class='form-text text-muted')=category.label5
+                        button(class='btn btn-lg btn-block btn-primary', type='submit') Vote
 
 block footer
-	script.
-		$(function(){
-			var socket = io();
-
-			// ...
-			$('#contestants').hide();
-			$('#contestant-ballot').hide();
-			$('#username').focus();
-
-			// ...
-			$('#contestant-ballot form').submit(function(event){
-				var vote = {
-					user: $('input#user').val(),
-					code: $('input#contestant-code').val(),
-					cat1: $('input#cat1:checked').val(),
-					cat2: $('input#cat2:checked').val(),
-					cat3: $('input#cat3:checked').val(),
-					cat4: $('input#cat4:checked').val(),
-					cat5: $('input#cat5:checked').val()
-				};
-
-				event.preventDefault();
-				socket.emit('ballot-vote', vote);
-			});
-
-			// ...
-			$('#user-registration form').submit(function(event){
-				event.preventDefault();
-				socket.emit('user-register', $('#username').val());
-			});
-
-			// ...
-			socket.on('ballot-init', function(contestant){
-				$('#contestants').hide();
-				$('#contestant-ballot').show();
-				
-				$('#contestant-ballot span.flag-icon').removeClass().addClass('flag-icon flag-icon-' + contestant.code);
-				$('#contestant-ballot h3').text(contestant.country);
-				$('#contestant-ballot span.card-text').text(contestant.artist + ' – "' + contestant.title + '"');
-				$('#contestant-ballot input#contestant-code').val(contestant.code);
-			});
-
-			// ...
-			socket.on('user-register', function(username){
-				$('h1#user-heading').text(username);
-				$('#contestants').show();
-				$('#user-registration').hide();
-			});
-		});
+    script(src='/javascripts/client.js')

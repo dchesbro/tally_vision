@@ -1,25 +1,35 @@
-body {
-  margin-top: 2rem;
-  margin-bottom: 2rem; }
+#client-views #ballot, #client-views #contestants, #client-views #user-heading, #client-views #voted{
+    display: none;
+}
 
-#contestants table {
-  margin-bottom: 0; }
-  #contestants table tbody tr td, #contestants table thead tr th.col-votes, #contestants table thead tr th.col-score {
-    text-align: center; }
-  #contestants table thead tr th {
-    white-space: nowrap; }
+#contestants table td.col-score, #contestants table td.col-votes {
+    text-align: center;
+    width: 1%;
+}
 
 #user-heading {
-  text-align: center; }
+    text-align: center;
+    margin-bottom: 2rem;
+}
 
-.card-body .media .flag-icon {
-  font-size: 4rem;
-  margin-right: 0.75rem; }
+.card{
+    border-radius: .6rem;
+    overflow: hidden;
+}
 
-.card {
-  overflow: hidden; }
-  .card form button[type="submit"] {
-    border: none;
-    border-radius: 0; }
+.card .btn[type='submit']{
+    border-radius: 0;
+}
 
-/*# sourceMappingURL=style.css.map */
+.card .table, .card .form-group{
+    margin-bottom: 0;
+}
+
+.card-group {
+    margin-bottom: 2rem;
+}
+
+body{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}

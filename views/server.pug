@@ -1,68 +1,36 @@
 extends layout
 
-block content	
-	main#item-list(class='container')
-		section(class='row')
-			div(class='col')
-				
-				// Admin stats
-				div(class='card-group text-center')
-					div(class='card')
-						div(class='card-body')
-							h3#stats-connections 0
-							span(class='card-text text-muted') Connections
-					div(class='card')
-						div(class='card-body')
-							h3#stats-ballot --
-							span(class='card-text text-muted') Current ballot
-					div(class='card')
-						div(class='card-body')
-							h3 ...
-							span(class='card-text text-muted') ...
-				
-				hr
-				
-				// Admin contestants table
-				div(class='card')
-					
-					// Contestants table heading
-					div(class='card-body')
-						img(alt='Eurovision logo', src='/images/eurovision-logo.svg')
-						p(class='card-text text-muted') Select a contestant to vote
-					
-					// Contestants table
-					table(class='table')
-						thead(class='thead-light')
-							tr
-								th(class='col-entry', scope='col') Contestant
-								th(class='col-votes', scope='col') # Votes
-								th(class='col-score', scope='col') Score
-						tbody
-							each contestant, index in contestants
-								tr
-									th(scope='row')
-										a(class='ballot-link', href='#', id=index)=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
-									td --
-									td -- / --
+block content
+    main#server-views(class='container')
+        section(class='row justify-content-center')
+            div(class='col')
+
+                // AdminServer stats
+                div(class='card-group text-center')
+                    div(class='card bg-dark text-white')
+                        div(class='card-body')
+                            h3#stats-users 0
+                            span(class='card-text text-muted') User(s) registered
+                    div(class='card bg-dark text-white')
+                        div(class='card-body')
+                            h3#stats-ballot --
+                            span(class='card-text text-muted') Current ballot
+                
+                // Contestants table
+                div#contestants(class='card shadow-lg')
+                    table(class='table')
+                        thead(class='thead-dark')
+                            tr
+                                th(class='col-contestant', scope='col') Contestant
+                                th(class='col-votes', scope='col') Votes
+                                th(class='col-score', scope='col') Score
+                        tbody
+                            each contestant, id in contestants
+                                tr
+                                    td(class='col-contestant', scope='row')
+                                        a(class='ballot-link init', href='#', id=id)=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
+                                    td(class='col-votes') ...
+                                    td(class='col-score') ...
 
 block footer
-	script.
-		$(function(){
-			var socket = io();
-
-			// ...
-			$('.ballot-link').on('click', function(event){
-				event.preventDefault();
-				socket.emit('ballot-init', $(this).attr('id'));
-			});
-
-			// ...
-			socket.on('ballot-init', function(contestant){
-				$('#stats-ballot').text(contestant.country);
-			});
-			
-			// ...
-			socket.on('stats-connections', function(connections){
-				$('#stats-connections').text(connections);
-			});
-		});
+    script(src='/javascripts/server.js')

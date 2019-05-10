@@ -1,10 +1,8 @@
 var createError    = require('http-errors');          // Create HTTP error objects
 var express        = require('express');              // Application framework
 var path           = require('path');                 // File and directory path utilities
-var bodyParser     = require('body-parser');          // HTTP body parser 
 var cookieParser   = require('cookie-parser');        // HTTP cookie parser
 var logger         = require('morgan');               // HTTP request logger
-var sassMiddleware = require('node-sass-middleware'); // Recompile SASS files for Express servers
 
 // Set routing.
 var clientRouter   = require('./routes/client');
@@ -17,8 +15,37 @@ var app            = express();
 var server         = require('http').Server(app);
 var io             = require('socket.io')(server);
 
+// Set array of categories.
+var categories = [
+	{
+		title:  'Category 1',
+		label0: 'Worst',
+		label5: 'Best'
+	},
+	{
+		title:  'Category 2',
+		label0: 'Worst',
+		label5: 'Best'
+	},
+	{
+		title:  'Category 3',
+		label0: 'Worst',
+		label5: 'Best'
+	},
+	{
+		title:  'Category 4',
+		label0: 'Worst',
+		label5: 'Best'
+	},
+	{
+		title:  'Graham Norton Bitch Quota',
+		label0: 'Worst',
+		label5: 'Best'
+	}
+];
+
 // Set array of contestants.
-app.set('contestants', [
+var contestants = [
 	{
 		country: 'Albania',
 		code:    'al',
@@ -265,91 +292,13 @@ app.set('contestants', [
 		artist:  'Michael Rice',
 		title:   'Bigger Than Us'
 	}
-]);
+];
 
-// Set array of ballot categories.
-app.set('ballot-categories', [
-	{
-		title:  'Category 1',
-		label0: 'Worst',
-		label5: 'Best'
-	},
-	{
-		title:  'Category 2',
-		label0: 'Worst',
-		label5: 'Best'
-	},
-	{
-		title:  'Category 3',
-		label0: 'Worst',
-		label5: 'Best'
-	},
-	{
-		title:  'Category 4',
-		label0: 'Worst',
-		label5: 'Best'
-	},
-	{
-		title:  'Graham Norton Bitch Quota',
-		label0: 'Worst',
-		label5: 'Best'
-	}
-]);
+// Set app variables.
+var contestant;
+var userCount = 0;
 
-// Initialize array of users.
-var users = [];
-
-/* ...
-app.use(function(req, res, next){
-	res.io = io;
-	next();
-}); */
-
-// Client Socket.IO event handlers.
-io.on('connection', function(socket){
-
-	// Initiate voting.
-	socket.on('user-register', function(username){
-
-		// ...
-		console.log('IO Registering socket ID ' + socket.id + ' as user "' + username + '"');
-		users[username] = socket.id;
-		
-		// ...
-		console.log(users);
-		io.emit('user-register', username);
-	});
-});
-
-// Server Socket.IO event handlers.
-io.on('connection', function(socket){
-
-	// Initiate voting.
-	socket.on('ballot-init', function(id){
-
-		// ...
-		var contestant = app.get('contestants')[id];
-
-		// ...
-		console.log('IO Initiating vote for ' + contestant.country);
-		io.emit('ballot-init', contestant);
-	});
-
-	// ...
-	socket.on('ballot-vote', function(vote){
-		console.log(vote);
-	});
-
-	console.log('IO Connection from socket ID ' + socket.id);
-
-	// Get current number of connections.
-	var connections = socket.client.conn.server.clientsCount;
-	
-	console.log('IO ' + connections + ' current connection(s)');
-	io.emit('stats-connections', connections);
-});
-
-// Set view engine.
+// Express app generator setup.
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
@@ -357,12 +306,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(sassMiddleware({
-	src: path.join(__dirname, 'public'),
-	dest: path.join(__dirname, 'public'),
-	indentedSyntax: false,
-	sourceMap: true
-}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', clientRouter);
@@ -382,6 +325,113 @@ app.use(function(err, req, res, next) {
 	
 	res.status(err.status || 500);
 	res.render('error');
+});
+
+app.set('categories', categories);
+app.set('contestants', contestants);
+
+// Client Socket.IO event handlers.
+io.on('connection', function(socket){
+
+	/**
+	 * ...
+	 */
+    socket.on('ballot-close', function(){
+
+        // Set current contestant.
+        contestant = null;
+
+        // Return 'ballot-display' event (everyone).
+		io.sockets.emit('ballot-display', contestant);
+		
+		// Print debug message(s).
+        console.log('IO Initiating vote for ' + contestant.country + ' (ID ' + id + ')');
+    });
+	
+	/**
+	 * ...
+	 */
+    socket.on('ballot-init', function(id){
+
+        // Set contestant from defined contestant ID.
+        contestant = contestants[id];
+
+        // Return 'ballot-open' event (everyone).
+		io.sockets.emit('ballot-open', contestant);
+		
+		// Print debug message(s).
+        console.log('IO Initiating vote for ' + contestant.country + ' (ID ' + id + ')');
+    });
+
+    /**
+	 * ...
+	 */
+    socket.on('disconnect', function(){
+
+		// If socket not registered, return.
+		if(!socket.registered){
+			return;
+		}
+
+		// Decrease registered user count.
+		userCount--;
+
+		// Return 'user-disconected' event (everyone).
+        io.sockets.emit('client-disconnected', { username: socket.username, userCount });
+		
+		// Print debug message(s).
+		console.log('IO Registered user "' + socket.username + '" disconnected');
+		console.log('IO ' + userCount + ' user(s) registered');
+    });
+
+    /**
+	 * ...
+	 */
+    socket.on('user-register', function(username){
+        
+        // If socket registered, return.
+        if(socket.registered){
+			return;
+		}
+
+        // Set socket username and registered property.
+		socket.username = username;
+		socket.registered = true;
+
+		// Increase registered user count.
+		userCount++;
+		
+		// Return 'user-registered' event (sender).
+		socket.emit('user-registered');
+
+		// Return 'client-connected' event (everyone).
+        io.sockets.emit('client-connected', { username: socket.username, userCount });
+		
+		// Print debug message(s).
+        console.log('IO Registered socket ID ' + socket.id + ' as user "' + socket.username + '"');
+        console.log('IO ' + userCount + ' user(s) registered');
+	});
+	
+	/**
+	 * ...
+	 */
+	socket.on('user-vote', function({ username, vote }){
+		
+		// If socket not registered, return.
+		if(!socket.registered){
+			return;
+		}
+
+		// Return 'user-voted' event (sender).
+		socket.emit('user-voted');
+
+		// Return 'client-voted' event (everyone).
+		io.sockets.emit('client-voted');
+
+		// Print debug message(s).
+		console.log('IO Registered user "' + username + '" submitted vote:');
+		console.log(vote);
+	});
 });
 
 module.exports = { app: app, server: server };
