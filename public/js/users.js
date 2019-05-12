@@ -1,24 +1,24 @@
 $(function(){
 
-    // Initialize Socket.IO instance.
+    // Define Socket.IO instance.
     var socket = io();
     
-    // Set local client variables.
+    // Define local user variables.
     var registered = false;
     var username;
     var voting = false;
 
     /**
-     * Initiate client connection.
+     * Initialize user connections.
      */
-    function init() {
+    function userInit() {
 
         // Focus input on username input field.
         $('input#username').focus();
     }
     
     /**
-     * Change client views.
+     * Change user views.
      */
     function shuffleCard(card){
 
@@ -91,7 +91,7 @@ $(function(){
 	 */
     socket.on('ballot-open', function(contestant){
 
-        // If client not registered or already voting, return.
+        // If user not registered or already voting, return.
         if(!registered || voting){ 
             return;
         }
@@ -116,7 +116,7 @@ $(function(){
     });
 
     /**
-     * Re-register clients on reconnect.
+     * Re-register users on reconnect.
      */
     socket.on('disconnect', function(){
         
@@ -125,7 +125,7 @@ $(function(){
 	});
 
     /**
-     * Re-register clients on reconnect.
+     * Re-register users on reconnect.
      */
     socket.on('reconnect', function(){
         
@@ -136,7 +136,7 @@ $(function(){
 	});
 
     /**
-	 * Register clients and shuffle to whatever card view.
+	 * Register users and shuffle to whatever card view.
 	 */
     socket.on('user-registered', function(){
 
@@ -162,5 +162,5 @@ $(function(){
         $('#ballot form').hide();
     });
 
-    init();
+    userInit();
 });

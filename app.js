@@ -5,12 +5,12 @@ var cookieParser   = require('cookie-parser'); // HTTP cookie parser
 var logger         = require('morgan');        // HTTP request logger
 var mongoose       = require('mongoose');      // MongoDB object modeling
 
-// Define Express app.
+// Define Express instance.
 var app            = express();
 
 // Define routers.
-var clientRouter   = require('./routes/client');
-var serverRouter   = require('./routes/server');
+var adminRouter    = require('./routes/admin');
+var usersRouter    = require('./routes/users');
 
 // Define Socket.IO server.
 var server         = require('http').Server(app);
@@ -311,10 +311,10 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/', clientRouter);
-app.use('/server', serverRouter);
+app.use(express.static(path.join(__dirname, 'public')))
+app.use(cookieParser());;
+app.use('/', usersRouter);
+app.use('/admin', adminRouter);
 
 // Forward 404 messages to error handler.
 app.use(function(req, res, next) {
