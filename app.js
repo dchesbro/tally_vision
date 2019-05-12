@@ -12,6 +12,9 @@ var app            = express();
 var adminRouter    = require('./routes/admin');
 var usersRouter    = require('./routes/users');
 
+// Define database models.
+var vote           = require('./models/vote');
+
 // Define Socket.IO server.
 var server         = require('http').Server(app);
 var io             = require('socket.io')(server);
@@ -311,8 +314,8 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')))
-app.use(cookieParser());;
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
 app.use('/', usersRouter);
 app.use('/admin', adminRouter);
 
@@ -334,51 +337,6 @@ app.use(function(err, req, res, next) {
 
 // Initialize MongoDB connection.
 mongoose.connect('mongodb://localhost/tallyvision', {useNewUrlParser: true});
-
-// Set vote schema.
-var voteSchema = new mongoose.Schema({
-    user: {
-        type:     String,
-        required: [true, 'How am I supposed to know who`s vote this is?'],
-    },
-    contestant: {
-        type:     Number,
-        required: [true, 'How am I supposed to know which contestant this is for?'],
-    },
-    cat1: {
-        type:     Number,
-        required: true,
-        min:      [0, 'Category scores can`t be less than zero!'],
-        max:      [5, 'Category scores can`t be greater than five!']
-    },
-    cat2: {
-        type:     Number,
-        required: true,
-        min:      [0, 'Category scores can`t be less than zero!'],
-        max:      [5, 'Category scores can`t be greater than five!']
-    },
-    cat3: {
-        type:     Number,
-        required: true,
-        min:      [0, 'Category scores can`t be less than zero!'],
-        max:      [5, 'Category scores can`t be greater than five!']
-    },
-    cat4: {
-        type:     Number,
-        required: true,
-        min:      [0, 'Category scores can`t be less than zero!'],
-        max:      [5, 'Category scores can`t be greater than five!']
-    },
-    cat5: {
-        type:     Number,
-        required: true,
-        min:      [0, 'Category scores can`t be less than zero!'],
-        max:      [5, 'Category scores can`t be greater than five!']
-    }
-});
-
-// Set vote model.
-var voteModel = mongoose.model('Vote', voteSchema);
 
 // Client Socket.IO event handlers.
 io.on('connection', function(socket){
