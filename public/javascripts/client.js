@@ -4,9 +4,9 @@ $(function(){
     var socket = io();
     
     // Set local client variables.
-    var currentBallot;
     var registered = false;
     var username;
+    var voting = false;
 
     /**
      * Initiate client connection.
@@ -16,17 +16,17 @@ $(function(){
         // Focus input on username input field.
         $('input#username').focus();
     }
-
+    
     /**
      * Change client views.
      */
-    function shuffleCard(cardID){
+    function shuffleCard(card){
 
         // Hide all card views.
         $('.card').hide();
 
         // Show defined card.
-        $(cardID).show();
+        $(card).show();
 
         // Scroll to top of window.
         $(window).scrollTop(0);
@@ -43,7 +43,7 @@ $(function(){
         // Set vote object for current ballot.
         var vote = {
             user: username,
-            code: currentBallot,
+            // code: currentBallot,
             cat1: $('input#cat1:checked').val(),
             cat2: $('input#cat2:checked').val(),
             cat3: $('input#cat3:checked').val(),
@@ -75,24 +75,24 @@ $(function(){
     });
 
     /**
-     * ...
+     * Set voting status and shuffle to contestants view.
      */
     socket.on('ballot-close', function(){
         
-        // Set current ballot to null.
-        currentBallot = null;
+        // Set voting to false.
+        voting = false;
 
         // Shuffle to contestants card view.
         shuffleCard('#contestants');
 	});
     
     /**
-	 * Set ballot details and shuffle to ballot card view.
+	 * Set ballot details, voting status, and shuffle to ballot card view.
 	 */
     socket.on('ballot-open', function(contestant){
 
         // If client not registered or already voting, return.
-        if(!registered || currentBallot){ 
+        if(!registered || voting){ 
             return;
         }
         
@@ -108,12 +108,21 @@ $(function(){
         // Show ballot form.
         $('#ballot form').show();
 
-        // Set current ballot to contestant country.
-        currentBallot = contestant.country;
+        // Set voting to true.
+        voting = true;
 
         // Shuffle to ballot card view.
         shuffleCard('#ballot');
     });
+
+    /**
+     * Re-register clients on reconnect.
+     */
+    socket.on('disconnect', function(){
+        
+        // Set registered to false.
+        registered = false;
+	});
 
     /**
      * Re-register clients on reconnect.
@@ -137,14 +146,8 @@ $(function(){
         // Set registered to true.
         registered = true;
 
-        // If current ballot set, shuffle to ballot card view...
-        if(currentBallot){
-            shuffleCard('#ballot');
-        
-        // ...else, shuffle to contestants table card view.
-        }else{
-            shuffleCard('#contestants');
-        }
+        // Shuffle to contestants card view.
+        shuffleCard('#contestants');
     });
 
     /**

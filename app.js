@@ -1,8 +1,9 @@
-var createError    = require('http-errors');          // Create HTTP error objects
-var express        = require('express');              // Application framework
-var path           = require('path');                 // File and directory path utilities
-var cookieParser   = require('cookie-parser');        // HTTP cookie parser
-var logger         = require('morgan');               // HTTP request logger
+var createError    = require('http-errors');   // Create HTTP error objects
+var express        = require('express');       // Application framework
+var path           = require('path');          // File and directory path utilities
+var cookieParser   = require('cookie-parser'); // HTTP cookie parser
+var logger         = require('morgan');        // HTTP request logger
+var mongoose       = require('mongoose');      // MongoDB object modeling
 
 // Set routing.
 var clientRouter   = require('./routes/client');
@@ -191,7 +192,7 @@ var contestants = [
 		title:   'Run with the Lions'
 	},
 	{
-		country: 'FYR Macedonia',
+		country: 'F.Y.R. Macedonia',
 		code:    'mk',
 		artist:  'Tamara Todevska',
 		title:   'Proud'
@@ -298,6 +299,9 @@ var contestants = [
 var contestant;
 var userCount = 0;
 
+app.set('categories', categories);
+app.set('contestants', contestants);
+
 // Express app generator setup.
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -327,8 +331,55 @@ app.use(function(err, req, res, next) {
 	res.render('error');
 });
 
-app.set('categories', categories);
-app.set('contestants', contestants);
+// Initialize MongoDB connection.
+mongoose.connect('mongodb://localhost/tallyvision', {useNewUrlParser: true});
+
+var mongoose = require('mongoose');
+
+// Set vote schema.
+var voteSchema = new mongoose.Schema({
+    user: {
+        type:     String,
+        required: [true, 'How am I supposed to know who`s vote this is?'],
+    },
+    contestant: {
+        type:     Number,
+        required: [true, 'How am I supposed to know which contestant this is for?'],
+    },
+    cat1: {
+        type:     Number,
+        required: true,
+        min:      [0, 'Category scores can`t be less than zero!'],
+        max:      [5, 'Category scores can`t be greater than five!']
+    },
+    cat2: {
+        type:     Number,
+        required: true,
+        min:      [0, 'Category scores can`t be less than zero!'],
+        max:      [5, 'Category scores can`t be greater than five!']
+    },
+    cat3: {
+        type:     Number,
+        required: true,
+        min:      [0, 'Category scores can`t be less than zero!'],
+        max:      [5, 'Category scores can`t be greater than five!']
+    },
+    cat4: {
+        type:     Number,
+        required: true,
+        min:      [0, 'Category scores can`t be less than zero!'],
+        max:      [5, 'Category scores can`t be greater than five!']
+    },
+    cat5: {
+        type:     Number,
+        required: true,
+        min:      [0, 'Category scores can`t be less than zero!'],
+        max:      [5, 'Category scores can`t be greater than five!']
+    }
+});
+
+// Set vote model.
+var voteModel = mongoose.model('Vote', voteSchema);
 
 // Client Socket.IO event handlers.
 io.on('connection', function(socket){
@@ -350,7 +401,7 @@ io.on('connection', function(socket){
 		io.sockets.emit('ballot-open', contestant);
 		
 		// Print debug message(s).
-        console.log('IO Opening ballot for ' + contestant.country);
+        console.log('IO Opening ballot "' + contestant.country + '"');
 	});
 	
 	/**
@@ -367,7 +418,7 @@ io.on('connection', function(socket){
 		io.sockets.emit('ballot-close');
 		
 		// Print debug message(s).
-		console.log('IO Closing ballot for ' + contestant.country);
+		console.log('IO Closing ballot "' + contestant.country + '"');
 		
 		// Set contestant to null.
 		contestant = null;
@@ -419,7 +470,17 @@ io.on('connection', function(socket){
 		
 		// Print debug message(s).
         console.log('IO Registered socket ID ' + socket.id + ' as user "' + socket.username + '"');
-        console.log('IO ' + userCount + ' user(s) registered');
+		console.log('IO ' + userCount + ' user(s) registered');
+		
+		// ...
+		if(contestant){
+			
+			// Return 'ballot-open' event (sender).
+			socket.emit('ballot-open', contestant);
+		
+			// Print debug message(s).
+        	console.log('IO Opening ballot "' + contestant.country + '" for user "' + socket.username + '"');
+		}
 	});
 	
 	/**
@@ -441,6 +502,14 @@ io.on('connection', function(socket){
 		// Print debug message(s).
 		console.log('IO Registered user "' + username + '" submitted ballot:');
 		console.log(vote);
+
+		vote.save(function (err, vote) {
+			if (err) {
+				return console.log(err.message);
+			} else {
+				return console.log('DB added vote ' + vote._id);
+			}
+		});
 	});
 });
 

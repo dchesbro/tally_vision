@@ -22,16 +22,18 @@ block content
                         thead(class='thead-dark')
                             tr
                                 th(class='col-contestant', scope='col') Contestant
-                                th(class='col-votes', scope='col') Votes
                                 th(class='col-score', scope='col') Score
+                                th(class='col-votes', scope='col') Votes
+                                th(class='col-actions', scope='col') Actions
                         tbody
                             each contestant, id in contestants
                                 tr
-                                    td(class='col-contestant', scope='row')
-                                        a(class='ballot-link init', href='#', id=id)=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
-                                        a(class='ballot-link kill', href='#') Close
+                                    td(class='col-contestant', scope='row')=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
                                     td(class='col-votes') ...
                                     td(class='col-score') ...
+                                    td(class='col-actions')
+                                        a(class='ballot-action init', href='#', id=id) Init
+                                        a(class='ballot-action kill', href='#', id=id) Kill
 
 block footer
     script(src='/javascripts/server.js')

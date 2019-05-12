@@ -6,7 +6,7 @@
     display: none;
 }
 
-#contestants table td.col-score, #contestants table td.col-votes {
+#contestants table td.col-actions, #contestants table td.col-score, #contestants table td.col-votes {
     text-align: center;
     width: 1%;
 }
@@ -16,7 +16,16 @@
     margin-bottom: 2rem;
 }
 
-.card{
+.ballot-action {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.ballot-action.kill {
+    display: none;
+}
+
+.card {
     border-radius: .6rem;
     overflow: hidden;
 }

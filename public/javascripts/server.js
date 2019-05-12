@@ -2,17 +2,20 @@ $(function(){
 
     // Initialize Socket.IO instance.
     var socket = io();
+
+    // Set local server variables.
+    var index;
     
     /**
 	 * ...
 	 */
-    $('.ballot-link.init').on('click', function(event){
+    $('.ballot-action.init').on('click', function(event){
 
         // Prevent jump to anchor reference.
         event.preventDefault();
 
-        // Set contestant index number.
-        var index = $(this).attr('id');
+        // Set contestant index.
+        index = $(this).attr('id');
 
         // If contestant index number set, return 'server-ballot-open' event.
         if(index){
@@ -23,10 +26,13 @@ $(function(){
     /**
 	 * ...
 	 */
-    $('.ballot-link.kill').on('click', function(event){
+    $('.ballot-action.kill').on('click', function(event){
 
         // Prevent jump to anchor reference.
         event.preventDefault();
+
+        // Set current contestant index to null.
+        index = null;
 
         // Return 'server-ballot-kill' event.
         socket.emit('ballot-kill');
@@ -35,7 +41,13 @@ $(function(){
     /**
 	 * ...
 	 */
-    socket.on('ballot-close', function(contestant){
+    socket.on('ballot-close', function(){
+
+        // Hide kill actions.
+        $('.ballot-action.kill').hide();
+
+        // Show init actions.
+        $('.ballot-action.init').show();
 
         // Update current ballot display.
         $('#stats-ballot').text('--');
@@ -45,6 +57,12 @@ $(function(){
 	 * ...
 	 */
     socket.on('ballot-open', function(contestant){
+
+        // Hide init actions.
+        $('.ballot-action.init').hide();
+
+        // Show kill action for current contestant index.
+        $('#' + index + '.ballot-action.kill').show();
 
         // Update current ballot display.
         $('#stats-ballot').text(contestant.country);
