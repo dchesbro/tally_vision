@@ -5,18 +5,18 @@ var cookieParser   = require('cookie-parser'); // HTTP cookie parser
 var logger         = require('morgan');        // HTTP request logger
 var mongoose       = require('mongoose');      // MongoDB object modeling
 
-// Set routing.
+// Define Express app.
+var app            = express();
+
+// Define routers.
 var clientRouter   = require('./routes/client');
 var serverRouter   = require('./routes/server');
 
-// Initialize app.
-var app            = express();
-
-// Initialize Socket.IO server.
+// Define Socket.IO server.
 var server         = require('http').Server(app);
 var io             = require('socket.io')(server);
 
-// Set array of categories.
+// Define array of categories.
 var categories = [
 	{
 		title:  'Category 1',
@@ -45,7 +45,7 @@ var categories = [
 	}
 ];
 
-// Set array of contestants.
+// Define array of contestants.
 var contestants = [
 	{
 		country: 'Albania',
@@ -295,23 +295,24 @@ var contestants = [
 	}
 ];
 
-// Set app variables.
+// Define app variables.
 var contestant;
 var userCount = 0;
 
+// Set app variables.
 app.set('categories', categories);
 app.set('contestants', contestants);
 
-// Express app generator setup.
+// Set views.
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+// Express app generator setup.
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use('/', clientRouter);
 app.use('/server', serverRouter);
 
@@ -333,8 +334,6 @@ app.use(function(err, req, res, next) {
 
 // Initialize MongoDB connection.
 mongoose.connect('mongodb://localhost/tallyvision', {useNewUrlParser: true});
-
-var mongoose = require('mongoose');
 
 // Set vote schema.
 var voteSchema = new mongoose.Schema({
