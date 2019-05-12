@@ -1,13 +1,13 @@
 var mongoose = require('mongoose');
 
-// Set vote schema.
+// Define vote schema.
 var voteSchema = new mongoose.Schema({
     user: {
         type:     String,
         required: [true, 'How am I supposed to know who`s vote this is?'],
     },
     contestant: {
-        type:     Number,
+        type:     String,
         required: [true, 'How am I supposed to know which contestant this is for?'],
     },
     cat1: {
@@ -42,7 +42,4 @@ var voteSchema = new mongoose.Schema({
     }
 });
 
-// Define vote model.
-var voteModel = mongoose.model('Vote', voteSchema);
-
-module.exports = voteModel;
+module.exports = mongoose.model('Vote', voteSchema);

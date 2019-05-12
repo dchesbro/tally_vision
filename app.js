@@ -13,7 +13,7 @@ var adminRouter    = require('./routes/admin');
 var usersRouter    = require('./routes/users');
 
 // Define database models.
-var vote           = require('./models/vote');
+var voteModel      = require('./models/vote');
 
 // Define Socket.IO server.
 var server         = require('http').Server(app);
@@ -335,8 +335,8 @@ app.use(function(err, req, res, next) {
 	res.render('error');
 });
 
-// Initialize MongoDB connection.
-mongoose.connect('mongodb://localhost/tallyvision', {useNewUrlParser: true});
+// Define MongoDB connection.
+var db = mongoose.connect('mongodb://localhost/tallyvision', {useNewUrlParser: true});
 
 // Client Socket.IO event handlers.
 io.on('connection', function(socket){
@@ -443,12 +443,33 @@ io.on('connection', function(socket){
 	/**
 	 * ...
 	 */
-	socket.on('user-vote', function({ username, vote }){
+	socket.on('user-vote', function({ scores }){
 		
-		// If socket not registered, return.
-		if(!socket.registered){
+		// If socket not registered or contestant not set, return.
+		if(!socket.registered || !contestant){
 			return;
 		}
+
+		// Print debug message(s).
+		console.log('IO Registered user "' + socket.username + '" submitted scores for "' + contestant.country + '"');
+
+		// Parse scores as integers and define vote object.
+		var vote = new voteModel({
+			user: socket.username,
+			contestant: contestant.code,
+			cat1: parseInt(scores.cat1),
+			cat2: parseInt(scores.cat2),
+			cat3: parseInt(scores.cat3),
+			cat4: parseInt(scores.cat4),
+			cat5: parseInt(scores.cat5)
+		});
+
+		// Save vote to database.
+		vote.save(function(err, vote){
+			if(err){
+				console.log(err.message);
+			}
+		});
 
 		// Return 'user-voted' event (sender).
 		socket.emit('user-voted');
@@ -457,16 +478,7 @@ io.on('connection', function(socket){
 		io.sockets.emit('client-voted');
 
 		// Print debug message(s).
-		console.log('IO Registered user "' + username + '" submitted ballot:');
-		console.log(vote);
-
-		vote.save(function (err, vote) {
-			if (err) {
-				return console.log(err.message);
-			} else {
-				return console.log('DB added vote ' + vote._id);
-			}
-		});
+		console.log('DB Saved vote ID ' + vote._id);
 	});
 });
 

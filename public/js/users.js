@@ -33,17 +33,15 @@ $(function(){
     }
 
     /**
-	 * Set vote object and return 'user-vote' event.
+	 * Define scores object and return 'user-vote' event.
 	 */
     $('#ballot form').submit(function(event){
 
         // Prevent form submission.
         event.preventDefault();
 
-        // Set vote object for current ballot.
-        var vote = {
-            user: username,
-            // code: currentBallot,
+        // Define scores object.
+        var scores = {
             cat1: $('input#cat1:checked').val(),
             cat2: $('input#cat2:checked').val(),
             cat3: $('input#cat3:checked').val(),
@@ -52,8 +50,8 @@ $(function(){
         };
 
         // If vote not empty assume everything is good, return 'user-vote' event.
-        if(!$.isEmptyObject(vote)){
-            socket.emit('user-vote', { username, vote });
+        if(!$.isEmptyObject(scores)){
+            socket.emit('user-vote', { scores });
         }
     });
 
