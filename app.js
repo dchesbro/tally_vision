@@ -112,6 +112,9 @@ io.on('connection', function(socket){
 		contestant = null;
 	});
 
+	/*----------------------------------------------------------
+	## Connection events
+	----------------------------------------------------------*/
 	/**
 	 * Register socket as admin.
 	 */
@@ -146,8 +149,15 @@ io.on('connection', function(socket){
 	/**
 	 * ...
 	 */
-	socket.on('ballot-total', function(){
+	socket.on('ballot-total', function(code){
+		
+		// ...
+		voteModel.find({ contestant: code }, function(err, votes) {
+			if (err) throw err;
 
+			// object of all the users
+			console.log(votes);
+		});
 	});
 	
 	/**
@@ -166,7 +176,7 @@ io.on('connection', function(socket){
 		// Parse scores as integers and define vote object.
 		var vote = new voteModel({
 			user: socket.username,
-			contestant: contestant.code,
+			code: contestant.code,
 			cat1: parseInt(scores.cat1),
 			cat2: parseInt(scores.cat2),
 			cat3: parseInt(scores.cat3),
@@ -186,7 +196,7 @@ io.on('connection', function(socket){
 				socket.emit('ballot-vote', vote);
 
 				// Send 'ballot-voted' event (to everyone).
-				io.sockets.emit('ballot-voted', contestant);
+				io.sockets.emit('ballot-voted', vote);
 
 				// Print debug message(s).
 				console.log('DB Saved vote ID ' + vote._id);

@@ -1,68 +1,68 @@
 extends layout
 
 block content
-    main#user-cards(class='container-fluid')
-        section(class='row justify-content-center')
-            div(class='col')
-                h1#user-heading
+	main#user-cards(class='container-fluid')
+		section(class='row justify-content-center')
+			div(class='col')
+				h1#user-heading
 
-                // User registration form
-                div#user-registration(class='card shadow-lg')
-                    form
-                        div(class='card-body form-group')
-                            label(for='username') Choose a name to join or reconnect:
-                            input(class='form-control', id='username', name='username', type='text', required)
-                        button(class='btn btn-lg btn-block btn-primary', type='submit') Join
-                
-                // Contestants table
-                div#contestants(class='card shadow-lg')
-                    table(class='table')
-                        thead(class='thead-dark')
-                            tr
-                                th(class='col-index', scope='col') <!-- Index # -->
-                                th(class='col-contestant', scope='col') Contestant
-                                th(class='col-score', scope='col') Score
-                        tbody
-                            each contestant, index in contestants
+				// User registration form
+				div#user-registration(class='card shadow-lg')
+					form
+						div(class='card-body form-group')
+							label(for='username') Choose a name to join or reconnect:
+							input(class='form-control', id='username', name='username', type='text', required)
+						button(class='btn btn-lg btn-block btn-primary', type='submit') Join
+				
+				// Contestants table
+				div#contestants(class='card shadow-lg')
+					table(class='table')
+						thead(class='thead-dark')
+							tr
+								th(class='col-index', scope='col') <!-- Index # -->
+								th(class='col-contestant', scope='col') Contestant
+								th(class='col-score', scope='col') Score
+						tbody
+							each contestant, index in contestants
 
-                                - var displayIndex = index + 1;
+								- var displayIndex = index + 1;
 
-                                tr
-                                    th(class='col-index', scope='row')=displayIndex
-                                    td(class='col-contestant')=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
-                                    td(class='col-score') --
+								tr(id=contestant.code)
+									th(class='col-index', scope='row')=displayIndex
+									td(class='col-contestant')=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
+									td(class='col-score') --
 
-                // Ballot form
-                div#ballot(class='card shadow-lg')
-                    div(class='card-body')
-                        h3#contestant-country
-                        span#contestant-details
-                        span#contestant-score
-                    form
-                        ul(class='list-group list-group-flush')
-                            each category, index in categories
+				// Ballot form
+				div#ballot(class='card shadow-lg')
+					div(class='card-body')
+						h3#contestant-country
+						span#contestant-details
+						span#contestant-score
+					form
+						ul(class='list-group list-group-flush')
+							each category, index in categories
 
-                                - var displayIndex = index + 1;
+								- var displayIndex = index + 1;
 
-                                li(class='list-group-item')
-                                    h6=displayIndex + '. ' + category.title
-                                    div(class='btn-group btn-group-toggle w-100', data-toggle='buttons')
-                                        label(class='btn btn-outline-primary') 0
-                                            input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='0', required)
-                                        label(class='btn btn-outline-primary') 1
-                                            input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='1')
-                                        label(class='btn btn-outline-primary') 2
-                                            input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='2')
-                                        label(class='btn btn-outline-primary') 3
-                                            input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='3')
-                                        label(class='btn btn-outline-primary') 4
-                                            input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='4')
-                                        label(class='btn btn-outline-primary') 5
-                                            input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='5')
-                                    div(class='d-flex justify-content-between')
-                                        small(class='form-text text-muted')=category.label0
-                                        small(class='form-text text-muted')=category.label5
-                        button(class='btn btn-lg btn-block btn-primary', type='submit') Vote
+								li(class='list-group-item')
+									h6=displayIndex + '. ' + category.title
+									div(class='btn-group btn-group-toggle w-100', data-toggle='buttons')
+										label(class='btn btn-outline-primary') 0
+											input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='0', required)
+										label(class='btn btn-outline-primary') 1
+											input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='1')
+										label(class='btn btn-outline-primary') 2
+											input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='2')
+										label(class='btn btn-outline-primary') 3
+											input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='3')
+										label(class='btn btn-outline-primary') 4
+											input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='4')
+										label(class='btn btn-outline-primary') 5
+											input(id='cat' + displayIndex, name='cat' + displayIndex, type='radio', value='5')
+									div(class='d-flex justify-content-between')
+										small(class='form-text text-muted')=category.label0
+										small(class='form-text text-muted')=category.label5
+						button(class='btn btn-lg btn-block btn-primary', type='submit') Vote
 
 block footer
-    script(src='/js/users.js')
+	script(src='/js/users.js')

@@ -1,59 +1,59 @@
 #admin-cards {
-    max-width: 1080px
+	max-width: 1080px
 }
 
 #user-cards {
-    max-width: 640px;
+	max-width: 640px;
 }
 
 #user-cards #ballot, #user-cards #contestants, #user-cards #user-heading, #user-cards #voted{
-    display: none;
+	display: none;
 }
 
 #user-heading {
-    text-align: center;
-    margin-bottom: 2rem;
+	text-align: center;
+	margin-bottom: 2rem;
 }
 
 #contestants table .col-actions, #contestants table .col-index, #contestants table .col-score, #contestants table .col-votes {
-    text-align: center;
-    width: 1%;
+	text-align: center;
+	width: 1%;
 }
 
 #contestants table .col-actions a {
-    font-weight: bold;
-    text-transform: uppercase;
+	font-weight: bold;
+	text-transform: uppercase;
 }
 
 #contestants table .col-actions a.kill {
-    display: none;
+	display: none;
 }
 
 #contestant-score {
-    display: block;
-    font-size: 1.75rem;
-    margin-top: 1rem;
-    text-align: center;
+	display: block;
+	font-size: 1.75rem;
+	margin-top: 1rem;
+	text-align: center;
 }
 
 .card {
-    border-radius: .6rem;
-    overflow: hidden;
+	border-radius: .6rem;
+	overflow: hidden;
 }
 
 .card .btn[type='submit']{
-    border-radius: 0;
+	border-radius: 0;
 }
 
 .card .table, .card .form-group{
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 .card-group {
-    margin-bottom: 2rem;
+	margin-bottom: 2rem;
 }
 
 body {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+	margin-top: 2rem;
+	margin-bottom: 2rem;
 }
