@@ -66,8 +66,21 @@ mongoose.connect('mongodb://localhost/tallyvision', {useNewUrlParser: true});
 // Socket.IO event handlers.
 io.on('connection', function(socket){
 	
+	/*----------------------------------------------------------
+	# Admin action events
+	----------------------------------------------------------*/
 	/**
 	 * ...
+	 */
+	socket.on('admin-connect', function(){
+		
+		// Return 'user-registered' event (sender).
+		socket.emit('admin-connected', { contestant, userCount });
+		console.log('IO ' + userCount + ' user(s) registered');
+	});
+
+	/**
+	 * Set contestant using defined index and initiate voting.
 	 */
     socket.on('ballot-init', function(index){
 
@@ -87,7 +100,7 @@ io.on('connection', function(socket){
 	});
 	
 	/**
-	 * ...
+	 * Kill voting and set contestant to null.
 	 */
     socket.on('ballot-kill', function(){
 
@@ -104,31 +117,13 @@ io.on('connection', function(socket){
 		
 		// Set contestant to null.
 		contestant = null;
-    });
-
+	});
+	
+	/*----------------------------------------------------------
+	# User action events
+	----------------------------------------------------------*/
     /**
-	 * ...
-	 */
-    socket.on('disconnect', function(){
-
-		// If socket not registered, return.
-		if(!socket.registered){
-			return;
-		}
-
-		// Decrease registered user count.
-		userCount--;
-
-		// Return 'user-disconected' event (everyone).
-        io.sockets.emit('client-disconnected', { username: socket.username, userCount });
-		
-		// Print debug message(s).
-		console.log('IO Registered user "' + socket.username + '" disconnected');
-		console.log('IO ' + userCount + ' user(s) registered');
-    });
-
-    /**
-	 * ...
+	 * Register socket as user, increase user count, and check for open ballot.
 	 */
     socket.on('user-register', function(username){
         
@@ -154,7 +149,7 @@ io.on('connection', function(socket){
         console.log('IO Registered socket ID ' + socket.id + ' as user "' + socket.username + '"');
 		console.log('IO ' + userCount + ' user(s) registered');
 		
-		// ...
+		// If contestant set when user registers send them to ballot.
 		if(contestant){
 			
 			// Return 'ballot-open' event (sender).
@@ -204,6 +199,30 @@ io.on('connection', function(socket){
 
 		// Print debug message(s).
 		console.log('DB Saved vote ID ' + vote._id);
+	});
+
+	/*----------------------------------------------------------
+	# User connection events
+	----------------------------------------------------------*/
+    /**
+	 * Decrease user count on disconnect.
+	 */
+    socket.on('disconnect', function(){
+
+		// If socket not registered, return.
+		if(!socket.registered){
+			return;
+		}
+
+		// Decrease registered user count.
+		userCount--;
+
+		// Return 'user-disconected' event (everyone).
+        io.sockets.emit('client-disconnected', { username: socket.username, userCount });
+		
+		// Print debug message(s).
+		console.log('IO Registered user "' + socket.username + '" disconnected');
+		console.log('IO ' + userCount + ' user(s) registered');
 	});
 });
 

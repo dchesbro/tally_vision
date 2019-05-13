@@ -11,7 +11,7 @@ $(function(){
     /**
      * Initialize user connections.
      */
-    function userInit() {
+    function initUser(){
 
         // Focus input on username input field.
         $('input#username').focus();
@@ -160,5 +160,5 @@ $(function(){
         $('#ballot form').hide();
     });
 
-    userInit();
+    initUser();
 });

@@ -21,19 +21,24 @@ block content
                     table(class='table')
                         thead(class='thead-dark')
                             tr
+                                th(class='col-contestant', scope='col') <!-- Index -->
                                 th(class='col-contestant', scope='col') Contestant
                                 th(class='col-score', scope='col') Score
                                 th(class='col-votes', scope='col') Votes
                                 th(class='col-actions', scope='col') Actions
                         tbody
-                            each contestant, id in contestants
+                            each contestant, index in contestants
+
+                                - var displayIndex = index + 1;
+
                                 tr
-                                    td(class='col-contestant', scope='row')=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
+                                    th(class='col-index',, scope='row')=displayIndex
+                                    td(class='col-contestant')=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
                                     td(class='col-votes') ...
                                     td(class='col-score') ...
                                     td(class='col-actions')
-                                        a(class='ballot-action init', href='#', id=id) Init
-                                        a(class='ballot-action kill', href='#', id=id) Kill
+                                        a(class='ballot-action init', data-index=index, href='#', id=contestant.code) Init
+                                        a(class='ballot-action kill', data-index=index, href='#', id=contestant.code) Kill
 
 block footer
     script(src='/js/admin.js')

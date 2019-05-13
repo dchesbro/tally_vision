@@ -5,7 +5,16 @@ $(function(){
 
     // Set local server variables.
     var index;
-    
+
+    /**
+     * Initialize user connections.
+     */
+    function initAdmin(){
+
+        // ...
+        socket.emit('admin-connect');
+    }
+
     /**
 	 * ...
 	 */
@@ -15,7 +24,7 @@ $(function(){
         event.preventDefault();
 
         // Set contestant index.
-        index = $(this).attr('id');
+        index = $(this).attr('data-index');
 
         // If contestant index number set, return 'server-ballot-open' event.
         if(index){
@@ -36,6 +45,27 @@ $(function(){
 
         // Return 'server-ballot-kill' event.
         socket.emit('ballot-kill');
+    });
+
+    /**
+     * ...
+     */
+    socket.on('admin-connected', function({ contestant, userCount }){
+        
+        // Update registered user count display.
+        $('#stats-users').text(userCount);
+
+        if(contestant){
+
+            // Hide init actions.
+            $('.ballot-action.init').hide();
+
+            // Show kill action for current contestant index.
+            $('#' + contestant.code + '.ballot-action.kill').show();
+
+            // Update current ballot display.
+            $('#stats-ballot').text(contestant.country);
+        }
     });
 
     /**
@@ -62,7 +92,7 @@ $(function(){
         $('.ballot-action.init').hide();
 
         // Show kill action for current contestant index.
-        $('#' + index + '.ballot-action.kill').show();
+        $('#' + contestant.code + '.ballot-action.kill').show();
 
         // Update current ballot display.
         $('#stats-ballot').text(contestant.country);
@@ -85,4 +115,6 @@ $(function(){
         // Update registered user count display.
         $('#stats-users').text(userCount);
     });
+
+    initAdmin();
 });
