@@ -6,19 +6,21 @@ $(function(){
     // Define local user variables.
     var registered = false;
     var username;
-    var voting = false;
-
+    
+    /*----------------------------------------------------------
+	# User functions
+    ----------------------------------------------------------*/
     /**
      * Initialize user connections.
      */
     function initUser(){
 
-        // Focus input on username input field.
+        // Focus input on username field.
         $('input#username').focus();
     }
-    
+
     /**
-     * Change user views.
+     * Shuffle user card view.
      */
     function shuffleCard(card){
 
@@ -28,12 +30,15 @@ $(function(){
         // Show defined card.
         $(card).show();
 
-        // Scroll to top of window.
+        // Scroll to top of viewport.
         $(window).scrollTop(0);
     }
 
+    /*----------------------------------------------------------
+	# User JS events
+	----------------------------------------------------------*/
     /**
-	 * Define scores object and return 'user-vote' event.
+	 * Define scores object and send 'user-vote' event.
 	 */
     $('#ballot form').submit(function(event){
 
@@ -49,14 +54,14 @@ $(function(){
             cat5: $('input#cat5:checked').val()
         };
 
-        // If vote not empty assume everything is good, return 'user-vote' event.
+        // If scores found for all categories, send 'ballot-vote' event.
         if(!$.isEmptyObject(scores)){
-            socket.emit('user-vote', { scores });
+            socket.emit('ballot-vote', scores);
         }
     });
 
     /**
-	 * Set username and return 'user-register' event.
+	 * Set username and send 'user-register' event.
 	 */
     $('#user-registration form').submit(function(event){
 
@@ -66,31 +71,34 @@ $(function(){
         // Trim input and set username.
         username = $('input#username').val().trim();
 
-        // If username set, return 'user-register' event.
+        // If username set, send 'user-register' event.
         if(username){
             socket.emit('user-register', username);
         }
     });
 
+    /*----------------------------------------------------------
+	# User Socket.IO events
+    ----------------------------------------------------------*/
+    /*----------------------------------------------------------
+	## Ballot events
+    ----------------------------------------------------------*/
     /**
-     * Set voting status and shuffle to contestants view.
+     * Set voting and shuffle to contestants card view.
      */
     socket.on('ballot-close', function(){
-        
-        // Set voting to false.
-        voting = false;
 
         // Shuffle to contestants card view.
         shuffleCard('#contestants');
-	});
-    
+    });
+
     /**
-	 * Set ballot details, voting status, and shuffle to ballot card view.
+	 * Set ballot, voting status, and shuffle to ballot card view.
 	 */
     socket.on('ballot-open', function(contestant){
 
-        // If user not registered or already voting, return.
-        if(!registered || voting){ 
+        // If user not registered, return.
+        if(!registered){ 
             return;
         }
         
@@ -106,28 +114,45 @@ $(function(){
         // Show ballot form.
         $('#ballot form').show();
 
-        // Set voting to true.
-        voting = true;
-
         // Shuffle to ballot card view.
         shuffleCard('#ballot');
     });
 
     /**
-     * Re-register users on reconnect.
+	 * Set score and hide ballot form.
+	 */
+    socket.on('ballot-vote', function(score){
+
+        // If user not registered, return.
+        if(!registered){ 
+            return;
+        }
+
+        // Update ballot with contestant score.
+        $('#contestant-score').text(score);
+
+        // Hide ballot form.
+        $('#ballot form').hide();
+    });
+    
+    /*----------------------------------------------------------
+	## Connection events
+    ----------------------------------------------------------*/
+    /**
+     * Set registered to false on disconnect.
      */
     socket.on('disconnect', function(){
-        
+
         // Set registered to false.
         registered = false;
-	});
+    });
 
     /**
-     * Re-register users on reconnect.
+     * If username set, send 'user-register' event on reconnect.
      */
     socket.on('reconnect', function(){
         
-        // If username set, return 'user-register' event.
+        // If username set, send 'user-register' event.
         if(username){
             socket.emit('user-register', username);
         }
@@ -136,28 +161,16 @@ $(function(){
     /**
 	 * Register users and shuffle to whatever card view.
 	 */
-    socket.on('user-registered', function(){
-
-        // Set user heading and hide registration form.
-        $('#user-heading').text(username).show();
+    socket.on('user-register', function(){
 
         // Set registered to true.
         registered = true;
 
+        // Set and show user heading.
+        $('#user-heading').text(username).show();
+
         // Shuffle to contestants card view.
         shuffleCard('#contestants');
-    });
-
-    /**
-	 * ...
-	 */
-    socket.on('user-voted', function(contestant){
-
-        // ...
-        $('#contestant-score').text();
-
-        // Hide ballot form.
-        $('#ballot form').hide()
     });
 
     initUser();

@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    main#server-views(class='container-fluid')
+    main#admin-cards(class='container-fluid')
         section(class='row justify-content-center')
             div(class='col')
 
@@ -37,8 +37,8 @@ block content
                                     td(class='col-votes') --
                                     td(class='col-score') --
                                     td(class='col-actions')
-                                        a(class='btn btn-sm btn-outline-primary ballot-action init', data-index=index, href='#', id=contestant.code) Init
-                                        a(class='btn btn-sm btn-outline-danger ballot-action kill', data-index=index, href='#', id=contestant.code) Kill
+                                        a(class='open', data-index=index, href='#', id=contestant.code) Open
+                                        a(class='text-danger kill', data-index=index, href='#', id=contestant.code) Kill
 
 block footer
     script(src='/js/admin.js')

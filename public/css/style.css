@@ -1,25 +1,32 @@
-#client-cards {
+#admin-cards {
+    max-width: 1080px
+}
+
+#user-cards {
     max-width: 640px;
 }
 
-#client-cards #ballot, #client-cards #contestants, #client-cards #user-heading, #client-cards #voted{
+#user-cards #ballot, #user-cards #contestants, #user-cards #user-heading, #user-cards #voted{
     display: none;
 }
 
-#contestants table td.col-actions, #contestants table td.col-score, #contestants table td.col-votes {
+#contestants table .col-actions, #contestants table .col-index, #contestants table .col-score, #contestants table .col-votes {
     text-align: center;
     width: 1%;
+}
+
+#contestants table .col-actions a {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#contestants table .col-actions a.kill {
+    display: none;
 }
 
 #user-heading {
     text-align: center;
     margin-bottom: 2rem;
-}
-
-.ballot-action {
-    display: none;
-    font-weight: bold;
-    text-transform: uppercase;
 }
 
 .card {
@@ -39,7 +46,7 @@
     margin-bottom: 2rem;
 }
 
-body{
+body {
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
