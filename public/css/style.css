@@ -10,6 +10,11 @@
     display: none;
 }
 
+#user-heading {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
 #contestants table .col-actions, #contestants table .col-index, #contestants table .col-score, #contestants table .col-votes {
     text-align: center;
     width: 1%;
@@ -24,9 +29,11 @@
     display: none;
 }
 
-#user-heading {
+#contestant-score {
+    display: block;
+    font-size: 1.75rem;
+    margin-top: 1rem;
     text-align: center;
-    margin-bottom: 2rem;
 }
 
 .card {

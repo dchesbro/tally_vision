@@ -19,13 +19,18 @@ block content
                     table(class='table')
                         thead(class='thead-dark')
                             tr
+                                th(class='col-index', scope='col') <!-- Index # -->
                                 th(class='col-contestant', scope='col') Contestant
                                 th(class='col-score', scope='col') Score
                         tbody
                             each contestant, index in contestants
+
+                                - var displayIndex = index + 1;
+
                                 tr
-                                    td(class='col-contestant', scope='row')=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
-                                    td(class='col-score') ...
+                                    th(class='col-index', scope='row')=displayIndex
+                                    td(class='col-contestant')=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
+                                    td(class='col-score') --
 
                 // Ballot form
                 div#ballot(class='card shadow-lg')

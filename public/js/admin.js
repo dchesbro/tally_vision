@@ -21,14 +21,14 @@ $(function(){
     /**
      * Update current ballot stat display.
      */
-    function statsBallot(country = '--'){
+    function updateBallot(country = '--'){
         $('#stats-ballot').text(country);
     }
 
     /**
      * Update users registered stat display.
      */
-    function statsUsers(userCount = 0){
+    function updateUsers(userCount = 0){
         $('#stats-users').text(userCount);
     }
 
@@ -77,7 +77,7 @@ $(function(){
 	 * ...
 	 */
     socket.on('ballot-open', function(contestant){
-        statsBallot(contestant.country);
+        updateBallot(contestant.country);
 
         // Hide open buttons.
         $('.open').hide();
@@ -90,7 +90,7 @@ $(function(){
 	 * ...
 	 */
     socket.on('ballot-kill', function(){
-        statsBallot();
+        updateBallot();
 
         // Hide kill actions.
         $('.kill').hide();
@@ -106,21 +106,21 @@ $(function(){
      * ...
      */
     socket.on('admin-register', function(userCount){
-        statsUsers(userCount);
+        updateUsers(userCount);
     });
 
     /**
 	 * ...
 	 */
     socket.on('user-disconnected', function({ username, userCount }){
-        statsUsers(userCount);
+        updateUsers(userCount);
     });
 
     /**
 	 * ...
 	 */
     socket.on('user-registered', function({ username, userCount }){
-        statsUsers(userCount);
+        updateUsers(userCount);
     });
 
     initAdmin();

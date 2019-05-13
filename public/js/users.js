@@ -34,6 +34,18 @@ $(function(){
         $(window).scrollTop(0);
     }
 
+    /**
+     * ...
+     */
+    function updateScore(vote){
+
+        // ...
+        var total = vote.cat1 + vote.cat2 + vote.cat3 + vote.cat4 + vote.cat5;
+        
+        // ...
+        $('#contestant-score').text(total);
+    }
+
     /*----------------------------------------------------------
 	# User JS events
 	----------------------------------------------------------*/
@@ -86,7 +98,7 @@ $(function(){
     /**
      * Set voting and shuffle to contestants card view.
      */
-    socket.on('ballot-close', function(){
+    socket.on('ballot-kill', function(){
 
         // Shuffle to contestants card view.
         shuffleCard('#contestants');
@@ -121,15 +133,8 @@ $(function(){
     /**
 	 * Set score and hide ballot form.
 	 */
-    socket.on('ballot-vote', function(score){
-
-        // If user not registered, return.
-        if(!registered){ 
-            return;
-        }
-
-        // Update ballot with contestant score.
-        $('#contestant-score').text(score);
+    socket.on('ballot-vote', function(vote){
+        updateScore(vote);
 
         // Hide ballot form.
         $('#ballot form').hide();

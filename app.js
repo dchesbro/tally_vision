@@ -146,7 +146,7 @@ io.on('connection', function(socket){
 	/**
 	 * ...
 	 */
-	socket.on('user-vote', function({ scores }){
+	socket.on('ballot-vote', function(scores){
 		
 		// If socket not registered or contestant not set, return.
 		if(!socket.registered || !contestant){
@@ -170,18 +170,21 @@ io.on('connection', function(socket){
 		// Save vote to database.
 		vote.save(function(err, vote){
 			if(err){
+
+				// Print debug message(s).
 				console.log(err.message);
+			}else{
+
+				// Send 'ballot-vote' event (to sender).
+				socket.emit('ballot-vote', vote);
+
+				// Send 'ballot-voted' event (to everyone).
+				io.sockets.emit('ballot-voted');
+
+				// Print debug message(s).
+				console.log('DB Saved vote ID ' + vote._id);
 			}
 		});
-
-		// Send 'user-voted' event (to sender).
-		socket.emit('user-voted', contestant);
-
-		// Send 'client-voted' event (to everyone).
-		io.sockets.emit('client-voted');
-
-		// Print debug message(s).
-		console.log('DB Saved vote ID ' + vote._id);
 	});
 
 	/*----------------------------------------------------------
