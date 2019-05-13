@@ -151,13 +151,13 @@ $(function(){
     /**
 	 * ...
 	 */
-    socket.on('user-voted', function(){
+    socket.on('user-voted', function(contestant){
 
         // ...
         $('#contestant-score').text();
 
         // Hide ballot form.
-        $('#ballot form').hide();
+        $('#ballot form').hide()
     });
 
     initUser();

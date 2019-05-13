@@ -19,13 +19,13 @@ var voteModel      = require('./models/vote');
 var categories     = require('./includes/categories');
 var contestants    = require('./includes/contestants');
 
+// Define local app variables.
+var contestant;
+var userCount = 0;
+
 // Define routers.
 var adminRouter    = require('./routes/admin');
 var usersRouter    = require('./routes/users');
-
-// Define app variables.
-var contestant;
-var userCount = 0;
 
 // Set app variables.
 app.set('categories', categories);
@@ -192,7 +192,7 @@ io.on('connection', function(socket){
 		});
 
 		// Return 'user-voted' event (sender).
-		socket.emit('user-voted');
+		socket.emit('user-voted', contestant);
 
 		// Return 'client-voted' event (everyone).
 		io.sockets.emit('client-voted');

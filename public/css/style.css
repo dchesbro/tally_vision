@@ -17,12 +17,9 @@
 }
 
 .ballot-action {
+    display: none;
     font-weight: bold;
     text-transform: uppercase;
-}
-
-.ballot-action.kill {
-    display: none;
 }
 
 .card {
