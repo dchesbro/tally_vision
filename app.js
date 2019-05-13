@@ -75,34 +75,34 @@ io.on('connection', function(socket){
 	/**
 	 * Set contestant using defined index and open voting.
 	 */
-    socket.on('ballot-open', function(index){
+	socket.on('ballot-open', function(index){
 
 		// If contestant set, return.
 		if(contestant){
 			return;
 		}
 
-        // Set contestant using contestant index.
-        contestant = contestants[index];
+		// Set contestant using contestant index.
+		contestant = contestants[index];
 
-        // Send 'ballot-open' event (to everyone).
+		// Send 'ballot-open' event (to everyone).
 		io.sockets.emit('ballot-open', contestant);
 		
 		// Print debug message(s).
-        console.log('IO Opening ballot for "' + contestant.country + '"');
+		console.log('IO Opening ballot for "' + contestant.country + '"');
 	});
 	
 	/**
 	 * Kill voting and set contestant to null.
 	 */
-    socket.on('ballot-kill', function(){
+	socket.on('ballot-kill', function(){
 
-        // If contestant not set, return.
+		// If contestant not set, return.
 		if(!contestant){
 			return;
 		}
 
-        // Send 'ballot-kill' event (to everyone).
+		// Send 'ballot-kill' event (to everyone).
 		io.sockets.emit('ballot-kill');
 		
 		// Print debug message(s).
@@ -117,14 +117,14 @@ io.on('connection', function(socket){
 	 */
 	socket.on('admin-register', function(){
 
-        // Set admin as socket properties.
+		// Set admin as socket properties.
 		socket.admin = true;
 		
 		// Send 'admin-register' event (to sender).
 		socket.emit('admin-register', userCount);
 		
 		// Print debug message(s).
-        console.log('IO Registered socket ID ' + socket.id + ' as admin');
+		console.log('IO Registered socket ID ' + socket.id + ' as admin');
 		
 		// If contestant set, send 'ballot-open' event to registered socket.
 		if(contestant){
@@ -133,7 +133,7 @@ io.on('connection', function(socket){
 			socket.emit('ballot-open', contestant);
 		
 			// Print debug message(s).
-        	console.log('IO Opening ballot "' + contestant.country + '" for admin');
+			console.log('IO Opening ballot "' + contestant.country + '" for admin');
 		}
 	});
 	
@@ -143,6 +143,13 @@ io.on('connection', function(socket){
 	/*----------------------------------------------------------
 	## Ballot events
 	----------------------------------------------------------*/
+	/**
+	 * ...
+	 */
+	socket.on('ballot-total', function(){
+
+	});
+	
 	/**
 	 * ...
 	 */
@@ -179,7 +186,7 @@ io.on('connection', function(socket){
 				socket.emit('ballot-vote', vote);
 
 				// Send 'ballot-voted' event (to everyone).
-				io.sockets.emit('ballot-voted');
+				io.sockets.emit('ballot-voted', contestant);
 
 				// Print debug message(s).
 				console.log('DB Saved vote ID ' + vote._id);
@@ -190,10 +197,10 @@ io.on('connection', function(socket){
 	/*----------------------------------------------------------
 	## Connection events
 	----------------------------------------------------------*/
-    /**
+	/**
 	 * Decrease user count on disconnect.
 	 */
-    socket.on('disconnect', function(){
+	socket.on('disconnect', function(){
 
 		// If socket not registered, return.
 		if(!socket.registered){
@@ -204,7 +211,7 @@ io.on('connection', function(socket){
 		userCount--;
 
 		// Send 'user-disconected' event (to everyone).
-        io.sockets.emit('user-disconnected', { username: socket.username, userCount });
+		io.sockets.emit('user-disconnected', { username: socket.username, userCount });
 		
 		// Print debug message(s).
 		console.log('IO Registered user "' + socket.username + '" disconnected');
@@ -214,14 +221,14 @@ io.on('connection', function(socket){
 	/**
 	 * Register socket as user, increase user count, and check for open ballot.
 	 */
-    socket.on('user-register', function(username){
-        
-        // If socket registered, return.
-        if(socket.registered){
+	socket.on('user-register', function(username){
+		
+		// If socket registered, return.
+		if(socket.registered){
 			return;
 		}
 
-        // Set username and registered as socket properties.
+		// Set username and registered as socket properties.
 		socket.username = username;
 		socket.registered = true;
 
@@ -232,10 +239,10 @@ io.on('connection', function(socket){
 		socket.emit('user-register');
 
 		// Send 'user-registered' event (to everyone).
-        io.sockets.emit('user-registered', { username: socket.username, userCount });
+		io.sockets.emit('user-registered', { username: socket.username, userCount });
 		
 		// Print debug message(s).
-        console.log('IO Registered socket ID ' + socket.id + ' as user "' + socket.username + '"');
+		console.log('IO Registered socket ID ' + socket.id + ' as user "' + socket.username + '"');
 		console.log('IO ' + userCount + ' user(s) registered');
 		
 		// If contestant set, send 'ballot-open' event to registered socket.
@@ -245,7 +252,7 @@ io.on('connection', function(socket){
 			socket.emit('ballot-open', contestant);
 		
 			// Print debug message(s).
-        	console.log('IO Opening ballot "' + contestant.country + '" for user "' + socket.username + '"');
+			console.log('IO Opening ballot "' + contestant.country + '" for user "' + socket.username + '"');
 		}
 	});
 });
