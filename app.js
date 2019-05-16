@@ -1,9 +1,9 @@
-var createError    = require('http-errors');   // Create HTTP error objects
-var express        = require('express');       // Application framework
-var path           = require('path');          // File and directory path utilities
 var cookieParser   = require('cookie-parser'); // HTTP cookie parser
-var logger         = require('morgan');        // HTTP request logger
+var express        = require('express');       // Application framework
+var createError    = require('http-errors');   // Create HTTP error objects
 var mongoose       = require('mongoose');      // MongoDB object modeling
+var logger         = require('morgan');        // HTTP request logger
+var path           = require('path');          // File and dir path utilities
 
 // Define Express app instance.
 var app            = express();
@@ -26,6 +26,20 @@ var userCount = 0;
 // Define routers.
 var adminRouter    = require('./routes/admin');
 var usersRouter    = require('./routes/users');
+
+/**
+ * ...
+ */
+function getUserScores(username){
+	
+	// ...
+	voteModel.find({ username: username }, function(err, votes) {
+		if (err) throw err;
+
+		// object of all the users
+		console.log(votes);
+	});
+}
 
 // Set app variables.
 app.set('categories', categories);
