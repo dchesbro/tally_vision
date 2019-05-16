@@ -100,6 +100,11 @@ $(function(){
 	 */
 	socket.on('ballot-kill', function(){
 
+		// If user not registered, return.
+		if(!registered){ 
+			return;
+		}
+
 		// Shuffle to contestants card view.
 		shuffleCard('#contestants');
 	});
