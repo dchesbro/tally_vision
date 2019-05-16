@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 // Define vote schema.
 var voteSchema = new mongoose.Schema({
-	user: {
+	username: {
 		type:     String,
 		required: [true, 'How am I supposed to know who`s vote this is?'],
 	},

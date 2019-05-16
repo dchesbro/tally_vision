@@ -60,9 +60,6 @@ app.use(function(err, req, res, next) {
 	res.render('error');
 });
 
-// Open database connection.
-mongoose.connect('mongodb://localhost/tallyvision', {useNewUrlParser: true});
-
 // Socket.IO event handlers.
 io.on('connection', function(socket){
 	
@@ -102,14 +99,14 @@ io.on('connection', function(socket){
 			return;
 		}
 
+		// Set contestant to null.
+		contestant = null;
+
 		// Send 'ballot-kill' event (to everyone).
 		io.sockets.emit('ballot-kill');
 		
 		// Print debug message(s).
-		console.log('IO Closing ballot for "' + contestant.country + '"');
-		
-		// Set contestant to null.
-		contestant = null;
+		console.log('IO Closing ballot');
 	});
 
 	/*----------------------------------------------------------
@@ -266,5 +263,8 @@ io.on('connection', function(socket){
 		}
 	});
 });
+
+// Open database connection.
+mongoose.connect('mongodb://localhost/tallyvision', {useNewUrlParser: true});
 
 module.exports = { app: app, server: server };
