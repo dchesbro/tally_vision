@@ -15,17 +15,17 @@
 	margin-bottom: 2rem;
 }
 
-#contestants table .col-actions, #contestants table .col-index, #contestants table .col-score, #contestants table .col-votes {
+#contestants table .col-ballot, #contestants table .col-index, #contestants table .col-score, #contestants table .col-votes {
 	text-align: center;
 	width: 1%;
 }
 
-#contestants table .col-actions a {
+#contestants table .col-ballot a {
 	font-weight: bold;
 	text-transform: uppercase;
 }
 
-#contestants table .col-actions a.kill {
+#contestants table .col-ballot a.kill {
 	display: none;
 }
 

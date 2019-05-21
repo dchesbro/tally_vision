@@ -114,7 +114,7 @@ $(function(){
 	socket.on('ballot-open', function(contestant){
 
 		// If user not registered, return.
-		if(!registered){ 
+		if(!registered){
 			return;
 		}
 		
@@ -142,15 +142,6 @@ $(function(){
 
 		// Hide ballot form.
 		$('#ballot form').hide();
-	});
-
-	/**
-	 * ...
-	 */
-	socket.on('updateScores', function(scores){
-		$.each(scores, function(err, code, score){
-			$('.col-score').text(score);
-		});
 	});
 	
 	/*----------------------------------------------------------
@@ -189,6 +180,18 @@ $(function(){
 
 		// Shuffle to contestants card view.
 		shuffleCard('#contestants');
+	});
+
+	/*----------------------------------------------------------
+	## Database events
+	----------------------------------------------------------*/
+	/**
+	 * ...
+	 */
+	socket.on('user-scores', function(votes){
+		$.each(votes, function(index, vote){
+			$('tr#' + vote.code + ' .col-score').text(vote.total);
+		});
 	});
 
 	initUser();

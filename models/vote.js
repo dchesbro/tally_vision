@@ -4,36 +4,44 @@ var mongoose = require('mongoose');
 var voteSchema = new mongoose.Schema({
 	username: {
 		type:     String,
-		required: [true, 'How am I supposed to know who`s vote this is?'],
+		required: [true, 'Whose man is this? (Missing username)'],
 	},
 	code: {
 		type:     String,
-		required: [true, 'How am I supposed to know which contestant this is for?'],
+		required: [true, 'Where in the world is this? (Missing country code)'],
 	},
 	cat1: {
 		type:     Number,
 		required: true,
-		min:      [0, 'Category scores can`t be less than zero!'],
-		max:      [5, 'Category scores can`t be greater than five!']
+		min:      [0, 'It can`t be that bad! (Can`t be less than zero)'],
+		max:      [5, 'Seems too good to be true! (Can`t be greater than five)']
 	},
 	cat2: {
 		type:     Number,
 		required: true,
-		min:      [0, 'Category scores can`t be less than zero!'],
-		max:      [5, 'Category scores can`t be greater than five!']
+		min:      [0, 'It can`t be that bad! (Can`t be less than zero)'],
+		max:      [5, 'Seems too good to be true! (Can`t be greater than five)']
 	},
 	cat3: {
 		type:     Number,
 		required: true,
-		min:      [0, 'Category scores can`t be less than zero!'],
-		max:      [5, 'Category scores can`t be greater than five!']
+		min:      [0, 'It can`t be that bad! (Can`t be less than zero)'],
+		max:      [5, 'Seems too good to be true! (Can`t be greater than five)']
 	},
 	cat4: {
 		type:     Number,
 		required: true,
-		min:      [0, 'Category scores can`t be less than zero!'],
-		max:      [5, 'Category scores can`t be greater than five!']
+		min:      [0, 'It can`t be that bad! (Can`t be less than zero)'],
+		max:      [5, 'Seems too good to be true! (Can`t be greater than five)']
+	},
+	total: {
+		type:     Number
 	}
+});
+
+// Calculate total score on document save.
+voteSchema.pre('save', function(){
+	this.total = this.cat1 + this.cat2 + this.cat3 + this.cat4;
 });
 
 // Define vote model.

@@ -1,56 +1,31 @@
-var cookieParser   = require('cookie-parser'); // HTTP cookie parser
-var express        = require('express');       // Application framework
-var createError    = require('http-errors');   // Create HTTP error objects
-var mongoose       = require('mongoose');      // MongoDB object modeling
-var logger         = require('morgan');        // HTTP request logger
-var path           = require('path');          // File and dir path utilities
+var cookieParser = require('cookie-parser'); // HTTP cookie parser
+var express      = require('express');       // Application framework
+var createError  = require('http-errors');   // Create HTTP error objects
+var mongoose     = require('mongoose');      // MongoDB object modeling
+var logger       = require('morgan');        // HTTP request logger
+var path         = require('path');          // File and dir path utilities
 
 // Define Express app instance.
-var app            = express();
+var app          = express();
 
 // Define Socket.IO server.
-var server         = require('http').Server(app);
-var io             = require('socket.io')(server);
+var server       = require('http').Server(app);
+var io           = require('socket.io')(server);
 
 // Define database document models.
-var voteModel      = require('./models/vote');
+var voteModel    = require('./models/vote');
 
 // Define includes.
-var categories     = require('./includes/categories');
-var contestants    = require('./includes/contestants');
+var categories   = require('./includes/categories');
+var contestants  = require('./includes/contestants');
 
 // Define local app variables.
 var contestant;
 var userCount = 0;
 
 // Define routers.
-var adminRouter    = require('./routes/admin');
-var usersRouter    = require('./routes/users');
-
-/**
- * ...
- */
-function getUserScores(username){
-	
-	// ...
-	voteModel.find({ username: username }, function(err, votes) {
-		if(err){
-
-			// Print debug message(s).
-			console.log(err.message);
-		}else{
-			var scores = {};
-
-			votes.forEach(function(vote){
-				scores[vote.code] = vote.cat1 + vote.cat2 + vote.cat3 + vote.cat4 + vote.cat5;
-			});
-
-			console.log(scores);
-
-			return scores;
-		}
-	});
-}
+var adminRouter  = require('./routes/admin');
+var usersRouter  = require('./routes/users');
 
 // Set app variables.
 app.set('categories', categories);
@@ -61,11 +36,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // Express app generator setup.
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: false }));
+app.use(logger('dev'));
 app.use('/', usersRouter);
 app.use('/admin', adminRouter);
 
@@ -87,6 +62,30 @@ app.use(function(err, req, res, next) {
 
 // Socket.IO event handlers.
 io.on('connection', function(socket){
+
+	socket.on('adminBallotInit', function(){
+
+	});
+
+	socket.on('adminBallotKill', function(){
+
+	});
+
+	socket.on('adminRegister', function(){
+
+	});
+
+	socket.on('userBallotVote', function(){
+
+	});
+	
+	socket.on('userRegister', function(){
+
+	});
+
+	socket.on('disconnect', function(){
+
+	});
 	
 	/*----------------------------------------------------------
 	# Admin Socket.IO events
@@ -208,16 +207,28 @@ io.on('connection', function(socket){
 		// Save vote to database.
 		vote.save(function(err, vote){
 			if(err){
-
+				
 				// Print debug message(s).
 				console.log(err);
 			}else{
 
-				// Send 'ballot-vote' event (to sender).
+				// ...
 				socket.emit('ballot-vote', vote);
 
-				// Print debug message(s).
-				console.log('DB Saved vote ID ' + vote._id);
+				// ...
+				voteModel.find({ username: socket.username }, 'code total', function(err, votes){
+					if(err){
+						
+						// Print debug message(s).
+						console.log(err);
+					}else{
+
+						console.log(votes);
+
+						// ...
+						socket.emit('user-scores', votes);
+					}
+				});
 			}
 		});
 	});

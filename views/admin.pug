@@ -23,9 +23,9 @@ block content
 							tr
 								th(class='col-index', scope='col') <!-- Index # -->
 								th(class='col-contestant', scope='col') Contestant
-								th(class='col-score', scope='col') Score
+								th(class='col-ballot', scope='col') Ballot
 								th(class='col-votes', scope='col') Votes
-								th(class='col-actions', scope='col') Actions
+								th(class='col-score', scope='col') Score
 						tbody
 							each contestant, index in contestants
 
@@ -34,11 +34,11 @@ block content
 								tr(id=contestant.code)
 									th(class='col-index', scope='row')=displayIndex
 									td(class='col-contestant')=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
-									td(class='col-votes') --
-									td(class='col-score') --
-									td(class='col-actions')
+									td(class='col-ballot')
 										a(class='init', data-index=index, href='#') Init
 										a(class='text-danger kill', data-index=index, href='#') Kill
+									td(class='col-votes') --
+									td(class='col-score') --
 
 block footer
 	script(src='/js/admin.js')
