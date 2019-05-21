@@ -35,8 +35,8 @@ block content
 									th(class='col-index', scope='row')=displayIndex
 									td(class='col-contestant')=contestant.country + ': ' + contestant.artist + ' – "' + contestant.title + '"'
 									td(class='col-ballot')
-										a(class='init', data-index=index, href='#') Init
-										a(class='text-danger kill', data-index=index, href='#') Kill
+										a(class='badge badge-primary init', data-index=index, href='#') Init
+										a(class='badge badge-danger kill', data-index=index, href='#', style='display: none;') Kill
 									td(class='col-votes') --
 									td(class='col-score') --
 
