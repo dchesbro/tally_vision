@@ -38,7 +38,7 @@ $(function(){
 	/**
 	 * ...
 	 */
-	$('.open').on('click', function(event){
+	$('.init').on('click', function(event){
 
 		// Prevent jump to anchor reference.
 		event.preventDefault();
@@ -63,8 +63,8 @@ $(function(){
 		// Set current contestant index to null.
 		index = null;
 
-		// Send 'ballot-kill' event.
-		socket.emit('ballot-kill');
+		// Send 'ballot-close' event.
+		socket.emit('ballot-close');
 	});
 
 	/*----------------------------------------------------------
@@ -79,8 +79,8 @@ $(function(){
 	socket.on('ballot-open', function(contestant){
 		updateBallot(contestant.country);
 
-		// Hide open buttons.
-		$('.open').hide();
+		// Hide init buttons.
+		$('.init').hide();
 
 		// Show kill button for current contestant index.
 		$('#' + contestant.code + ' .kill').show();
@@ -89,14 +89,14 @@ $(function(){
 	/**
 	 * ...
 	 */
-	socket.on('ballot-kill', function(){
+	socket.on('ballot-close', function(){
 		updateBallot();
 
-		// Hide kill actions.
+		// Hide kill buttons.
 		$('.kill').hide();
 
-		// Show init actions.
-		$('.open').show();
+		// Show init buttons.
+		$('.init').show();
 	});
 
 	/**

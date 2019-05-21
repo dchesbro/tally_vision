@@ -34,10 +34,21 @@ function getUserScores(username){
 	
 	// ...
 	voteModel.find({ username: username }, function(err, votes) {
-		if (err) throw err;
+		if(err){
 
-		// object of all the users
-		console.log(votes);
+			// Print debug message(s).
+			console.log(err.message);
+		}else{
+			var scores = {};
+
+			votes.forEach(function(vote){
+				scores[vote.code] = vote.cat1 + vote.cat2 + vote.cat3 + vote.cat4 + vote.cat5;
+			});
+
+			console.log(scores);
+
+			return scores;
+		}
 	});
 }
 
@@ -104,9 +115,9 @@ io.on('connection', function(socket){
 	});
 	
 	/**
-	 * Kill voting and set contestant to null.
+	 * Close voting and set contestant to null.
 	 */
-	socket.on('ballot-kill', function(){
+	socket.on('ballot-close', function(){
 
 		// If contestant not set, return.
 		if(!contestant){
@@ -117,7 +128,7 @@ io.on('connection', function(socket){
 		contestant = null;
 
 		// Send 'ballot-kill' event (to everyone).
-		io.sockets.emit('ballot-kill');
+		io.sockets.emit('ballot-close');
 		
 		// Print debug message(s).
 		console.log('IO Closing ballot');
@@ -186,7 +197,7 @@ io.on('connection', function(socket){
 
 		// Parse scores as integers and define vote object.
 		var vote = new voteModel({
-			user: socket.username,
+			username: socket.username,
 			code: contestant.code,
 			cat1: parseInt(scores.cat1),
 			cat2: parseInt(scores.cat2),
@@ -200,14 +211,11 @@ io.on('connection', function(socket){
 			if(err){
 
 				// Print debug message(s).
-				console.log(err.message);
+				console.log(err);
 			}else{
 
 				// Send 'ballot-vote' event (to sender).
 				socket.emit('ballot-vote', vote);
-
-				// Send 'ballot-voted' event (to everyone).
-				io.sockets.emit('ballot-voted', vote);
 
 				// Print debug message(s).
 				console.log('DB Saved vote ID ' + vote._id);

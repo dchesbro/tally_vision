@@ -144,6 +144,15 @@ $(function(){
 		// Hide ballot form.
 		$('#ballot form').hide();
 	});
+
+	/**
+	 * ...
+	 */
+	socket.on('updateScores', function(scores){
+		$.each(scores, function(err, code, score){
+			$('.col-score').text(score);
+		});
+	});
 	
 	/*----------------------------------------------------------
 	## Connection events

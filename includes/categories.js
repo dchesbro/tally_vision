@@ -21,7 +21,7 @@ var categories = [
 		label5: 'Best'
 	},
 	{
-		title:  'Graham Norton Bitch Quota',
+		title:  'Category 5',
 		label0: 'Worst',
 		label5: 'Best'
 	}
