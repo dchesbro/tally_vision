@@ -3,10 +3,10 @@ var router  = express.Router();
 
 // Get user index.
 router.get('/', function(req, res, next) {
-	res.render('users', {
+	res.render('user', {
 		categories:  res.app.get('categories'),
 		contestants: res.app.get('contestants'),
-		title:       'TALLYVISION',
+		title:       'TALLYVISION'
 	});
 });
 

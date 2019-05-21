@@ -25,7 +25,7 @@ var userCount = 0;
 
 // Define routers.
 var adminRouter  = require('./routes/admin');
-var usersRouter  = require('./routes/users');
+var userRouter  = require('./routes/user');
 
 // Set app variables.
 app.set('categories', categories);
@@ -41,7 +41,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: false }));
 app.use(logger('dev'));
-app.use('/', usersRouter);
+app.use('/', userRouter);
 app.use('/admin', adminRouter);
 
 // Forward 404 messages to error handler.
@@ -68,6 +68,10 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('adminBallotKill', function(){
+
+	});
+
+	socket.on('adminBallotVote', function(){
 
 	});
 
