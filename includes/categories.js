@@ -18,7 +18,7 @@ var categories = [
 	{
 		title:  'Fashion',
 		label0: 'Shirt looks like a dishrag',
-		label5: 'Gucci Gang'
+		label5: 'Gucci gang'
 	}
 ];
 

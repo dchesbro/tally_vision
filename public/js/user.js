@@ -189,9 +189,19 @@ $(function(){
 	 * ...
 	 */
 	socket.on('user-scores', function(votes){
+
+		var hiScore = { _id: '', code: '', total: 0 };
+
 		$.each(votes, function(index, vote){
-			$('tr#' + vote.code + ' .col-score').text(vote.total);
+			$('#contestants table tbody tr#' + vote.code + ' .col-score').text(vote.total);
+
+			if(vote.total >= hiScore.total){
+				hiScore = vote;
+			}
 		});
+
+		$('#contestants table tbody tr').removeClass();
+		$('#contestants table tbody tr#' + hiScore.code).addClass('table-primary');
 	});
 
 	initUser();

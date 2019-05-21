@@ -71,10 +71,6 @@ io.on('connection', function(socket){
 
 	});
 
-	socket.on('adminBallotVote', function(){
-
-	});
-
 	socket.on('adminRegister', function(){
 
 	});
