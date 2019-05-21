@@ -33,12 +33,6 @@ var voteSchema = new mongoose.Schema({
 		required: true,
 		min:      [0, 'Category scores can`t be less than zero!'],
 		max:      [5, 'Category scores can`t be greater than five!']
-	},
-	cat5: {
-		type:     Number,
-		required: true,
-		min:      [0, 'Category scores can`t be less than zero!'],
-		max:      [5, 'Category scores can`t be greater than five!']
 	}
 });
 

@@ -19,14 +19,14 @@ $(function(){
 	}
 
 	/**
-	 * Update current ballot stat display.
+	 * Update current ballot display.
 	 */
 	function updateBallot(country = '--'){
 		$('#stats-ballot').text(country);
 	}
 
 	/**
-	 * Update users registered stat display.
+	 * Update users registered display.
 	 */
 	function updateUsers(userCount = 0){
 		$('#stats-users').text(userCount);
@@ -36,7 +36,7 @@ $(function(){
 	# Admin JS events
 	----------------------------------------------------------*/
 	/**
-	 * ...
+	 * Initiate ballot for selected contestant.
 	 */
 	$('.init').on('click', function(event){
 
@@ -53,7 +53,7 @@ $(function(){
 	});
 
 	/**
-	 * ...
+	 * Kill voting for any open ballots.
 	 */
 	$('.kill').on('click', function(event){
 
@@ -74,7 +74,7 @@ $(function(){
 	## Ballot events
 	----------------------------------------------------------*/
 	/**
-	 * ...
+	 * Update current ballot display and hide/show appropriate actions.
 	 */
 	socket.on('ballot-open', function(contestant){
 		updateBallot(contestant.country);
@@ -87,7 +87,7 @@ $(function(){
 	});
 
 	/**
-	 * ...
+	 * Update current ballot display and hide/show appropriate actions.
 	 */
 	socket.on('ballot-close', function(){
 		updateBallot();
@@ -99,32 +99,25 @@ $(function(){
 		$('.init').show();
 	});
 
-	/**
-	 * ...
-	 */
-	socket.on('ballot-vote', function(totalScore){
-		
-	});
-
 	/*----------------------------------------------------------
 	## Connection events
 	----------------------------------------------------------*/
 	/**
-	 * ...
+	 * Update users registered display.
 	 */
 	socket.on('admin-register', function(userCount){
 		updateUsers(userCount);
 	});
 
 	/**
-	 * ...
+	 * Update users registered display.
 	 */
 	socket.on('user-disconnected', function({ username, userCount }){
 		updateUsers(userCount);
 	});
 
 	/**
-	 * ...
+	 * Update users registered display.
 	 */
 	socket.on('user-registered', function({ username, userCount }){
 		updateUsers(userCount);

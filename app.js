@@ -127,7 +127,7 @@ io.on('connection', function(socket){
 		// Set contestant to null.
 		contestant = null;
 
-		// Send 'ballot-kill' event (to everyone).
+		// Send 'ballot-close' event (to everyone).
 		io.sockets.emit('ballot-close');
 		
 		// Print debug message(s).
@@ -202,8 +202,7 @@ io.on('connection', function(socket){
 			cat1: parseInt(scores.cat1),
 			cat2: parseInt(scores.cat2),
 			cat3: parseInt(scores.cat3),
-			cat4: parseInt(scores.cat4),
-			cat5: parseInt(scores.cat5)
+			cat4: parseInt(scores.cat4)
 		});
 
 		// Save vote to database.

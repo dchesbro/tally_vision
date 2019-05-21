@@ -40,7 +40,7 @@ $(function(){
 	function updateScore(vote){
 
 		// ...
-		var total = vote.cat1 + vote.cat2 + vote.cat3 + vote.cat4 + vote.cat5;
+		var total = vote.cat1 + vote.cat2 + vote.cat3 + vote.cat4;
 		
 		// ...
 		$('#contestant-score').text(total);
@@ -57,13 +57,12 @@ $(function(){
 		// Prevent form submission.
 		event.preventDefault();
 
-		// Define scores object.
+		// Get ballot scores as object.
 		var scores = {
 			cat1: $('input#cat1:checked').val(),
 			cat2: $('input#cat2:checked').val(),
 			cat3: $('input#cat3:checked').val(),
-			cat4: $('input#cat4:checked').val(),
-			cat5: $('input#cat5:checked').val()
+			cat4: $('input#cat4:checked').val()
 		};
 
 		// If scores found for all categories, send 'ballot-vote' event.
@@ -98,7 +97,7 @@ $(function(){
 	/**
 	 * Set voting and shuffle to contestants card view.
 	 */
-	socket.on('ballot-kill', function(){
+	socket.on('ballot-close', function(){
 
 		// If user not registered, return.
 		if(!registered){ 

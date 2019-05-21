@@ -1,29 +1,24 @@
 // Define array of categories.
 var categories = [
 	{
-		title:  'Category 1',
-		label0: 'Worst',
-		label5: 'Best'
+		title:  'Song',
+		label0: 'Moms spaghetti',
+		label5: '100% banger'
 	},
 	{
-		title:  'Category 2',
-		label0: 'Worst',
-		label5: 'Best'
+		title:  'Performance',
+		label0: 'Sashay away',
+		label5: 'Shantay you stay'
 	},
 	{
-		title:  'Category 3',
-		label0: 'Worst',
-		label5: 'Best'
+		title:  'Staging',
+		label0: 'Dead fish',
+		label5: 'Hot stuff'
 	},
 	{
-		title:  'Category 4',
-		label0: 'Worst',
-		label5: 'Best'
-	},
-	{
-		title:  'Category 5',
-		label0: 'Worst',
-		label5: 'Best'
+		title:  'Fashion',
+		label0: 'Shirt looks like a dishrag',
+		label5: 'Gucci Gang'
 	}
 ];
 
