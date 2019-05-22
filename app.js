@@ -87,6 +87,9 @@ io.on('connection', function(socket){
 
 				// Send global response.
 				io.sockets.emit('adminUpdateScores', contestantData);
+
+				// Print debug message(s).
+				console.log('IO Updating contestant data for administrator');
 			}
 		});
 
@@ -196,6 +199,9 @@ io.on('connection', function(socket){
 		
 		// Print debug message(s).
 		console.log('IO Registered socket ID ' + socket.id + ' as administrator');
+
+		// Update contestant data for admin.
+		adminUpdateScores();
 		
 		// If contestant set, update admin index.
 		if(contestant){
