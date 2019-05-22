@@ -188,20 +188,20 @@ $(function(){
 	/**
 	 * ...
 	 */
-	socket.on('user-scores', function(votes){
+	socket.on('userUpdateScores', function(votes){
 
-		var hiScore = { _id: '', code: '', total: 0 };
+		var topScore = { _id: null, code: null, total: 0 };
 
 		$.each(votes, function(index, vote){
 			$('#contestants table tbody tr#' + vote.code + ' .col-score').text(vote.total);
 
-			if(vote.total >= hiScore.total){
-				hiScore = vote;
+			if(topScore.total <= vote.total){
+				topScore = vote;
 			}
 		});
 
 		$('#contestants table tbody tr').removeClass();
-		$('#contestants table tbody tr#' + hiScore.code).addClass('table-primary');
+		$('#contestants table tbody tr#' + topScore.code).addClass('table-primary');
 	});
 
 	initUser();

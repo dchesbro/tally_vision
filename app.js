@@ -63,17 +63,49 @@ app.use(function(err, req, res, next) {
 // Socket.IO event handlers.
 io.on('connection', function(socket){
 
-	socket.on('adminBallotInit', function(){
+	/**
+	 * ...
+	 */
+	function adminUpdateScores(){
+		
+		// Get all previously submitted votes.
+		voteModel.find('code total', function(err, votes){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
 
-	});
+				// Send global response.
+				io.sockets.emit('UpdateScores', votes);
 
-	socket.on('adminBallotKill', function(){
+				// Print debug message(s).
+				console.log('IO Updating scores for user "' + socket.username + '"');
+			}
+		});
+	}
+	
+	/**
+	 * ...
+	 */
+	function userUpdateScores(){
+		
+		// Get all previously submitted votes for user.
+		voteModel.find({ username: socket.username }, 'code total', function(err, votes){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
 
-	});
+				// Send user response.
+				socket.emit('userUpdateScores', votes);
 
-	socket.on('adminRegister', function(){
-
-	});
+				// Print debug message(s).
+				console.log('IO Updating scores for user "' + socket.username + '"');
+			}
+		});
+	}
 
 	socket.on('userBallotVote', function(){
 
@@ -88,37 +120,34 @@ io.on('connection', function(socket){
 	});
 	
 	/*----------------------------------------------------------
-	# Admin Socket.IO events
-	----------------------------------------------------------*/
-	/*----------------------------------------------------------
-	## Ballot events
+	# Admin events
 	----------------------------------------------------------*/
 	/**
-	 * Set contestant using defined index and open voting.
+	 * ...
 	 */
-	socket.on('ballot-open', function(index){
+	socket.on('adminBallotInit', function(index){
 
 		// If contestant set, return.
 		if(contestant){
 			return;
 		}
 
-		// Set contestant using contestant index.
+		// Set contestant using index.
 		contestant = contestants[index];
 
-		// Send 'ballot-open' event (to everyone).
-		io.sockets.emit('ballot-open', contestant);
+		// Send global response.
+		io.sockets.emit('ballotOpen', contestant);
 		
 		// Print debug message(s).
 		console.log('IO Opening ballot for "' + contestant.country + '"');
 	});
 	
 	/**
-	 * Close voting and set contestant to null.
+	 * ...
 	 */
-	socket.on('ballot-close', function(){
+	socket.on('adminBallotKill', function(){
 
-		// If contestant not set, return.
+		// If no contestant set, return.
 		if(!contestant){
 			return;
 		}
@@ -126,73 +155,50 @@ io.on('connection', function(socket){
 		// Set contestant to null.
 		contestant = null;
 
-		// Send 'ballot-close' event (to everyone).
-		io.sockets.emit('ballot-close');
+		// Send global response.
+		io.sockets.emit('ballotClose');
 		
 		// Print debug message(s).
 		console.log('IO Closing ballot');
 	});
 
-	/*----------------------------------------------------------
-	## Connection events
-	----------------------------------------------------------*/
 	/**
-	 * Register socket as admin.
+	 * ...
 	 */
-	socket.on('admin-register', function(){
+	socket.on('adminRegister', function(){
 
-		// Set admin as socket properties.
+		// Set socket admin properties.
 		socket.admin = true;
 		
-		// Send 'admin-register' event (to sender).
-		socket.emit('admin-register', userCount);
+		// Send user event.
+		socket.emit('adminRegister', userCount);
 		
 		// Print debug message(s).
-		console.log('IO Registered socket ID ' + socket.id + ' as admin');
+		console.log('IO Registered socket ID ' + socket.id + ' as administrator');
 		
-		// If contestant set, send 'ballot-open' event to registered socket.
+		// If contestant set, update admin index.
 		if(contestant){
 			
-			// Send 'ballot-open' event (sender).
-			socket.emit('ballot-open', contestant);
+			// Send user response.
+			socket.emit('ballotOpen', contestant);
 		
 			// Print debug message(s).
-			console.log('IO Opening ballot "' + contestant.country + '" for admin');
+			console.log('IO Opening ballot "' + contestant.country + '" for administrator');
 		}
 	});
 	
 	/*----------------------------------------------------------
-	# User Socket.IO events
-	----------------------------------------------------------*/
-	/*----------------------------------------------------------
-	## Ballot events
+	# User events
 	----------------------------------------------------------*/
 	/**
 	 * ...
 	 */
-	socket.on('ballot-total', function(code){
+	socket.on('userBallotVote', function(scores){
 		
-		// ...
-		voteModel.find({ contestant: code }, function(err, votes) {
-			if (err) throw err;
-
-			// object of all the users
-			console.log(votes);
-		});
-	});
-	
-	/**
-	 * ...
-	 */
-	socket.on('ballot-vote', function(scores){
-		
-		// If socket not registered or contestant not set, return.
-		if(!socket.registered || !contestant){
+		// If no contestant set or socket not registered, return.
+		if(!contestant || !socket.registered){
 			return;
 		}
-
-		// Print debug message(s).
-		console.log('IO Registered user "' + socket.username + '" submitted scores for "' + contestant.country + '"');
 
 		// Parse scores as integers and define vote object.
 		var vote = new voteModel({
@@ -212,23 +218,14 @@ io.on('connection', function(socket){
 				console.log(err);
 			}else{
 
-				// ...
-				socket.emit('ballot-vote', vote);
+				// Update scores for admin and user.
+				adminUpdateScores(); userUpdateScores();
 
-				// ...
-				voteModel.find({ username: socket.username }, 'code total', function(err, votes){
-					if(err){
-						
-						// Print debug message(s).
-						console.log(err);
-					}else{
+				// Send user response.
+				socket.emit('userBallotVote');
 
-						console.log(votes);
-
-						// ...
-						socket.emit('user-scores', votes);
-					}
-				});
+				// Print debug message(s).
+				console.log('IO Saved vote from user "' + socket.username + '" for "' + contestant.country + '"');
 			}
 		});
 	});
@@ -258,23 +255,23 @@ io.on('connection', function(socket){
 	});
 
 	/**
-	 * Register socket as user, increase user count, and check for open ballot.
+	 * Register socket user properties, increase user count, and check for open ballot.
 	 */
 	socket.on('user-register', function(username){
 		
-		// If socket registered, return.
-		if(socket.registered){
+		// If socket registered as user, return.
+		if(socket.registered || socket.username){
 			return;
 		}
 
-		// Set username and registered as socket properties.
+		// Set socket user properties.
 		socket.username = username;
 		socket.registered = true;
 
 		// Increase registered user count.
 		userCount++;
 		
-		// Send 'user-register' event (to sender).
+		// Send 'user-register' event (to user).
 		socket.emit('user-register');
 
 		// Send 'user-registered' event (to everyone).
@@ -283,6 +280,9 @@ io.on('connection', function(socket){
 		// Print debug message(s).
 		console.log('IO Registered socket ID ' + socket.id + ' as user "' + socket.username + '"');
 		console.log('IO ' + userCount + ' user(s) registered');
+
+		// Update scores for registered user (if any).
+		userUpdateScores();
 		
 		// If contestant set, send 'ballot-open' event to registered socket.
 		if(contestant){
@@ -297,6 +297,6 @@ io.on('connection', function(socket){
 });
 
 // Open database connection.
-mongoose.connect('mongodb://localhost/tallyvision', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost/tallyvision', { useNewUrlParser: true });
 
 module.exports = { app: app, server: server };
