@@ -3,81 +3,75 @@ $(function(){
 	// Initialize Socket.IO instance.
 	var socket = io();
 
-	// Set local server variables.
+	// Define local admin variables.
 	var index;
 
 	/*----------------------------------------------------------
 	# Admin functions
 	----------------------------------------------------------*/
 	/**
-	 * Initialize admin connections.
+	 * ...
 	 */
 	function initAdmin(){
 
-		// Send 'admin-register' event.
-		socket.emit('admin-register');
-	}
-
-	/**
-	 * Update current ballot display.
-	 */
-	function updateBallot(country = '--'){
-		$('#stats-ballot').text(country);
-	}
-
-	/**
-	 * Update users registered display.
-	 */
-	function updateUsers(userCount = 0){
-		$('#stats-users').text(userCount);
+		// Send app event.
+		socket.emit('adminRegister');
 	}
 
 	/*----------------------------------------------------------
-	# Admin JS events
+	# Admin browser events
 	----------------------------------------------------------*/
 	/**
-	 * Initiate ballot for selected contestant.
+	 * ...
 	 */
 	$('.init').on('click', function(event){
 
 		// Prevent jump to anchor reference.
 		event.preventDefault();
 
-		// Set contestant index.
+		// Set index.
 		index = $(this).attr('data-index');
 
-		// If contestant index set, send 'ballot-init' event.
+		// If index set, send app event.
 		if(index){
-			socket.emit('ballot-open', index);
+			socket.emit('adminBallotInit', index);
 		}
 	});
 
 	/**
-	 * Kill voting for any open ballots.
+	 * ...
 	 */
 	$('.kill').on('click', function(event){
 
 		// Prevent jump to anchor reference.
 		event.preventDefault();
 
-		// Set current contestant index to null.
+		// Set index to null.
 		index = null;
 
-		// Send 'ballot-close' event.
-		socket.emit('ballot-close');
+		// Send app event.
+		socket.emit('adminBallotKill');
 	});
 
 	/*----------------------------------------------------------
-	# Admin Socket.IO events
-	----------------------------------------------------------*/
-	/*----------------------------------------------------------
-	## Ballot events
+	# Admin events
 	----------------------------------------------------------*/
 	/**
-	 * Update current ballot display and hide/show appropriate actions.
+	 * ...
 	 */
-	socket.on('ballot-open', function(contestant){
-		updateBallot(contestant.country);
+	socket.on('adminRegister', function(userCount){
+		
+		// ...
+		$('#stats-users').text(userCount);
+	});
+
+	/**
+	 * ...
+	 */
+	socket.on('ballotOpen', function(contestant){
+
+		// ...
+		$('#stats-ballot').text(contestant.country);
 
 		// Hide init buttons.
 		$('.init').hide();
@@ -87,40 +81,36 @@ $(function(){
 	});
 
 	/**
-	 * Update current ballot display and hide/show appropriate actions.
+	 * ...
 	 */
-	socket.on('ballot-close', function(){
-		updateBallot();
+	socket.on('ballotClose', function(){
 
-		// Hide kill buttons.
+		// ...
+		$('#stats-ballot').text('--');
+
+		// Hide kill button.
 		$('.kill').hide();
 
 		// Show init buttons.
 		$('.init').show();
 	});
 
-	/*----------------------------------------------------------
-	## Connection events
-	----------------------------------------------------------*/
 	/**
-	 * Update users registered display.
+	 * ...
 	 */
-	socket.on('admin-register', function(userCount){
-		updateUsers(userCount);
+	socket.on('userDisconnected', function({ username, userCount }){
+		
+		// ...
+		$('#stats-users').text(userCount);
 	});
 
 	/**
-	 * Update users registered display.
+	 * ...
 	 */
-	socket.on('user-disconnected', function({ username, userCount }){
-		updateUsers(userCount);
-	});
-
-	/**
-	 * Update users registered display.
-	 */
-	socket.on('user-registered', function({ username, userCount }){
-		updateUsers(userCount);
+	socket.on('userConnected', function({ username, userCount }){
+		
+		// ...
+		$('#stats-users').text(userCount);
 	});
 
 	initAdmin();
