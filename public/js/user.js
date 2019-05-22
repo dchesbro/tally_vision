@@ -169,11 +169,11 @@ $(function(){
 	/**
 	 * ...
 	 */
-	socket.on('userUpdateTable', function(userVotes){
+	socket.on('userUpdateTable', function(contestantsData){
 
 		// ...
-		$.each(userVotes, function(index, vote){
-			$('#contestants table tbody tr#' + vote.code + ' .col-score').text(vote.total);
+		$.each(contestantsData, function(index, contestant){
+			$('#contestants table tbody tr#' + contestant.code + ' .col-score').text(contestant.total);
 		});
 	});
 
