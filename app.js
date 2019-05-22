@@ -72,7 +72,7 @@ io.on('connection', function(socket){
 	function adminUpdateScores(){
 		
 		// Get all previously submitted votes.
-		voteModel.find(function(err, votes){
+		voteModel.find({}, 'code total', function(err, votes){
 			if(err){
 				
 				// Print debug message(s).
@@ -277,7 +277,7 @@ io.on('connection', function(socket){
 		if(contestant){
 			
 			// Send user reponse.
-			socket.emit('ballot-open', contestant);
+			socket.emit('ballotOpen', contestant);
 		
 			// Print debug message(s).
 			console.log('IO Opening ballot "' + contestant.country + '" for user "' + socket.username + '"');

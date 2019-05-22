@@ -68,6 +68,25 @@ $(function(){
 	/**
 	 * ...
 	 */
+	socket.on('adminUpdateScores', function(votes){
+
+		// ...
+		var totals = {};
+
+		// ...
+		$.each(votes, function(index, vote){
+			totals[vote.code] += vote.total;
+		}).
+		then(function(totals){
+			$.each(totals, function(code, total){
+				$('#contestants table tbody tr#' + code + ' .col-score').text(total);
+			});
+		});
+	});
+
+	/**
+	 * ...
+	 */
 	socket.on('ballotOpen', function(contestant){
 
 		// ...

@@ -172,22 +172,9 @@ $(function(){
 	socket.on('userUpdateScores', function(votes){
 
 		// ...
-		var topScore = { _id: null, code: null, total: 0 };
-
 		$.each(votes, function(index, vote){
-
-			// ...
 			$('#contestants table tbody tr#' + vote.code + ' .col-score').text(vote.total);
-
-			// ...
-			if(topScore.total <= vote.total){
-				topScore = vote;
-			}
 		});
-
-		// ...
-		$('#contestants table tbody tr').removeClass();
-		$('#contestants table tbody tr#' + topScore.code).addClass('table-primary');
 	});
 
 	initUser();
