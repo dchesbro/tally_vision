@@ -2,18 +2,18 @@
 var categories = [
 	{
 		title:  'Song',
-		label0: 'Moms spaghetti',
+		label0: 'Mom\'s spaghetti',
 		label5: '100% banger'
 	},
 	{
 		title:  'Performance',
-		label0: 'Sashay away',
-		label5: 'Shantay you stay'
+		label0: 'Sashay, away',
+		label5: 'Shante, you stay'
 	},
 	{
 		title:  'Staging',
-		label0: 'Dead fish',
-		label5: 'Hot stuff'
+		label0: 'I sleep',
+		label5: 'Real shit'
 	},
 	{
 		title:  'Fashion',

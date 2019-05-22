@@ -72,13 +72,13 @@ io.on('connection', function(socket){
 	function adminUpdateTable(){
 
 		// ...
-		voteModel.aggregate([{
-			$group: {
+		voteModel.aggregate([
+			{ $group: {
 				_id: '$code',
 				score: { $sum: '$total' },
 				votes: { $sum: 1 } 
-			}
-		}], function(err, contestantsData){
+			} }
+		], function(err, contestantsData){
 			if(err){
 				
 				// Print debug message(s).
