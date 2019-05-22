@@ -25,7 +25,7 @@ var userCount = 0;
 
 // Define routers.
 var adminRouter  = require('./routes/admin');
-var userRouter  = require('./routes/user');
+var userRouter   = require('./routes/user');
 
 // Set app variables.
 app.set('categories', categories);
