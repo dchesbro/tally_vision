@@ -225,7 +225,7 @@ io.on('connection', function(socket){
 				socket.emit('userBallotVote');
 
 				// Print debug message(s).
-				console.log('IO Saved vote from user "' + socket.username + '" for "' + contestant.country + '"');
+				console.log('IO Saved vote ID ' + vote._id + 'from user "' + socket.username + '"');
 			}
 		});
 	});
