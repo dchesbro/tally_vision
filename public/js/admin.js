@@ -68,19 +68,12 @@ $(function(){
 	/**
 	 * ...
 	 */
-	socket.on('adminUpdateScores', function(votes){
+	socket.on('adminUpdateScores', function(contestantData){
 
 		// ...
-		var totals = {};
-
-		// ...
-		$.each(votes, function(index, vote){
-			totals[vote.code] += vote.total;
-		}).
-		then(function(totals){
-			$.each(totals, function(code, total){
-				$('#contestants table tbody tr#' + code + ' .col-score').text(total);
-			});
+		$.each(contestantData, function(index, contestant){
+			$('#contestants table tbody tr#' + contestant._id + ' .col-score').text(contestant.score);
+			$('#contestants table tbody tr#' + contestant._id + ' .col-votes').text(contestant.votes);
 		});
 	});
 

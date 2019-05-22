@@ -70,8 +70,38 @@ io.on('connection', function(socket){
 	 * ...
 	 */
 	function adminUpdateScores(){
+
+		// ...
+		voteModel.aggregate([{
+			$group: {
+				_id: '$code',
+				score: { $sum: '$total' },
+				votes: { $sum: 1 } 
+			}
+		}], function(err, contestantData){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+
+				// Send global response.
+				io.sockets.emit('adminUpdateScores', contestantData);
+			}
+		});
+
+		/* ...
+		voteModel.countDocuments({
+			code: contestant.code
+		}, function(err, result){
+			if(err){
+				console.log(err);
+				return;
+			}
+			console.log(result);
+		}); */
 		
-		// Get all previously submitted votes.
+		/* Get all previously submitted votes.
 		voteModel.find({}, 'code total', function(err, votes){
 			if(err){
 				
@@ -85,7 +115,7 @@ io.on('connection', function(socket){
 				// Print debug message(s).
 				console.log('IO Updating scores for administrator');
 			}
-		});
+		}); */
 	}
 	
 	/**
@@ -94,7 +124,7 @@ io.on('connection', function(socket){
 	function userUpdateScores(){
 		
 		// Get all previously submitted votes for user.
-		voteModel.find({ username: socket.username }, 'code total', function(err, votes){
+		voteModel.find({ username: socket.username }, 'code total', function(err, userVotes){
 			if(err){
 				
 				// Print debug message(s).
@@ -102,7 +132,7 @@ io.on('connection', function(socket){
 			}else{
 
 				// Send user response.
-				socket.emit('userUpdateScores', votes);
+				socket.emit('userUpdateScores', userVotes);
 
 				// Print debug message(s).
 				console.log('IO Updating scores for user "' + socket.username + '"');
