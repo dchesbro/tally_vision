@@ -169,7 +169,7 @@ $(function(){
 	/**
 	 * ...
 	 */
-	socket.on('userUpdateScores', function(userVotes){
+	socket.on('userUpdateTable', function(userVotes){
 
 		// ...
 		$.each(userVotes, function(index, vote){

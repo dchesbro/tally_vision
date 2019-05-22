@@ -69,7 +69,7 @@ io.on('connection', function(socket){
 	/**
 	 * ...
 	 */
-	function adminUpdateScores(){
+	function adminUpdateTable(){
 
 		// ...
 		voteModel.aggregate([{
@@ -78,7 +78,7 @@ io.on('connection', function(socket){
 				score: { $sum: '$total' },
 				votes: { $sum: 1 } 
 			}
-		}], function(err, contestantData){
+		}], function(err, contestantsData){
 			if(err){
 				
 				// Print debug message(s).
@@ -86,10 +86,10 @@ io.on('connection', function(socket){
 			}else{
 
 				// Send global response.
-				io.sockets.emit('adminUpdateScores', contestantData);
+				io.sockets.emit('adminUpdateTable', contestantsData);
 
 				// Print debug message(s).
-				console.log('IO Updating contestant data for administrator');
+				console.log('IO Updating contestants table for administrator');
 			}
 		});
 
@@ -113,7 +113,7 @@ io.on('connection', function(socket){
 			}else{
 
 				// Send global response.
-				io.sockets.emit('adminUpdateScores', votes);
+				io.sockets.emit('adminUpdateTable', votes);
 
 				// Print debug message(s).
 				console.log('IO Updating scores for administrator');
@@ -124,10 +124,10 @@ io.on('connection', function(socket){
 	/**
 	 * ...
 	 */
-	function userUpdateScores(){
+	function userUpdateTable(){
 		
 		// Get all previously submitted votes for user.
-		voteModel.find({ username: socket.username }, 'code total', function(err, userVotes){
+		voteModel.find({ username: socket.username }, 'code total', function(err, contestantsData){
 			if(err){
 				
 				// Print debug message(s).
@@ -135,10 +135,10 @@ io.on('connection', function(socket){
 			}else{
 
 				// Send user response.
-				socket.emit('userUpdateScores', userVotes);
+				socket.emit('userUpdateTable', contestantsData);
 
 				// Print debug message(s).
-				console.log('IO Updating scores for user "' + socket.username + '"');
+				console.log('IO Updating contestants table for user "' + socket.username + '"');
 			}
 		});
 	}
@@ -200,8 +200,8 @@ io.on('connection', function(socket){
 		// Print debug message(s).
 		console.log('IO Registered socket ID ' + socket.id + ' as administrator');
 
-		// Update contestant data for admin.
-		adminUpdateScores();
+		// Update contestants table for admin.
+		adminUpdateTable();
 		
 		// If contestant set, update admin index.
 		if(contestant){
@@ -266,9 +266,8 @@ io.on('connection', function(socket){
 				console.log(err);
 			}else{
 
-				// Update scores for admin and user.
-				adminUpdateScores();
-				userUpdateScores();
+				// Update contestants table for admin and user.
+				adminUpdateTable(); userUpdateTable();
 
 				// Send user response.
 				socket.emit('userBallotVote', vote);
@@ -306,8 +305,8 @@ io.on('connection', function(socket){
 		console.log('IO Registered socket ID ' + socket.id + ' as user "' + socket.username + '"');
 		console.log('IO ' + userCount + ' user(s) registered');
 
-		// Update scores for user.
-		userUpdateScores();
+		// Update contestants table for user.
+		userUpdateTable();
 		
 		// If contestant set, open ballot.
 		if(contestant){

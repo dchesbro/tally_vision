@@ -68,7 +68,7 @@ $(function(){
 	/**
 	 * ...
 	 */
-	socket.on('adminUpdateScores', function(contestantData){
+	socket.on('adminUpdateTable', function(contestantData){
 
 		// ...
 		$.each(contestantData, function(index, contestant){
