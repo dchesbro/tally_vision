@@ -1,9 +1,9 @@
 var express = require('express');
 var router  = express.Router();
 
-// Get admin index.
+// Get host index.
 router.get('/', function(req, res, next) {
-	res.render('admin', {
+	res.render('host', {
 		contestants: res.app.get('contestants'),
 		title:       'TALLYVISION'
 	});

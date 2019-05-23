@@ -16,7 +16,7 @@ var categories = [
 		label5: 'Real shit'
 	},
 	{
-		title:  'Fashion',
+		title:  'Wardrobe',
 		label0: 'Shirt looks like a dishrag',
 		label5: 'Gucci gang'
 	}

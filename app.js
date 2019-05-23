@@ -24,7 +24,7 @@ var contestant;
 var userCount = 0;
 
 // Define routers.
-var adminRouter  = require('./routes/admin');
+var hostRouter  = require('./routes/host');
 var userRouter   = require('./routes/user');
 
 // Set app variables.
@@ -42,7 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: false }));
 app.use(logger('dev'));
 app.use('/', userRouter);
-app.use('/admin', adminRouter);
+app.use('/host', hostRouter);
 
 // Forward 404 messages to error handler.
 app.use(function(req, res, next) {
@@ -69,7 +69,7 @@ io.on('connection', function(socket){
 	/**
 	 * ...
 	 */
-	function adminUpdateTable(){
+	function hostUpdateTable(){
 
 		// ...
 		voteModel.aggregate([
@@ -86,10 +86,10 @@ io.on('connection', function(socket){
 			}else{
 
 				// Send global response.
-				io.sockets.emit('adminUpdateTable', contestantsData);
+				io.sockets.emit('hostUpdateTable', contestantsData);
 
 				// Print debug message(s).
-				console.log('IO Updating contestants table for administrator');
+				console.log('IO Updating contestants table for host');
 			}
 		});
 
@@ -113,10 +113,10 @@ io.on('connection', function(socket){
 			}else{
 
 				// Send global response.
-				io.sockets.emit('adminUpdateTable', votes);
+				io.sockets.emit('hostUpdateTable', votes);
 
 				// Print debug message(s).
-				console.log('IO Updating scores for administrator');
+				console.log('IO Updating scores for host');
 			}
 		}); */
 	}
@@ -144,12 +144,12 @@ io.on('connection', function(socket){
 	}
 	
 	/*----------------------------------------------------------
-	# Admin events
+	# Host events
 	----------------------------------------------------------*/
 	/**
 	 * ...
 	 */
-	socket.on('adminBallotInit', function(index){
+	socket.on('hostBallotInit', function(index){
 
 		// If contestant set, return.
 		if(contestant){
@@ -169,7 +169,7 @@ io.on('connection', function(socket){
 	/**
 	 * ...
 	 */
-	socket.on('adminBallotKill', function(){
+	socket.on('hostBallotKill', function(){
 
 		// If no contestant set, return.
 		if(!contestant){
@@ -189,28 +189,28 @@ io.on('connection', function(socket){
 	/**
 	 * ...
 	 */
-	socket.on('adminRegister', function(){
+	socket.on('hostRegister', function(){
 
-		// Set socket admin properties.
-		socket.admin = true;
+		// Set socket host properties.
+		socket.host = true;
 		
 		// Send user event.
-		socket.emit('adminRegister', userCount);
+		socket.emit('hostRegister', userCount);
 		
 		// Print debug message(s).
-		console.log('IO Registered socket ID ' + socket.id + ' as administrator');
+		console.log('IO Registered socket ID ' + socket.id + ' as host');
 
-		// Update contestants table for admin.
-		adminUpdateTable();
+		// Update contestants table for host.
+		hostUpdateTable();
 		
-		// If contestant set, update admin index.
+		// If contestant set, update host index.
 		if(contestant){
 			
 			// Send user response.
 			socket.emit('ballotOpen', contestant);
 		
 			// Print debug message(s).
-			console.log('IO Opening ballot "' + contestant.country + '" for administrator');
+			console.log('IO Opening ballot "' + contestant.country + '" for host');
 		}
 	});
 	
@@ -266,8 +266,8 @@ io.on('connection', function(socket){
 				console.log(err);
 			}else{
 
-				// Update contestants table for admin and user.
-				adminUpdateTable(); userUpdateTable();
+				// Update contestants table for host and user.
+				hostUpdateTable(); userUpdateTable();
 
 				// Send user response.
 				socket.emit('userBallotVote', vote);

@@ -1,55 +1,80 @@
-#admin-cards {
-	max-width: 1080px
-}
-
-#user-cards {
-	max-width: 640px;
-}
-
-#user-cards #ballot, #user-cards #contestants, #user-cards #user-heading, #user-cards #voted{
-	display: none;
-}
-
-#user-heading {
-	text-align: center;
+/*--------------------------------------------------------------
+# Global styles
+--------------------------------------------------------------*/
+body {
+	margin-top: 2rem;
 	margin-bottom: 2rem;
 }
 
-#contestants table .col-ballot, #contestants table .col-index, #contestants table .col-score, #contestants table .col-votes {
+.col-ballot, .col-index, .col-score, .col-votes{
 	text-align: center;
 	width: 1%;
 }
 
-#contestants table .col-ballot a {
+.col-ballot a.badge {
 	font-weight: bold;
 	text-transform: uppercase;
 }
 
-#contestant-score {
-	display: block;
-	font-size: 1.75rem;
-	margin-top: 1rem;
-	text-align: center;
-}
-
-.card {
+.btn[type='button'], .card {
 	border-radius: .6rem;
 	overflow: hidden;
 }
 
-.card .btn[type='submit']{
+.btn[type='submit']{
 	border-radius: 0;
-}
-
-.card .table, .card .form-group{
-	margin-bottom: 0;
 }
 
 .card-group {
 	margin-bottom: 2rem;
 }
 
-body {
-	margin-top: 2rem;
+.table, .form-group{
+	margin-bottom: 0;
+}
+
+/*--------------------------------------------------------------
+# Host styles
+--------------------------------------------------------------*/
+#host-cards{
+	max-width: 1080px
+}
+
+/*--------------------------------------------------------------
+# User styles
+--------------------------------------------------------------*/
+#user-cards{
+	max-width: 640px;
+}
+
+#user-cards #user-registration{
+	display: block;
+}
+
+#user-cards .card, #user-heading{
+	display: none;
+}
+
+#user-cards .card .card-body {
+	text-align: center;
+}
+
+#user-cards #user-heading{
+	text-align: center;
 	margin-bottom: 2rem;
+}
+
+#user-cards #contestant-score {
+	display: block;
+	font-size: 1.75rem;
+	margin-top: 1rem;
+	text-align: center;
+}
+
+#contestant-score:before {
+	content: 'Total score:';
+	display: block;
+	font-size: 1rem;
+	font-weight: bold;
+	text-transform: uppercase;
 }

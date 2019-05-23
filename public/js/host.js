@@ -3,23 +3,23 @@ $(function(){
 	// Initialize Socket.IO instance.
 	var socket = io();
 
-	// Define local admin variables.
+	// Define local host variables.
 	var index;
 
 	/*----------------------------------------------------------
-	# Admin functions
+	# Host functions
 	----------------------------------------------------------*/
 	/**
 	 * ...
 	 */
-	function initAdmin(){
+	function initHost(){
 
 		// Send app event.
-		socket.emit('adminRegister');
+		socket.emit('hostRegister');
 	}
 
 	/*----------------------------------------------------------
-	# Admin browser events
+	# Host browser events
 	----------------------------------------------------------*/
 	/**
 	 * ...
@@ -34,7 +34,7 @@ $(function(){
 
 		// If index set, send app event.
 		if(index){
-			socket.emit('adminBallotInit', index);
+			socket.emit('hostBallotInit', index);
 		}
 	});
 
@@ -50,16 +50,16 @@ $(function(){
 		index = null;
 
 		// Send app event.
-		socket.emit('adminBallotKill');
+		socket.emit('hostBallotKill');
 	});
 
 	/*----------------------------------------------------------
-	# Admin events
+	# Host events
 	----------------------------------------------------------*/
 	/**
 	 * ...
 	 */
-	socket.on('adminRegister', function(userCount){
+	socket.on('hostRegister', function(userCount){
 		
 		// ...
 		$('#stats-users').text(userCount);
@@ -68,7 +68,7 @@ $(function(){
 	/**
 	 * ...
 	 */
-	socket.on('adminUpdateTable', function(contestantData){
+	socket.on('hostUpdateTable', function(contestantData){
 
 		// ...
 		$.each(contestantData, function(index, contestant){
@@ -125,5 +125,5 @@ $(function(){
 		$('#stats-users').text(userCount);
 	});
 
-	initAdmin();
+	initHost();
 });
