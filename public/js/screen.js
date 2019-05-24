@@ -23,7 +23,7 @@ $(function(){
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 86, 1)',
                     'rgba(75, 192, 192, 1)'
-                ],
+				],
                 pointBackgroundColor: [
                     'rgba(255, 99, 132, 1)',
                     'rgba(54, 162, 235, 1)',
@@ -43,10 +43,10 @@ $(function(){
             },
             scale: {
 				angleLines:{
-					color: 'rgb(255, 255, 255, .5)',
+					color: 'rgb(255, 255, 255, 1)',
 				},
 				gridLines: {
-					color: 'rgb(255, 255, 255, .5)',
+					color: 'rgb(255, 255, 255, 1)',
 				},
                 pointLabels: {
 					fontSize: 20,
