@@ -31,7 +31,7 @@
 /*--------------------------------------------------------------
 # Host styles
 --------------------------------------------------------------*/
-#host-cards{
+#host{
 	margin-top: 2rem;
 	margin-bottom: 2rem;
 	max-width: 1080px
@@ -40,35 +40,47 @@
 /*--------------------------------------------------------------
 # Screen styles
 --------------------------------------------------------------*/
+#screen{
+	align-items: center;
+	background: url('/img/bg_screen.jpg') no-repeat center center;
+	background-size: cover;
+	display: flex;
+	height: 100vh;
+	justify-content: center;
+	width: 100vw;
+}
 
+#screen #ballot-chart{
+	width: 75vw;
+}
 
 /*--------------------------------------------------------------
 # User styles
 --------------------------------------------------------------*/
-#user-cards{
+#user{
 	margin-top: 2rem;
 	margin-bottom: 2rem;
 	max-width: 640px;
 }
 
-#user-cards #user-registration{
+#user #user-registration{
 	display: block;
 }
 
-#user-cards .card, #user-heading{
+#user .card, #user-heading{
 	display: none;
 }
 
-#user-cards .card .card-body {
+#user .card .card-body {
 	text-align: center;
 }
 
-#user-cards #user-heading{
+#user #user-heading{
 	text-align: center;
 	margin-bottom: 2rem;
 }
 
-#user-cards #contestant-score {
+#user #contestant-score {
 	display: block;
 	font-size: 1.75rem;
 	margin-top: 1rem;

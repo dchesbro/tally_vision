@@ -3,13 +3,15 @@ $(function(){
     // Initialize Socket.IO instance.
 	var socket = io();
 
+	Chart.defaults.global.defaultFontColor = 'rgba(255, 255, 255, 1)';
+
     var ctx = document.getElementById('ballot-chart');
-    var myChart = new Chart(ctx, {
+    var ballotChart = new Chart(ctx, {
         type: 'radar',
         data: {
             labels: ['Song', 'Performance', 'Staging', 'Wardrobe'],
             datasets: [{
-                data: [0, 0, 0, 0],
+                data: [],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -30,7 +32,8 @@ $(function(){
                 ],
                 pointHoverBorderWidth: 0,
                 pointHoverRadius: 12,
-                pointRadius: 10,
+				pointRadius: 10,
+				pointStyle: 'triangle'
             }]
         },
         options: {
@@ -39,14 +42,24 @@ $(function(){
                 display: false,
             },
             scale: {
+				angleLines:{
+					color: 'rgb(255, 255, 255, .5)',
+				},
+				gridLines: {
+					color: 'rgb(255, 255, 255, .5)',
+				},
                 pointLabels: {
-                    fontSize: 20
+					fontSize: 20,
+					fontStyle: 'bold'
                 },
                 ticks: {
-                    beginAtZero: true,
-                    fontSize: 20,
+					backdropColor: 'rgba(0, 0, 0, 0)',
+					backdropPaddingX: 4,
+					backdropPaddingY: 4,
+					beginAtZero: true,
+					fontSize: 14,
                     max: 20,
-                    min: 0,
+					min: 0,
                     stepSize: 5
                 }
             }
@@ -58,15 +71,15 @@ $(function(){
 	 */
 	socket.on('screenUpdateChart', function(voteData){
         
-        // ...
-        myChart.data.datasets[0].data = [
+        // Set updated chart data.
+        ballotChart.data.datasets[0].data = [
             voteData[0].cat1,
             voteData[0].cat2,
             voteData[0].cat3,
             voteData[0].cat4
         ];
 
-        // ...
-        myChart.update();
+        // Update chart.
+        ballotChart.update();
 	});
 });

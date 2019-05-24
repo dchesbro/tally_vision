@@ -1,12 +1,12 @@
 extends layout
 
 block content
-	main#screen-cards(class='container-fluid')
+	main#screen(class='container-fluid')
 		section(class='row justify-content-center')
 			div(class='col')
-
+					
 				// Ballot chart
-				canvas#ballot-chart <!-- Ballot chart -->
+				canvas#ballot-chart
 
 block footer
 	script(src='/js/chart.js')
