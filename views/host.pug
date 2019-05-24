@@ -5,16 +5,16 @@ block content
 		section(class='row justify-content-center')
 			div(class='col')
 
-				// AdminServer stats
-				div(class='card-group text-center')
-					div(class='card bg-dark text-white')
-						div(class='card-body')
-							h3#stats-users 0
-							span(class='card-text text-muted') User(s) registered
+				// Host stats
+				div#stats(class='card-group')
 					div(class='card bg-dark text-white')
 						div(class='card-body')
 							h3#stats-ballot --
 							span(class='card-text text-muted') Current ballot
+					div(class='card bg-dark text-white')
+						div(class='card-body')
+							h3#stats-users 0
+							span(class='card-text text-muted') User(s) registered
 				
 				// Contestants table
 				div#contestants(class='card shadow-lg')

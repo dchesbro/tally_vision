@@ -94,39 +94,12 @@ io.on('connection', function(socket){
 				console.log('IO Updating contestants table for host');
 			}
 		});
-
-		/* ...
-		voteModel.countDocuments({
-			code: contestant.code
-		}, function(err, result){
-			if(err){
-				console.log(err);
-				return;
-			}
-			console.log(result);
-		}); */
-		
-		/* Get all previously submitted votes.
-		voteModel.find({}, 'code total', function(err, votes){
-			if(err){
-				
-				// Print debug message(s).
-				console.log(err);
-			}else{
-
-				// Send global response.
-				io.sockets.emit('hostUpdateTable', votes);
-
-				// Print debug message(s).
-				console.log('IO Updating scores for host');
-			}
-		}); */
 	}
 
 	/**
 	 * ...
 	 */
-	function screenUpdateChart(){
+	function screenUpdateDisplay(){
 
 		// ...
 		voteModel.aggregate([
@@ -139,16 +112,14 @@ io.on('connection', function(socket){
 				cat2: { $sum: '$cat2' },
 				cat3: { $sum: '$cat3' },
 				cat4: { $sum: '$cat4' },
-			} }
+				votes: { $sum: 1 }
+			} },
 		], function(err, voteData){
 			if(err){
 				
 				// Print debug message(s).
 				console.log(err);
 			}else{
-
-				// Print debug message(s).
-				console.log(voteData);
 
 				// Send global response.
 				io.sockets.emit('screenUpdateChart', voteData);
@@ -164,7 +135,7 @@ io.on('connection', function(socket){
 	 */
 	function userUpdateTable(){
 		
-		// Get all previously submitted votes for user.
+		// Get previously submitted votes for user.
 		voteModel.find({ username: socket.username }, 'code total', function(err, contestantsData){
 			if(err){
 				
@@ -179,6 +150,38 @@ io.on('connection', function(socket){
 				console.log('IO Updating contestants table for user "' + socket.username + '"');
 			}
 		});
+	}
+
+	/**
+	 * ...
+	 */
+	function userVoted(){
+
+		// ...
+		if(!contestant || !socket.registered){
+			return;
+		}
+
+		// Get previously submitted vote count for user and contestant.
+		var voted = voteModel.countDocuments({ username: socket.username, code: contestant.code }, function(err, count){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+				
+				// If count of previously submitted votes greater than zero, return true...
+				if(count > 0){
+					return true;
+				
+				// ...else, assume user has not voted yet and return false.
+				}else{
+					return false;
+				}
+			}
+		});
+
+		return voted;
 	}
 	
 	/*----------------------------------------------------------
@@ -281,8 +284,8 @@ io.on('connection', function(socket){
 	 */
 	socket.on('userBallotVote', function(scores){
 		
-		// If socket not registered or no contestant set, return.
-		if(!socket.registered || !contestant){
+		// If no contestant set or socket not registered, return.
+		if(!contestant || !socket.registered){
 			return;
 		}
 
@@ -304,9 +307,11 @@ io.on('connection', function(socket){
 				console.log(err);
 			}else{
 
+				// Update display for screen.
+				screenUpdateDisplay();
+
 				// Update contestants table for host and user.
 				hostUpdateTable();
-				screenUpdateChart();
 				userUpdateTable();
 
 				// Send user response.
@@ -348,8 +353,8 @@ io.on('connection', function(socket){
 		// Update contestants table for user.
 		userUpdateTable();
 		
-		// If contestant set, open ballot.
-		if(contestant){
+		// If contestant set and user hasn't already voted, open ballot.
+		if(contestant && !userVoted()){
 			
 			// Send user reponse.
 			socket.emit('ballotOpen', contestant);

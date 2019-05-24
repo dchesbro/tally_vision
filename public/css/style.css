@@ -1,6 +1,10 @@
 /*--------------------------------------------------------------
 # Global styles
 --------------------------------------------------------------*/
+#stats{
+	text-align: center;
+}
+
 .col-ballot, .col-index, .col-score, .col-votes{
 	text-align: center;
 	width: 1%;
@@ -40,6 +44,24 @@
 /*--------------------------------------------------------------
 # Screen styles
 --------------------------------------------------------------*/
+#screen{
+	min-width: 1080px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+#screen #stats table{
+	height: 100%;
+}
+
+#screen #stats table tr:first-of-type td{
+	border-top: none;
+}
+
+#screen #stats table tr td{
+	border-color: rgba(0, 0, 0, .125);
+}
+
 /* #screen{
 	align-items: center;
 	background: url('/img/bg_screen.jpg') no-repeat center center;
