@@ -353,8 +353,8 @@ io.on('connection', function(socket){
 		// Update contestants table for user.
 		userUpdateTable();
 		
-		// If contestant set and user hasn't already voted, open ballot.
-		if(contestant && !userVoted()){
+		// If contestant set, open ballot.
+		if(contestant){
 			
 			// Send user reponse.
 			socket.emit('ballotOpen', contestant);
