@@ -40,7 +40,7 @@
 /*--------------------------------------------------------------
 # Screen styles
 --------------------------------------------------------------*/
-#screen{
+/* #screen{
 	align-items: center;
 	background: url('/img/bg_screen.jpg') no-repeat center center;
 	background-size: cover;
@@ -52,7 +52,7 @@
 
 #screen #ballot-chart{
 	width: 75vw;
-}
+} */
 
 /*--------------------------------------------------------------
 # User styles
