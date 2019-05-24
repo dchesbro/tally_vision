@@ -1,11 +1,6 @@
 /*--------------------------------------------------------------
 # Global styles
 --------------------------------------------------------------*/
-body {
-	margin-top: 2rem;
-	margin-bottom: 2rem;
-}
-
 .col-ballot, .col-index, .col-score, .col-votes{
 	text-align: center;
 	width: 1%;
@@ -37,13 +32,22 @@ body {
 # Host styles
 --------------------------------------------------------------*/
 #host-cards{
+	margin-top: 2rem;
+	margin-bottom: 2rem;
 	max-width: 1080px
 }
+
+/*--------------------------------------------------------------
+# Screen styles
+--------------------------------------------------------------*/
+
 
 /*--------------------------------------------------------------
 # User styles
 --------------------------------------------------------------*/
 #user-cards{
+	margin-top: 2rem;
+	margin-bottom: 2rem;
 	max-width: 640px;
 }
 
@@ -72,7 +76,7 @@ body {
 }
 
 #contestant-score:before {
-	content: 'Total score:';
+	content: 'Your score:';
 	display: block;
 	font-size: 1rem;
 	font-weight: bold;

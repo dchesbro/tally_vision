@@ -24,7 +24,8 @@ var contestant;
 var userCount = 0;
 
 // Define routers.
-var hostRouter  = require('./routes/host');
+var hostRouter   = require('./routes/host');
+var screenRouter = require('./routes/screen');
 var userRouter   = require('./routes/user');
 
 // Set app variables.
@@ -43,6 +44,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(logger('dev'));
 app.use('/', userRouter);
 app.use('/host', hostRouter);
+app.use('/screen', screenRouter);
 
 // Forward 404 messages to error handler.
 app.use(function(req, res, next) {
@@ -119,6 +121,42 @@ io.on('connection', function(socket){
 				console.log('IO Updating scores for host');
 			}
 		}); */
+	}
+
+	/**
+	 * ...
+	 */
+	function screenUpdateChart(){
+
+		// ...
+		voteModel.aggregate([
+			{ $match: {
+				code: contestant.code
+			} },
+			{ $group: {
+				_id: '$code',
+				cat1: { $sum: '$cat1' },
+				cat2: { $sum: '$cat2' },
+				cat3: { $sum: '$cat3' },
+				cat4: { $sum: '$cat4' },
+			} }
+		], function(err, voteData){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+
+				// Print debug message(s).
+				console.log(voteData);
+
+				// Send global response.
+				io.sockets.emit('screenUpdateChart', voteData);
+
+				// Print debug message(s).
+				console.log('IO Updating contestant chart on screen');
+			}
+		});
 	}
 	
 	/**
@@ -267,7 +305,9 @@ io.on('connection', function(socket){
 			}else{
 
 				// Update contestants table for host and user.
-				hostUpdateTable(); userUpdateTable();
+				hostUpdateTable();
+				screenUpdateChart();
+				userUpdateTable();
 
 				// Send user response.
 				socket.emit('userBallotVote', vote);
