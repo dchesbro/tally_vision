@@ -22,9 +22,9 @@ $(function(){
 			}]
 		},
 		options: {
-			aspectRatio: 1.7,
+			aspectRatio: 1.27725,
 			legend: {
-				display: false,
+				display: false
 			},
 			plugins: {
 				colorschemes: {
@@ -33,13 +33,13 @@ $(function(){
 			},
 			scale: {
 				angleLines:{
-					color: 'rgb(69, 77, 85, 1)',
+					color: 'rgb(69, 77, 85, 1)'
 				},
 				gridLines: {
-					color: 'rgb(69, 77, 85, 1)',
+					color: 'rgb(69, 77, 85, 1)'
 				},
 				pointLabels: {
-					fontSize: 20,
+					fontSize: 28,
 					fontStyle: '500'
 				},
 				ticks: {
@@ -47,7 +47,8 @@ $(function(){
 					backdropPaddingX: 4,
 					backdropPaddingY: 4,
 					beginAtZero: true,
-					fontSize: 12,
+					fontColor: 'rgb(108, 117, 125, 1)',
+					fontSize: 16,
 					max: 20,
 					min: 0,
 					stepSize: 5
@@ -55,6 +56,18 @@ $(function(){
 			}
 		}
 	});
+
+	/*----------------------------------------------------------
+	# Screen functions
+	----------------------------------------------------------*/
+	/**
+	 * ...
+	 */
+	function initScreen(){
+
+		// Send app event.
+		socket.emit('screenRegister');
+	}
 
 	/*----------------------------------------------------------
 	# Screen events
@@ -71,7 +84,7 @@ $(function(){
 	/**
 	 * ...
 	 */
-	socket.on('screenUpdateChart', function(voteData){
+	socket.on('screenUpdateDisplay', function(voteData){
 
 		// ...
 		$('#stats-votes').text(voteData[0].votes);
@@ -87,4 +100,6 @@ $(function(){
 		// Update chart.
 		ballotChart.update();
 	});
+
+	initScreen();
 });

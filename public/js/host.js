@@ -53,6 +53,18 @@ $(function(){
 		socket.emit('hostBallotKill');
 	});
 
+	/**
+	 * ...
+	 */
+	$('.results').on('click', function(event){
+
+		// Prevent jump to anchor reference.
+		event.preventDefault();
+
+		// Send app event.
+		socket.emit('hostPrintResults');
+	});
+
 	/*----------------------------------------------------------
 	# Host events
 	----------------------------------------------------------*/

@@ -78,7 +78,7 @@ io.on('connection', function(socket){
 			{ $group: {
 				_id: '$code',
 				score: { $sum: '$total' },
-				votes: { $sum: 1 } 
+				votes: { $sum: 1 }
 			} }
 		], function(err, contestantsData){
 			if(err){
@@ -92,6 +92,233 @@ io.on('connection', function(socket){
 
 				// Print debug message(s).
 				console.log('IO Updating contestants table for host');
+			}
+		});
+	}
+
+	/**
+	 * ...
+	 */
+	function resultsOverall(){
+		
+		// ...
+		voteModel.aggregate([
+			{ $group: {
+				_id: '$code',
+				score: { $sum: '$total' },
+				votes: { $sum: 1 }
+			} },
+			{ $sort: {
+				score: -1
+			} }
+		], function(err, resultsData){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+
+				// Print debug message(s).
+				console.log('RESULTS: Best Overall');
+				console.log(resultsData);
+			}
+		});
+		
+		// ...
+		voteModel.aggregate([
+			{ $group: {
+				_id: '$code',
+				score: { $sum: '$cat1' }
+			} },
+			{ $sort: {
+				score: -1
+			} }
+		], function(err, resultsData){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+
+				// Print debug message(s).
+				console.log('RESULTS: Best Song');
+				console.log(resultsData);
+			}
+		});
+		
+		// ...
+		voteModel.aggregate([
+			{ $group: {
+				_id: '$code',
+				score: { $sum: '$cat2' }
+			} },
+			{ $sort: {
+				score: -1
+			} }
+		], function(err, resultsData){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+
+				// Print debug message(s).
+				console.log('RESULTS: Best Performance');
+				console.log(resultsData);
+			}
+		});
+		
+		// ...
+		voteModel.aggregate([
+			{ $group: {
+				_id: '$code',
+				score: { $sum: '$cat3' }
+			} },
+			{ $sort: {
+				score: -1
+			} }
+		], function(err, resultsData){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+
+				// Print debug message(s).
+				console.log('RESULTS: Best Staging');
+				console.log(resultsData);
+			}
+		});
+		
+		// ...
+		voteModel.aggregate([
+			{ $group: {
+				_id: '$code',
+				score: { $sum: '$cat4' }
+			} },
+			{ $sort: {
+				score: -1
+			} }
+		], function(err, resultsData){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+
+				// Print debug message(s).
+				console.log('RESULTS: Best Wardrobe');
+				console.log(resultsData);
+			}
+		});
+	}
+
+	/**
+	 * ...
+	 */
+	function resultsUsers(){
+		
+		// ...
+		voteModel.aggregate([
+			{ $sort: {
+				cat1: -1
+			} },
+			{ $group: {
+				_id: '$username',
+				code: { $first: '$code' },
+				score: { $first: '$cat1' },
+			} },
+			{ $sort: {
+				_id: 1
+			} }
+		], function(err, resultsData){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+
+				// Print debug message(s).
+				console.log('RESULTS: Best Song Per User');
+				console.log(resultsData);
+			}
+		});
+
+		// ...
+		voteModel.aggregate([
+			{ $sort: {
+				cat2: -1
+			} },
+			{ $group: {
+				_id: '$username',
+				code: { $first: '$code' },
+				score: { $first: '$cat2' }
+			} },
+			{ $sort: {
+				_id: 1
+			} }
+		], function(err, resultsData){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+
+				// Print debug message(s).
+				console.log('RESULTS: Best Performance Per User');
+				console.log(resultsData);
+			}
+		});
+
+		// ...
+		voteModel.aggregate([
+			{ $sort: {
+				cat3: -1
+			} },
+			{ $group: {
+				_id: '$username',
+				code: { $first: '$code' },
+				score: { $first: '$cat3' }
+			} },
+			{ $sort: {
+				_id: 1
+			} }
+		], function(err, resultsData){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+
+				// Print debug message(s).
+				console.log('RESULTS: Best Staging Per User');
+				console.log(resultsData);
+			}
+		});
+
+		// ...
+		voteModel.aggregate([
+			{ $sort: {
+				cat4: -1
+			} },
+			{ $group: {
+				_id: '$username',
+				code: { $first: '$code' },
+				score: { $first: '$cat4' }
+			} },
+			{ $sort: {
+				_id: 1
+			} }
+		], function(err, resultsData){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+
+				// Print debug message(s).
+				console.log('RESULTS: Best Wardrobe Per User');
+				console.log(resultsData);
 			}
 		});
 	}
@@ -122,7 +349,7 @@ io.on('connection', function(socket){
 			}else{
 
 				// Send global response.
-				io.sockets.emit('screenUpdateChart', voteData);
+				io.sockets.emit('screenUpdateDisplay', voteData);
 
 				// Print debug message(s).
 				console.log('IO Updating contestant chart on screen');
@@ -230,6 +457,19 @@ io.on('connection', function(socket){
 	/**
 	 * ...
 	 */
+	socket.on('hostPrintResults', function(){
+
+		// Print debug message(s).
+		console.log('*** BEGIN RESULTS PRINTOUT ***');
+
+		// Call results functions.
+		resultsOverall();
+		resultsUsers();
+	});
+
+	/**
+	 * ...
+	 */
 	socket.on('hostRegister', function(){
 
 		// Set socket host properties.
@@ -252,6 +492,34 @@ io.on('connection', function(socket){
 		
 			// Print debug message(s).
 			console.log('IO Opening ballot "' + contestant.country + '" for host');
+		}
+	});
+
+	/*----------------------------------------------------------
+	# Screen events
+	----------------------------------------------------------*/
+	/**
+	 * ...
+	 */
+	socket.on('screenRegister', function(){
+
+		// Set socket screen properties.
+		socket.screen = true;
+		
+		// Print debug message(s).
+		console.log('IO Registered socket ID ' + socket.id + ' as screen');
+		
+		// If contestant set, update host index.
+		if(contestant){
+
+			// Update display for screen.
+			screenUpdateDisplay();
+			
+			// Send user response.
+			socket.emit('ballotOpen', contestant);
+		
+			// Print debug message(s).
+			console.log('IO Opening ballot "' + contestant.country + '" for screen');
 		}
 	});
 	
