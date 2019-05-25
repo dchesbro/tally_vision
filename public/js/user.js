@@ -101,6 +101,9 @@ $(function(){
 			return;
 		}
 
+		// Hide GNBB.
+		$('#gnbb .graham').hide();
+
 		// Show contestants card view.
 		shuffleCard('#contestants');
 	});
@@ -123,6 +126,9 @@ $(function(){
 		// Update ballot with contestant details.
 		$('#contestant-country').text(contestant.country);
 		$('#contestant-details').text(contestant.artist + ' – "' + contestant.title + '"');
+
+		// Hide GNBB.
+		$('#gnbb .graham').hide();
 
 		// Show ballot form.
 		$('#ballot form').show();
@@ -164,6 +170,9 @@ $(function(){
 
 		// Show GNBB.
 		$('#gnbb .graham').show();
+
+		// Show ballot card view.
+		shuffleCard('#ballot');
 	});
 
 	/**

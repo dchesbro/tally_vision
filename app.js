@@ -23,7 +23,7 @@ var contestants  = require('./includes/contestants');
 // Define local app variables.
 var contestant;
 var userCount = 0;
-var voted = {};
+var userVotes = {};
 
 // Define routers.
 var hostRouter   = require('./routes/host');
@@ -380,6 +380,13 @@ io.on('connection', function(socket){
 			}
 		});
 	}
+
+	/**
+	 * ...
+	 */
+	function userVoted(){
+		return userVotes[contestant.code + '_' + socket.username];
+	}
 	
 	/*----------------------------------------------------------
 	# Host events
@@ -527,41 +534,49 @@ io.on('connection', function(socket){
 			return;
 		}
 
-		// Parse scores as integers and define vote object.
-		var vote = new voteModel({
-			username: socket.username,
-			code: contestant.code,
-			cat1: parseInt(scores.cat1),
-			cat2: parseInt(scores.cat2),
-			cat3: parseInt(scores.cat3),
-			cat4: parseInt(scores.cat4)
-		});
+		// ...
+		if(userVoted()){
 
-		// Save vote to database.
-		vote.save(function(err, vote){
-			if(err){
-				
-				// Print debug message(s).
-				console.log(err);
-			}else{
+			// Send user response.
+			socket.emit('userBallotVote', userVoted());
+		}else{
 
-				// Update display for screen.
-				screenUpdateDisplay();
+			// Parse scores as integers and define vote object.
+			var vote = new voteModel({
+				username: socket.username,
+				code: contestant.code,
+				cat1: parseInt(scores.cat1),
+				cat2: parseInt(scores.cat2),
+				cat3: parseInt(scores.cat3),
+				cat4: parseInt(scores.cat4)
+			});
 
-				// Update contestants table for host and user.
-				hostUpdateTable();
-				userUpdateTable();
+			// Save vote to database.
+			vote.save(function(err, vote){
+				if(err){
+					
+					// Print debug message(s).
+					console.log(err);
+				}else{
 
-				// ...
-				voted[contestant.code + '_' + socket.username] = true;
+					// Update display for screen.
+					screenUpdateDisplay();
 
-				// Send user response.
-				socket.emit('userBallotVote', vote);
+					// Update contestants table for host and user.
+					hostUpdateTable();
+					userUpdateTable();
 
-				// Print debug message(s).
-				console.log('IO Saved vote ID ' + vote._id + ' from user "' + socket.username + '"');
-			}
-		});
+					// ...
+					userVotes[contestant.code + '_' + socket.username] = vote;
+
+					// Send user response.
+					socket.emit('userBallotVote', vote);
+
+					// Print debug message(s).
+					console.log('IO Saved vote ID ' + vote._id + ' from user "' + socket.username + '"');
+				}
+			});
+		}
 	});
 
 	/**
@@ -626,12 +641,19 @@ io.on('connection', function(socket){
 		
 		// If contestant set, open ballot.
 		if(contestant){
-			
+
 			// Send user reponse.
 			socket.emit('ballotOpen', contestant);
 		
 			// Print debug message(s).
 			console.log('IO Opening ballot "' + contestant.country + '" for user "' + socket.username + '"');
+
+			// ...
+			if(userVoted()){
+
+				// Send user response.
+				socket.emit('userBallotVote', userVoted());
+			}
 		}
 	});
 });

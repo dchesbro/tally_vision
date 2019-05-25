@@ -87,7 +87,7 @@ $(function(){
 	socket.on('ballotClose', function(){
 
 		// ...
-		$('#stats-ballot').text(--);
+		$('#stats-ballot').text('--');
 
 		// ...
 		$('#stats-votes').text(0);
