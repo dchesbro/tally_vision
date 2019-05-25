@@ -101,6 +101,58 @@ io.on('connection', function(socket){
 	/**
 	 * ...
 	 */
+	function resultsGNBP(){
+		
+		// ...
+		gnbpModel.aggregate([
+			{ $group: {
+				_id: '$country',
+				points: { $sum: 1 }
+			} },
+			{ $sort: {
+				points: -1
+			} },
+			{ $limit: 5 }
+		], function(err, resultsData){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+
+				// Print debug message(s).
+				console.log('RESULTS: Top 5 Songs During Which Graham Was Most Bitchy');
+				console.log(resultsData);
+			}
+		});
+
+		// ...
+		gnbpModel.aggregate([
+			{ $group: {
+				_id: '$country',
+				points: { $sum: 1 }
+			} },
+			{ $sort: {
+				points: 1
+			} },
+			{ $limit: 5 }
+		], function(err, resultsData){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+
+				// Print debug message(s).
+				console.log('RESULTS: Top 5 Songs During Which Graham Was Least Bitchy');
+				console.log(resultsData);
+			}
+		});
+	}
+
+	/**
+	 * ...
+	 */
 	function resultsOverall(){
 		
 		// ...
@@ -440,6 +492,7 @@ io.on('connection', function(socket){
 		console.log('*** BEGIN RESULTS PRINTOUT ***');
 
 		// Call results functions.
+		resultsGNBP();
 		resultsOverall();
 		resultsUsers();
 	});
@@ -593,6 +646,7 @@ io.on('connection', function(socket){
 		// Define GNBP object.
 		var gnbp = new gnbpModel({
 			username: socket.username,
+			country: contestant.country,
 			code: contestant.code,
 		});
 
