@@ -66,20 +66,6 @@
 	border-color: rgba(0, 0, 0, .125);
 }
 
-/* #screen{
-	align-items: center;
-	background: url('/img/bg_screen.jpg') no-repeat center center;
-	background-size: cover;
-	display: flex;
-	height: 100vh;
-	justify-content: center;
-	width: 100vw;
-}
-
-#screen #ballot-chart{
-	width: 75vw;
-} */
-
 /*--------------------------------------------------------------
 # User styles
 --------------------------------------------------------------*/
@@ -89,16 +75,44 @@
 	max-width: 640px;
 }
 
+#user #contestant-score{
+	display: block;
+	font-size: 1.75rem;
+	margin-top: 1rem;
+	text-align: center;
+}
+
+#user #contestant-score:before{
+	content: 'Your score:';
+	display: block;
+	font-size: 1rem;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+#user #gnbb{
+	margin-top: 2rem;
+	text-align: center;
+}
+
+#user #gnbb .graham{
+	background: url('/img/btn_graham.png') no-repeat center center;
+	background-size: 100%;
+	display: inline-block;
+	height: 100px;
+	width: 75px;
+}
+
+#user #gnbb .graham:active{
+	background-size: 90%;
+}
+
 #user #user-registration{
 	display: block;
 }
 
-#user .card, #user-heading{
+#user #user-heading, #user .card{
 	display: none;
-}
-
-#user .card .card-body {
-	text-align: center;
 }
 
 #user #user-heading{
@@ -106,17 +120,6 @@
 	margin-bottom: 2rem;
 }
 
-#user #contestant-score {
-	display: block;
-	font-size: 1.75rem;
-	margin-top: 1rem;
+#user .card .card-body{
 	text-align: center;
-}
-
-#contestant-score:before {
-	content: 'Your score:';
-	display: block;
-	font-size: 1rem;
-	font-weight: bold;
-	text-transform: uppercase;
 }

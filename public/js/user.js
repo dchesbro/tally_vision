@@ -76,6 +76,18 @@ $(function(){
 		}
 	});
 
+	/**
+	 * ...
+	 */
+	$('.graham').on('click', function(event){
+
+		// Prevent jump to anchor reference.
+		event.preventDefault();
+
+		// Send app event.
+		socket.emit('userGNBB');
+	});
+
 	/*----------------------------------------------------------
 	# User events
 	----------------------------------------------------------*/
@@ -149,6 +161,9 @@ $(function(){
 
 		// Update and show total score.
 		$('#contestant-score').text(vote.total).show();
+
+		// Show GNBB.
+		$('#gnbb .graham').show();
 	});
 
 	/**

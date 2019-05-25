@@ -13,6 +13,7 @@ var server       = require('http').Server(app);
 var io           = require('socket.io')(server);
 
 // Define database document models.
+var gnbpModel    = require('./models/gnbp');
 var voteModel    = require('./models/vote');
 
 // Define includes.
@@ -22,6 +23,7 @@ var contestants  = require('./includes/contestants');
 // Define local app variables.
 var contestant;
 var userCount = 0;
+var voted = {};
 
 // Define routers.
 var hostRouter   = require('./routes/host');
@@ -378,38 +380,6 @@ io.on('connection', function(socket){
 			}
 		});
 	}
-
-	/**
-	 * ...
-	 */
-	function userVoted(){
-
-		// ...
-		if(!contestant || !socket.registered){
-			return;
-		}
-
-		// Get previously submitted vote count for user and contestant.
-		var voted = voteModel.countDocuments({ username: socket.username, code: contestant.code }, function(err, count){
-			if(err){
-				
-				// Print debug message(s).
-				console.log(err);
-			}else{
-				
-				// If count of previously submitted votes greater than zero, return true...
-				if(count > 0){
-					return true;
-				
-				// ...else, assume user has not voted yet and return false.
-				}else{
-					return false;
-				}
-			}
-		});
-
-		return voted;
-	}
 	
 	/*----------------------------------------------------------
 	# Host events
@@ -582,11 +552,44 @@ io.on('connection', function(socket){
 				hostUpdateTable();
 				userUpdateTable();
 
+				// ...
+				voted[contestant.code + '_' + socket.username] = true;
+
 				// Send user response.
 				socket.emit('userBallotVote', vote);
 
 				// Print debug message(s).
 				console.log('IO Saved vote ID ' + vote._id + ' from user "' + socket.username + '"');
+			}
+		});
+	});
+
+	/**
+	 * ...
+	 */
+	socket.on('userGNBB', function(){
+
+		// If no contestant set or socket not registered, return.
+		if(!contestant || !socket.registered){
+			return;
+		}
+
+		// Define GNBP object.
+		var gnbp = new gnbpModel({
+			username: socket.username,
+			code: contestant.code,
+		});
+
+		// Save GNBP to database.
+		gnbp.save(function(err, gnbp){
+			if(err){
+				
+				// Print debug message(s).
+				console.log(err);
+			}else{
+
+				// Print debug message(s).
+				console.log('IO Added Graham Norton Bitch Point for "' + contestant.country + '" from user "' + socket.username + '"');
 			}
 		});
 	});

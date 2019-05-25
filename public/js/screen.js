@@ -49,9 +49,9 @@ $(function(){
 					beginAtZero: true,
 					fontColor: 'rgb(108, 117, 125, 1)',
 					fontSize: 16,
-					max: 20,
+					max: 40,
 					min: 0,
-					stepSize: 5
+					stepSize: 10
 				}
 			}
 		}
@@ -79,6 +79,24 @@ $(function(){
 
 		// ...
 		$('#stats-ballot').text(contestant.country);
+	});
+
+	/**
+	 * ...
+	 */
+	socket.on('ballotClose', function(){
+
+		// ...
+		$('#stats-ballot').text(--);
+
+		// ...
+		$('#stats-votes').text(0);
+
+		// Reset chart data.
+		ballotChart.data.datasets[0].data = [0, 0, 0, 0];
+
+		// Update chart.
+		ballotChart.update();
 	});
 
 	/**
