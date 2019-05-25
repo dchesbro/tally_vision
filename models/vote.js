@@ -6,9 +6,13 @@ var voteSchema = new mongoose.Schema({
 		type:     String,
 		required: [true, 'Whose man is this? (Missing username)'],
 	},
+	country: {
+		type:     String,
+		required: [true, 'Where in the world is this? (Missing country)'],
+	},
 	code: {
 		type:     String,
-		required: [true, 'Where in the world is this? (Missing country code)'],
+		required: [true, 'Whr n th wrld s ths? (Missing country code)'],
 	},
 	cat1: {
 		type:     Number,

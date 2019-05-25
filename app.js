@@ -106,7 +106,7 @@ io.on('connection', function(socket){
 		// ...
 		voteModel.aggregate([
 			{ $group: {
-				_id: '$code',
+				_id: '$country',
 				score: { $sum: '$total' },
 				votes: { $sum: 1 }
 			} },
@@ -129,7 +129,7 @@ io.on('connection', function(socket){
 		// ...
 		voteModel.aggregate([
 			{ $group: {
-				_id: '$code',
+				_id: '$country',
 				score: { $sum: '$cat1' }
 			} },
 			{ $sort: {
@@ -151,7 +151,7 @@ io.on('connection', function(socket){
 		// ...
 		voteModel.aggregate([
 			{ $group: {
-				_id: '$code',
+				_id: '$country',
 				score: { $sum: '$cat2' }
 			} },
 			{ $sort: {
@@ -173,7 +173,7 @@ io.on('connection', function(socket){
 		// ...
 		voteModel.aggregate([
 			{ $group: {
-				_id: '$code',
+				_id: '$country',
 				score: { $sum: '$cat3' }
 			} },
 			{ $sort: {
@@ -195,7 +195,7 @@ io.on('connection', function(socket){
 		// ...
 		voteModel.aggregate([
 			{ $group: {
-				_id: '$code',
+				_id: '$country',
 				score: { $sum: '$cat4' }
 			} },
 			{ $sort: {
@@ -227,7 +227,7 @@ io.on('connection', function(socket){
 			} },
 			{ $group: {
 				_id: '$username',
-				code: { $first: '$code' },
+				country: { $first: '$country' },
 				score: { $first: '$cat1' },
 			} },
 			{ $sort: {
@@ -253,7 +253,7 @@ io.on('connection', function(socket){
 			} },
 			{ $group: {
 				_id: '$username',
-				code: { $first: '$code' },
+				country: { $first: '$country' },
 				score: { $first: '$cat2' }
 			} },
 			{ $sort: {
@@ -279,7 +279,7 @@ io.on('connection', function(socket){
 			} },
 			{ $group: {
 				_id: '$username',
-				code: { $first: '$code' },
+				country: { $first: '$country' },
 				score: { $first: '$cat3' }
 			} },
 			{ $sort: {
@@ -305,7 +305,7 @@ io.on('connection', function(socket){
 			} },
 			{ $group: {
 				_id: '$username',
-				code: { $first: '$code' },
+				country: { $first: '$country' },
 				score: { $first: '$cat4' }
 			} },
 			{ $sort: {
@@ -544,6 +544,7 @@ io.on('connection', function(socket){
 			// Parse scores as integers and define vote object.
 			var vote = new voteModel({
 				username: socket.username,
+				country: contestant.country,
 				code: contestant.code,
 				cat1: parseInt(scores.cat1),
 				cat2: parseInt(scores.cat2),
