@@ -22,7 +22,7 @@ $(function(){
 			}]
 		},
 		options: {
-			aspectRatio: 1.27725,
+			aspectRatio: 1.125,
 			legend: {
 				display: false
 			},

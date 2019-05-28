@@ -128,7 +128,7 @@ $(function(){
 		$('#contestant-details').text(contestant.artist + ' – "' + contestant.title + '"');
 
 		// Hide GNBB.
-		$('#gnbb .graham').hide();
+		$('#gnbb .graham').show();
 
 		// Show ballot form.
 		$('#ballot form').show();
