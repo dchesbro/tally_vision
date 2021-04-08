@@ -55,7 +55,7 @@ app.use(function(err, req, res, next) {
 
 // ...
 app.set('categories', require('./categories'));
-app.set('contestants', require('./contestants'));
+app.set('contestants', require('./contestants/2021'));
 
 var appUserCount = 0;
 var appVoting = null;
