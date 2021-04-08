@@ -1,16 +1,26 @@
 doctype html
-html
-	head
-		meta(charset='utf-8')
-		meta(content='width=device-width, initial-scale=1, shrink-to-fit=no', name='viewport')
-		title=title
-		link(href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', rel='stylesheet')
-		link(href='/css/style.css', rel='stylesheet')
-	body(ontouchstart)
-		block content
-		footer
-			script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js')
-			script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js')
-			script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js')
-			script(src='/socket.io/socket.io.js')
-			block footer
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(content='width=device-width, initial-scale=1, shrink-to-fit=no', name='viewport')
+    title= title
+    
+    <!--stylesheets-->
+    link(href='https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/stylesheets/style.css', rel='stylesheet')
+  body(ontouchstart)
+    nav(class='navbar navbar-dark fixed-top bg-primary')
+      span(class='navbar-brand')= title
+      button(class='navbar-toggler', data-target='#about', data-toggle='collapse', type='button')
+        span(class='navbar-toggler-icon')
+      div(class='collapse navbar-collapse text-center', id='about')
+        small(class='navbar-text')= version
+    main(id='content')
+      block content
+
+    <!--javascripts-->
+    script(src='https://code.jquery.com/jquery-3.5.1.slim.min.js')
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js')
+    script(src='/socket.io/socket.io.js')
+    script(src='/javascripts/client.js')
+    

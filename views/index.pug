@@ -1,0 +1,57 @@
+extends layout
+
+block content
+  //join
+  div(id='join')
+    div(class='card')
+      form(autocomplete='off')
+        div(class='card-body')
+          div(class='form-group')
+            label(for='user-name') Enter your name to join or reconnect
+            input(class='form-control form-control-lg', id='user-name', maxlength='16', required, type='text')
+        button(class='btn btn-lg btn-block btn-primary', disabled, type='submit') Join
+
+  //scorecard
+  div(id='scorecard')
+    div(class='card')
+      table(class='table table-striped')
+        thead(class='thead-light')
+          tr
+            th(class='col-id', scope='col') #
+            th(class='col-contestant', scope='col') Contestant
+            th(class='col-score', scope='col') Score
+        tbody
+          each contestant, i in contestants
+
+            - var id = i + 1;
+            
+            tr(id=contestant.code)
+              th(class='col-id', scope='row') #{id}
+              td(class='col-contestant')
+                | #{contestant.country}
+                br
+                | #{contestant.artist + ' – "' + contestant.title + '"'}
+              td(class='col-score') --
+
+  //ballot
+  div(id='ballot')
+    div(class='card')
+      form
+        ul(class='list-group list-group-flush')
+          each category, i in categories
+
+            - var id = i + 1;
+
+            li(class='list-group-item')
+              h6 #{id + '. ' + category.title}
+              div(class='btn-group btn-group-toggle w-100', data-toggle='buttons')
+
+                - var n = 0;
+
+                while n <= category.max
+                  label(class='btn btn-outline-primary') #{n}
+                    input(id='cat-' + id, name='cat-' + id, required, type='radio', value=n++)
+        button(class='btn btn-lg btn-block btn-primary', disabled, type='submit') Vote
+
+  div(id='graham')
+    button(class='text-hide') Graham
