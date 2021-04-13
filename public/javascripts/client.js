@@ -1,12 +1,32 @@
-var socket = io();
+var socket = io('/client', {
+  autoConnect: false,
+});
 
-socket.on('clientJoin', function(arg) {
-  console.log(arg);
+//...
+var clientSessionID = null;
+var clientUserID = null;
+var clientUsername = '';
+
+//...
+socket.on('clientJoin', function(args) {
+  console.log(args);
 });
 
 
-// ...
-$('#ballot form').click(function() {
+
+//...
+$('form').on('submit', function(event) {
+  var button = $('button[type="submit"]', this);
+  var fields = $('fieldset', this);
+
+  event.preventDefault();
+
+  button.html('<span class="spinner-border spinner-border-sm" role="status"></span>');
+  fields.prop('disabled', true);
+});
+
+//...
+$('.view-ballot form').on('click', function() {
   var error = false;
   var categories = $('.list-group-item', this);
   var checked = $('input[type="radio"]:checked', this);
@@ -22,11 +42,11 @@ $('#ballot form').click(function() {
   }
 });
 
-// ...
-$('#join form').keyup(function() {
+//...
+$('.view-join form').on('keyup', function() {
   var error = false;
 
-  if (!$('input#user-name').val()) {
+  if (!$('input#username', this).val()) {
     error = true;
   };
 
@@ -37,14 +57,31 @@ $('#join form').keyup(function() {
   }
 });
 
-// ...
-$('#join form').submit(function(event) {
-  event.preventDefault();
-  
-  socket.emit('clientJoin', {
-    name: $('input#user-name').val(),
-  });
+//...
+$('.view-join form').on('click', function(event) {
+  var username = $('input#username', this).val();
+
+  socket.auth = {
+    client: true,
+    username: username,
+  };
+
+  socket.connect();
 });
 
-// ...
-$('#join input#user-name').focus();
+
+
+//...
+function __init() {
+  setView('join');
+}
+
+//...
+function setView(view) {
+  $('[class*="view-"]').hide();
+  $('.view-' + view).show();
+}
+
+
+
+__init();
