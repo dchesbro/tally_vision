@@ -1,14 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+/* GET client interface */
 router.get('/', function(req, res, next) {
-  res.render('index', {
+  res.render('client', {
     categories: res.app.get('categories'),
-		contestants: res.app.get('contestants'),
+    contestants: res.app.get('contestants'),
     title: 'TALLYVISION',
-    url: 'github.com/dchesbro/tallyvision',
-    version: '0.6.9',
   });
 });
 
