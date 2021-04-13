@@ -1,15 +1,16 @@
+//variables
+$sidebar-width: 384px;
+
+//overrides
+//components
+$border-radius: .5rem;
+
+//bootstrap
+@import '../../node_modules/bootstrap/scss/bootstrap';
+
+//global
 body {
   padding-top: 56px;
-}
-
-button[type='submit'] {
-  border-radius: 0;
-}
-
-.card {
-  margin: 2rem auto;
-  max-width: 480px;
-  overflow: hidden;
 }
 
 .navbar-brand {
@@ -19,22 +20,71 @@ button[type='submit'] {
   transform: translateX(-50%);
 }
 
-#graham {
-  text-align: center;
+.card {
+  margin: $grid-gutter-width / 2 auto;
+  overflow: hidden;
 
-  button {
-    background: url('/images/btn-graham.png') no-repeat center center;
-    background-size: 100%;
-    height: 100px;
-    width: 75px;
+  button[type='submit'] {
+    border-radius: 0;
+  }
 
-    &:active {
-      background-size: 90%;
+  .table {
+    margin-bottom: 0;
+  }
+}
+
+.contestant-country,
+.contestant-details {
+  display: block;
+}
+
+.contestant-details {
+  font-size: .8em;
+}
+
+.table {
+  td,
+  th {
+    vertical-align: middle;
+  }
+
+  .col-ballot,
+  .col-connected,
+  .col-id,
+  .col-score,
+  .col-votes,
+  .col-voting {
+    text-align: center;
+    white-space: nowrap;
+    width: 1%;
+  }
+}
+
+//client
+#client {
+  [class*='view-'] {
+    display: none;
+  }
+}
+
+.view-ballot {
+  .graham {
+    text-align: center;
+  
+    button {
+      background: url('/images/btn-graham.png') no-repeat center center;
+      background-size: 100%;
+      height: 100px;
+      width: 80px;
+  
+      &:active {
+        background-size: 90%;
+      }
     }
   }
 }
 
-#join {
+.view-join {
   label {
     display: block;
     text-align: center;
@@ -45,20 +95,54 @@ button[type='submit'] {
   }
 }
 
-#scorecard {
-  .col-id,
-  .col-score {
-    text-align: center;
-    white-space: nowrap;
-	  width: 1%;
+//host
+.ballot-close {
+  display: none;
+}
+
+.view-scoreboard {
+  .col-ballot {
+    button {
+      width: 80px;
+    }
+  }
+}
+
+@media(min-width: 992px) {
+  #content {
+    padding-left: $sidebar-width + $grid-gutter-width / 2;
   }
 
-  .table {
-    margin-bottom: 0;
+  #sidebar {
+    padding-top: 56px;
+    position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+    width: $sidebar-width;
+  }
+}
 
-    td,
-    th {
-      vertical-align: middle;
+#sidebar {
+  .card {
+    .card-header {
+      text-transform: uppercase;
+
+      .badge {
+        vertical-align: text-bottom;
+      }
+    }
+  }
+  
+  h6 {
+    text-transform: uppercase;
+
+    ~ h6 {
+      margin-top: 1.5rem;
+    }
+
+    .badge {
+      vertical-align: text-bottom;
     }
   }
 }
