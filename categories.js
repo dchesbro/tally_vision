@@ -1,24 +1,24 @@
 var categories = [
   {
-    title: 'Song',
+    title: 'song',
     max: 5,
     labelmax: '...',
     labelmin: '...',
   },
   {
-    title: 'Performance',
+    title: 'performance',
     max: 5,
     labelmax: '...',
     labelmin: '...',
   },
   {
-    title: 'Staging',
+    title: 'staging',
     max: 5,
     labelmax: '...',
     labelmin: '...',
   },
   {
-    title: 'Wardrobe',
+    title: 'wardrobe',
     max: 5,
     labelmax: '...',
     labelmin: '...',
