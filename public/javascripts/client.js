@@ -1,87 +1,151 @@
+// ...
+const LOCAL_STORAGE_KEY = 'tallyvisionName';
+
+// ...
 var socket = io('/client', {
   autoConnect: false,
 });
 
-//...
-var clientSessionID = null;
-var clientUserID = null;
-var clientUsername = '';
+// ...
+socket.on('appBallotClose', function() {
+  viewSet('scorecard');
+});
 
-//...
-socket.on('clientJoin', function(args) {
-  console.log(args);
+// ...
+socket.on('appBallotOpen', function(contestant) {
+  var ballot = $('.view-ballot .card-body');
+
+  $('.contestant-country', ballot).html(contestant.country);
+  $('.contestant-details', ballot).html(contestant.artist + ' – "' + contestant.title + '"');
+
+  viewSet('ballot');
+});
+
+// ...
+socket.on('appVoted', function(score) {
+  var ballot = $('.view-ballot');
+
+  $('form', ballot).hide();
+  $('.card-body .contestant-score', ballot).html(score);
+});
+
+// ...
+socket.on('clientConnect', function(name) {
+  localStorage.setItem(LOCAL_STORAGE_KEY, name);
+
+  $('.navbar-brand').html(name);
+
+  viewSet('scorecard');
 });
 
 
 
-//...
+// ...
 $('form').on('submit', function(event) {
-  var button = $('button[type="submit"]', this);
-  var fields = $('fieldset', this);
-
   event.preventDefault();
 
-  button.html('<span class="spinner-border spinner-border-sm" role="status"></span>');
-  fields.prop('disabled', true);
+  $('button[type="submit"]', this).html('<span class="spinner-border spinner-border-sm" role="status"></span>');
+  $('fieldset', this).prop('disabled', true);
 });
 
-//...
+// ...
 $('.view-ballot form').on('click', function() {
-  var error = false;
-  var categories = $('.list-group-item', this);
+  formBallotValidate(this);
+});
+
+// ...
+$('.view-ballot form').on('submit', function() {
   var checked = $('input[type="radio"]:checked', this);
+  var scores = [];
+
+  scores = checked.map(function(i, field) {
+    return parseInt($(field).val());
+  }).get();
+
+  socket.emit('clientBallotSubmit', scores);
+});
+
+// ...
+$('.view-join form').on('keyup', function() {
+  formJoinValidate(this);
+});
+
+// ...
+$('.view-join form').on('submit', function() {
+  var nameField = $('input#name', this);
+
+  formJoinConnect(nameField.val());
+});
+
+
+
+// ...
+function __init() {
+  var form = $('.view-join form');
+  var name = localStorage.getItem(LOCAL_STORAGE_KEY);
+
+  if (name) {
+    $('input#name', form).val(name);
+  }
+
+  formJoinValidate(form);
+  viewSet('join');
+
+  /* if (name) {
+    formJoinConnect(name);
+  } else {
+    viewSet('join');
+  } */
+}
+
+// ...
+function formBallotValidate(form) {
+  var error = false;
+  var categories = $('li.list-group-item', form);
+  var checked = $('input[type="radio"]:checked', form);
 
   if (checked.length !== categories.length) {
     error = true;
   }
 
-  if (error) {
-    $('button', this).prop('disabled', true);
-  } else {
-    $('button', this).prop('disabled', false);
-  }
-});
+  formSubmitProp(form, error);
+}
 
-//...
-$('.view-join form').on('keyup', function() {
-  var error = false;
-
-  if (!$('input#username', this).val()) {
-    error = true;
-  };
-
-  if (error) {
-    $('button', this).prop('disabled', true);
-  } else {
-    $('button', this).prop('disabled', false);
-  }
-});
-
-//...
-$('.view-join form').on('click', function(event) {
-  var username = $('input#username', this).val();
-
+// ...
+function formJoinConnect(name) {
   socket.auth = {
-    client: true,
-    username: username,
+    name: name,
   };
 
   socket.connect();
-});
-
-
-
-//...
-function __init() {
-  setView('join');
 }
 
-//...
-function setView(view) {
+// ...
+function formJoinValidate(form) {
+  var error = false;
+  var nameField = $('input#name', form);
+
+  if (!nameField.val()) {
+    error = true;
+  };
+
+  formSubmitProp(form, error);
+}
+
+// ...
+function formSubmitProp(form, error) {
+  if (error) {
+    $('button[type="submit"]', form).prop('disabled', true);
+  } else {
+    $('button[type="submit"]', form).prop('disabled', false);
+  }
+}
+
+// ...
+function viewSet(view) {
+  $('html').scrollTop(0);
   $('[class*="view-"]').hide();
   $('.view-' + view).show();
 }
-
-
 
 __init();

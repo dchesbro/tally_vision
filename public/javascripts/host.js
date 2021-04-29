@@ -1,38 +1,64 @@
 var socket = io('/host');
 
+// ...
+socket.on('appBallotClose', function() {
+  var widget = $('#widget-voting');
+
+  $('.ballot-close').hide();
+  $('.ballot-open').show();
+
+  $('.badge', widget).html('Closed');
+  $('.card-body', widget).hide();
+});
+
+// ...
+socket.on('appBallotOpen', function(contestant) {
+  var tr = $('tr#' + contestant.code);
+  var widget = $('#widget-voting');
+  
+  $('.ballot-close', tr).show();
+  $('.ballot-open').hide();
+
+  $('.badge', widget).html('Open');
+  $('.card-body .contestant-country', widget).html(contestant.country);
+  $('.card-body .contestant-details', widget).html(contestant.artist + ' – "' + contestant.title + '"');
+  $('.card-body', widget).show();
+});
+
 //...
-socket.on('hostUsers', function(appUsers) {
-  var rows = '';
+socket.on('hostVoters', function(voters) {
+  var tbody = '';
+  var widget = $('#widget-voters');
 
-  $.each(appUsers, function(i, user) {
-    var row = '<tr>';
+  $.each(voters, function(i, voter) {
+    var tr = '<tr>';
 
-    row += '<td class="col-connected"><i class="fas fa-user-alt"></i></td>';
-    row += '<td class="col-username">' + user.username + '</td>';
-
-    rows += row + '</tr>';
+    tr += '<td class="col-connected ' + voter.connected + '"></td>';
+    tr += '<td class="col-name">' + voter.name + '</td>';
+    
+    tbody += tr + '</tr>';
   });
 
-  $('#host-users .badge').html(appUsers.length);
-  $('#host-users .table tbody').html(rows);
+  $('.badge', widget).html(voters.length);
+  $('.card-body .table tbody', widget).html(tbody);
+  $('.card-body', widget).show();
 });
 
 //...
-socket.on('hostJoin', function(arg) {
-  console.log(arg);
+socket.on('hostConnect', function() {
+  // TODO.
 });
 
 
 
 //...
-$('button[class*="ballot-"').on('click', function() {
-  if ($(this).hasClass('ballot-close')) {
-    $('.ballot-close').hide();
-    $('.ballot-open').show();
-  } else if ($(this).hasClass('ballot-open')) {
-    var tr = $(this).parents('tr');
+$('button.ballot-close').on('click', function() {
+    socket.emit('hostBallotClose');
+});
 
-    $('.ballot-open').hide();
-    $('.ballot-close', tr).show();
-  }
+//...
+$('button.ballot-open').on('click', function() {
+  var i = $(this).attr('data-index');
+
+  socket.emit('hostBallotOpen', i);
 });

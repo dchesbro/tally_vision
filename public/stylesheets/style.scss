@@ -1,31 +1,41 @@
-//variables
+// variables
 $sidebar-width: 384px;
 
-//overrides
-//components
-$border-radius: .5rem;
+// bs overrides
+// components
+$border-radius: .8rem;
 
-//bootstrap
+// bootstrap
 @import '../../node_modules/bootstrap/scss/bootstrap';
 
-//global
+// global
 body {
   padding-top: 56px;
+}
+
+input {
+  text-transform: uppercase;
 }
 
 .navbar-brand {
   position: absolute;
     top: .5rem;
     left: 50%;
+  text-transform: uppercase;
   transform: translateX(-50%);
 }
 
-.card {
+.card,
+.graham {
   margin: $grid-gutter-width / 2 auto;
+}
+
+.card {
   overflow: hidden;
 
   button[type='submit'] {
     border-radius: 0;
+    text-transform: uppercase;
   }
 
   .table {
@@ -60,7 +70,7 @@ body {
   }
 }
 
-//client
+// client
 #client {
   [class*='view-'] {
     display: none;
@@ -78,7 +88,7 @@ body {
       width: 80px;
   
       &:active {
-        background-size: 90%;
+        background-size: 80%;
       }
     }
   }
@@ -95,16 +105,53 @@ body {
   }
 }
 
-//host
+// host
 .ballot-close {
   display: none;
 }
 
 .view-scoreboard {
-  .col-ballot {
-    button {
-      width: 80px;
+  td {
+    &.col-score {
+      color: transparent;
+      text-shadow: 0 0 .6em rgba(0, 0, 0, .8);
+      transition: text-shadow 0.1s linear;
+
+      &:focus,
+      &:hover {
+        text-shadow: 0 0 0 $body-color;
+      }
     }
+
+    &.col-ballot {
+      button {
+        width: 60px;
+      }
+    }
+  }
+}
+
+#widget-voters {
+  .col-connected {
+    font-size: .6em;
+
+    &:before {
+      content: '\25CF';
+    }
+
+    &.false {
+      color: $danger;
+    }
+
+    &.true {
+      color: $success;
+    }
+  }
+}
+
+div[id*='widget-'] {
+  .card-body {
+    display: none;
   }
 }
 

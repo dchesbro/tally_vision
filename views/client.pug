@@ -9,9 +9,9 @@ block content
           fieldset
             div(class='card-body')
               div(class='form-group')
-                label(for='user-name')
-                  h5 Enter your name to join or reconnect
-                input(class='form-control form-control-lg', id='username', maxlength='12', required, type='text')
+                label(for='name')
+                  h6 Enter your name to join or reconnect
+                input(class='form-control', id='name', maxlength='12', required, type='text')
             button(class='btn btn-lg btn-block btn-primary', disabled, type='submit') Join
 
     //scorecard
@@ -20,16 +20,11 @@ block content
         table(class='table table-striped')
           thead(class='thead-light')
             tr
-              th(class='col-id', scope='col') #
               th(class='col-contestant', scope='col') Contestant
-              th(class='col-score', scope='col') Score
+              th(class='col-score', scope='col') Your score
           tbody
-            each contestant, i in contestants
-
-              - var id = i + 1;
-              
+            each contestant, i in contestants              
               tr(id=contestant.code)
-                th(class='col-id', scope='row') #{id}
                 td(class='col-contestant')
                   span(class='contestant-country') #{contestant.country}
                   span(class='contestant-details') #{contestant.artist + ' – "' + contestant.title + '"'}
@@ -39,9 +34,10 @@ block content
     div(class='view-ballot')
       div(class='card')
         div(class='card-body')
-          h3
+          h4
             span(class='contestant-country') Country
             span(class='contestant-details') Artist – "Song"
+            span(class='contestant-score')
         form
           fieldset
             ul(class='list-group list-group-flush')
@@ -50,13 +46,13 @@ block content
                 - var id = i + 1;
 
                 li(class='list-group-item')
-                  h5 #{id + '. ' + category.title}
+                  h6 #{id + '. ' + category.title}
                   div(class='btn-group btn-group-toggle w-100', data-toggle='buttons')
 
                     - var n = 0;
 
                     while n <= category.max
-                      label(class='btn btn-lg btn-outline-primary') #{n}
+                      label(class='btn btn-outline-primary') #{n}
                         input(id='cat-' + id, name='cat-' + id, required, type='radio', value=n++)
                   div(class='d-flex justify-content-between')
                     small(class='form-text text-muted')=category.labelmin

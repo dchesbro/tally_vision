@@ -5,26 +5,20 @@ block content
     div(class='row')
       //sidebar
       div(class='col-lg', id='sidebar')
-        div(class='card bg-light')
+        div(class='card bg-light', id='widget-voters')
           div(class='card-header')
-            | Ballot status 
-            span(class='badge badge-pill badge-secondary') Open
-          div(class='card-body')
-            span(class='contestant-country') Country
-            span(class='contestant-details') Artist – "Song"
-        div(class='card bg-light', id='host-users')
-          div(class='card-header')
-            | Current users 
-            span(class='badge badge-pill badge-secondary') 0
+            | Registered voters 
+            span(class='badge badge-pill badge-dark') 0
           div(class='card-body')
             table(class='table table-sm table-borderless')
               tbody
-                tr
-                  td(class='col-status')
-                    i(class='fas fa-user-alt')
-                  td(class='col-username') Name
-                  td(class='col-voting')
-                    div(class='spinner-border spinner-border-sm', role='status')
+        div(class='card bg-light', id='widget-voting')
+          div(class='card-header')
+            | Voting 
+            span(class='badge badge-pill badge-dark') Closed
+          div(class='card-body')
+            span(class='contestant-country')
+            span(class='contestant-details')
       //content
       div(class='col-lg' id='content')
         //scoreboard
@@ -33,26 +27,21 @@ block content
             table(class='table table-striped')
               thead(class='thead-light')
                 tr
-                  th(class='col-id', scope='col') #
                   th(class='col-contestant', scope='col') Contestant
                   th(class='col-score', scope='col') Score
                   th(class='col-votes', scope='col') Votes
                   th(class='col-ballot', scope='col') Ballot
               tbody
                 each contestant, i in contestants
-
-                  - var id = i + 1;
-
                   tr(id=contestant.code)
-                    th(class='col-id', scope='row') #{id}
                     td(class='col-contestant')
                       span(class='contestant-country') #{contestant.country}
                       span(class='contestant-details') #{contestant.artist + ' – "' + contestant.title + '"'}
                     td(class='col-score') --
                     td(class='col-votes') --
                     td(class='col-ballot')
-                      button(class='btn btn-sm btn-primary ballot-open', type='button') Open
-                      button(class='btn btn-sm btn-danger ballot-close', type='button') Close
+                      button(class='btn btn-sm btn-primary ballot-open', data-index=i, type='button') Open
+                      button(class='btn btn-sm btn-danger ballot-close', data-index=i, type='button') Close
 
 block footer
   script(src='/javascripts/host.js')
