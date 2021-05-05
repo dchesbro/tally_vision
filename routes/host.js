@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('host', {
     contestants: res.app.get('contestants'),
-    title: 'Hostbot',
+    title: 'HOSTBOT',
   });
 });
 
