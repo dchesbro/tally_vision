@@ -3,7 +3,7 @@ extends layout
 block content
   div(class='container-fluid' id='client')
     //join
-    div(class='view-join')
+    div(id='view-join')
       div(class='card')
         form(autocomplete='off')
           fieldset
@@ -15,23 +15,24 @@ block content
             button(class='btn btn-lg btn-block btn-primary', disabled, type='submit') Join
 
     //scorecard
-    div(class='view-scorecard')
+    div(id='view-scorecard')
       div(class='card')
-        table(class='table table-striped')
+        h6(class='card-header border-0') Scorecard
+        table(class='table table-striped mb-0')
           thead(class='thead-light')
             tr
               th(class='col-contestant', scope='col') Contestant
-              th(class='col-score', scope='col') Your score
+              th(class='col-score text-center text-nowrap', scope='col') Your score
           tbody
             each contestant, i in contestants              
               tr(id=contestant.code)
                 td(class='col-contestant')
                   span(class='contestant-country') #{contestant.country}
                   span(class='contestant-details') #{contestant.artist + ' – "' + contestant.title + '"'}
-                td(class='col-score') --
+                td(class='col-score text-center') --
 
     //ballot
-    div(class='view-ballot')
+    div(id='view-ballot')
       div(class='card')
         div(class='card-body')
           h4
@@ -59,8 +60,8 @@ block content
                     small(class='form-text text-muted')=category.labelmax
             button(class='btn btn-lg btn-block btn-primary', disabled, type='submit') Vote
 
-      div(class='graham')
-        button(class='text-hide', type='button') Graham
+      div(class='gnbb')
+        button(class='text-hide', type='button') Graham Norton bitchiness button
 
 block footer
   script(src='/javascripts/client.js')

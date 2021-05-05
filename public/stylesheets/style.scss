@@ -1,6 +1,3 @@
-// variables
-$sidebar-width: 384px;
-
 // bs overrides
 // components
 $border-radius: .8rem;
@@ -8,13 +5,55 @@ $border-radius: .8rem;
 // bootstrap
 @import '../../node_modules/bootstrap/scss/bootstrap';
 
+// custom variables
+$navbar-padding: add($grid-gutter-width / 2, 56px);
+$sidebar-padding: 320px;
+
 // global
 body {
-  padding-top: 56px;
+  padding-top: $navbar-padding;
+  padding-bottom: $grid-gutter-width / 2;
 }
 
 input {
   text-transform: uppercase;
+}
+
+.card {
+  overflow: hidden;
+
+  .btn[type*='submit'] {
+    border-radius: 0;
+    text-transform: uppercase;
+  }
+
+  .table {
+    td:first-child,
+    th:first-child {
+      padding-left: 1.25rem;
+    }
+
+    td:last-child,
+    th:last-child {
+      padding-right: 1.25rem;
+    }
+  }
+}
+
+.card-header {
+  .badge {
+    vertical-align: bottom;
+  }
+}
+
+.contestant-country,
+.contestant-details,
+.contestant-score {
+  display: block;
+}
+
+.contestant-details {
+  font-size: .8em;
 }
 
 .navbar-brand {
@@ -25,12 +64,141 @@ input {
   transform: translateX(-50%);
 }
 
-.card,
-.graham {
-  margin: $grid-gutter-width / 2 auto;
+.table {
+  td,
+  th {
+    vertical-align: middle;
+  }
+
+  thead {
+    font-size: .8em;
+    text-transform: uppercase;
+  }
+
+  .text-blur {
+    color: transparent;
+    text-shadow: 0 0 .6em rgba(0, 0, 0, .8);
+    transition: text-shadow 0.1s linear;
+
+    &:focus,
+    &:hover {
+      text-shadow: 0 0 0 $body-color;
+    }
+  }
+
+  .text-nowrap {
+    width: 1%;
+  }
+}
+
+// client
+.gnbb {
+  text-align: center;
+
+  button {
+    background: url('/images/btn-graham.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 100px;
+    width: 80px;
+
+    &:active {
+      background-size: 80%;
+    }
+  }
+}
+
+#client [id*='view-'] {
+  display: none;
+}
+
+// host
+[id*='widget-'] {
+  .card-body {
+    display: none;
+  }
+
+  .table {
+    td:first-child,
+    th:first-child {
+      padding-left: 0;
+    }
+
+    td:last-child,
+    th:last-child {
+      padding-right: 0;
+    }
+  }
+}
+
+.ballot-close {
+  display: none;
+}
+
+.col-connected {
+  color: $success;
+  font-size: .6em;
+
+  &:before {
+    content: '\25CF';
+  }
+
+  &.false {
+    color: $danger;
+  }
+}
+
+#view-scoreboard {
+  .btn {
+    min-width: 60px;
+  }
+}
+
+@media(min-width: 992px) {
+  [id*='widget-'] + [id*='widget-'] {
+    margin-top: $grid-gutter-width / 2;
+  }
+
+  #content {
+    padding-left: $sidebar-padding;
+  }
+
+  #sidebar {
+    padding-top: $navbar-padding;
+    position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+    width: $sidebar-padding;
+  }
+}
+
+/*
+
+// global
+body {
+  padding-top: 56px;
+}
+
+input {
+  text-transform: uppercase;
+}
+
+span[class*='contestant-'] {
+  display: block;
+}
+
+.navbar-brand {
+  position: absolute;
+    top: .5rem;
+    left: 50%;
+  text-transform: uppercase;
+  transform: translateX(-50%);
 }
 
 .card {
+  margin: $grid-gutter-width / 2 auto;
   overflow: hidden;
 
   button[type='submit'] {
@@ -43,11 +211,6 @@ input {
   }
 }
 
-.contestant-country,
-.contestant-details {
-  display: block;
-}
-
 .contestant-details {
   font-size: .8em;
 }
@@ -58,12 +221,7 @@ input {
     vertical-align: middle;
   }
 
-  .col-ballot,
-  .col-connected,
-  .col-id,
-  .col-score,
-  .col-votes,
-  .col-voting {
+  .col-nowrap {
     text-align: center;
     white-space: nowrap;
     width: 1%;
@@ -112,7 +270,7 @@ input {
 
 .view-scoreboard {
   td {
-    &.col-score {
+    &.blur {
       color: transparent;
       text-shadow: 0 0 .6em rgba(0, 0, 0, .8);
       transition: text-shadow 0.1s linear;
@@ -149,15 +307,9 @@ input {
   }
 }
 
-div[id*='widget-'] {
-  .card-body {
-    display: none;
-  }
-}
-
 @media(min-width: 992px) {
   #content {
-    padding-left: $sidebar-width + $grid-gutter-width / 2;
+    padding-left: $sidebar-padding + $grid-gutter-width / 2;
   }
 
   #sidebar {
@@ -166,30 +318,20 @@ div[id*='widget-'] {
       top: 0;
       bottom: 0;
       left: 0;
-    width: $sidebar-width;
+    width: $sidebar-padding;
   }
 }
 
 #sidebar {
-  .card {
-    .card-header {
-      text-transform: uppercase;
-
-      .badge {
-        vertical-align: text-bottom;
-      }
-    }
+  .card-body {
+    display: none;
   }
-  
-  h6 {
-    text-transform: uppercase;
 
-    ~ h6 {
-      margin-top: 1.5rem;
-    }
+  .card-header {
+    text-transform: uppercase;
 
     .badge {
       vertical-align: text-bottom;
     }
   }
-}
+} */

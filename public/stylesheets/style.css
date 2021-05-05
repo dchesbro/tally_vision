@@ -7187,10 +7187,34 @@ a.text-dark:hover, a.text-dark:focus {
     border-color: #dee2e6; } }
 
 body {
-  padding-top: 56px; }
+  padding-top: 71px;
+  padding-bottom: 15px; }
 
 input {
   text-transform: uppercase; }
+
+.card {
+  overflow: hidden; }
+  .card .btn[type*='submit'] {
+    border-radius: 0;
+    text-transform: uppercase; }
+  .card .table td:first-child,
+  .card .table th:first-child {
+    padding-left: 1.25rem; }
+  .card .table td:last-child,
+  .card .table th:last-child {
+    padding-right: 1.25rem; }
+
+.card-header .badge {
+  vertical-align: bottom; }
+
+.contestant-country,
+.contestant-details,
+.contestant-score {
+  display: block; }
+
+.contestant-details {
+  font-size: .8em; }
 
 .navbar-brand {
   position: absolute;
@@ -7199,105 +7223,237 @@ input {
   text-transform: uppercase;
   transform: translateX(-50%); }
 
-.card,
-.graham {
-  margin: 15px auto; }
-
-.card {
-  overflow: hidden; }
-  .card button[type='submit'] {
-    border-radius: 0;
-    text-transform: uppercase; }
-  .card .table {
-    margin-bottom: 0; }
-
-.contestant-country,
-.contestant-details {
-  display: block; }
-
-.contestant-details {
-  font-size: .8em; }
-
 .table td,
 .table th {
   vertical-align: middle; }
 
-.table .col-ballot,
-.table .col-connected,
-.table .col-id,
-.table .col-score,
-.table .col-votes,
-.table .col-voting {
-  text-align: center;
-  white-space: nowrap;
+.table thead {
+  font-size: .8em;
+  text-transform: uppercase; }
+
+.table .text-blur {
+  color: transparent;
+  text-shadow: 0 0 0.6em rgba(0, 0, 0, 0.8);
+  transition: text-shadow 0.1s linear; }
+  .table .text-blur:focus, .table .text-blur:hover {
+    text-shadow: 0 0 0 #212529; }
+
+.table .text-nowrap {
   width: 1%; }
 
-#client [class*='view-'] {
-  display: none; }
-
-.view-ballot .graham {
+.gnbb {
   text-align: center; }
-  .view-ballot .graham button {
-    background: url("/images/btn-graham.png") no-repeat center center;
+  .gnbb button {
+    background: url("/images/btn-graham.png");
+    background-position: center center;
+    background-repeat: no-repeat;
     background-size: 100%;
     height: 100px;
     width: 80px; }
-    .view-ballot .graham button:active {
+    .gnbb button:active {
       background-size: 80%; }
 
-.view-join label {
-  display: block;
-  text-align: center; }
+#client [id*='view-'] {
+  display: none; }
 
-.view-join .form-group {
-  margin-bottom: 0; }
+[id*='widget-'] .card-body {
+  display: none; }
+
+[id*='widget-'] .table td:first-child,
+[id*='widget-'] .table th:first-child {
+  padding-left: 0; }
+
+[id*='widget-'] .table td:last-child,
+[id*='widget-'] .table th:last-child {
+  padding-right: 0; }
 
 .ballot-close {
   display: none; }
 
-.view-scoreboard td.col-score {
-  color: transparent;
-  text-shadow: 0 0 0.6em rgba(0, 0, 0, 0.8);
-  transition: text-shadow 0.1s linear; }
-  .view-scoreboard td.col-score:focus, .view-scoreboard td.col-score:hover {
-    text-shadow: 0 0 0 #212529; }
-
-.view-scoreboard td.col-ballot button {
-  width: 60px; }
-
-#widget-voters .col-connected {
+.col-connected {
+  color: #28a745;
   font-size: .6em; }
-  #widget-voters .col-connected:before {
+  .col-connected:before {
     content: '\25CF'; }
-  #widget-voters .col-connected.false {
+  .col-connected.false {
     color: #dc3545; }
-  #widget-voters .col-connected.true {
-    color: #28a745; }
 
-div[id*='widget-'] .card-body {
-  display: none; }
+#view-scoreboard .btn {
+  min-width: 60px; }
 
 @media (min-width: 992px) {
+  [id*='widget-'] + [id*='widget-'] {
+    margin-top: 15px; }
   #content {
-    padding-left: 399px; }
+    padding-left: 320px; }
   #sidebar {
-    padding-top: 56px;
+    padding-top: 71px;
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
-    width: 384px; } }
+    width: 320px; } }
 
-#sidebar .card .card-header {
-  text-transform: uppercase; }
-  #sidebar .card .card-header .badge {
-    vertical-align: text-bottom; }
+/*
 
-#sidebar h6 {
-  text-transform: uppercase; }
-  #sidebar h6 ~ h6 {
-    margin-top: 1.5rem; }
-  #sidebar h6 .badge {
-    vertical-align: text-bottom; }
+// global
+body {
+  padding-top: 56px;
+}
+
+input {
+  text-transform: uppercase;
+}
+
+span[class*='contestant-'] {
+  display: block;
+}
+
+.navbar-brand {
+  position: absolute;
+    top: .5rem;
+    left: 50%;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+}
+
+.card {
+  margin: $grid-gutter-width / 2 auto;
+  overflow: hidden;
+
+  button[type='submit'] {
+    border-radius: 0;
+    text-transform: uppercase;
+  }
+
+  .table {
+    margin-bottom: 0;
+  }
+}
+
+.contestant-details {
+  font-size: .8em;
+}
+
+.table {
+  td,
+  th {
+    vertical-align: middle;
+  }
+
+  .col-nowrap {
+    text-align: center;
+    white-space: nowrap;
+    width: 1%;
+  }
+}
+
+// client
+#client {
+  [class*='view-'] {
+    display: none;
+  }
+}
+
+.view-ballot {
+  .graham {
+    text-align: center;
+  
+    button {
+      background: url('/images/btn-graham.png') no-repeat center center;
+      background-size: 100%;
+      height: 100px;
+      width: 80px;
+  
+      &:active {
+        background-size: 80%;
+      }
+    }
+  }
+}
+
+.view-join {
+  label {
+    display: block;
+    text-align: center;
+  }
+
+  .form-group {
+    margin-bottom: 0;
+  }
+}
+
+// host
+.ballot-close {
+  display: none;
+}
+
+.view-scoreboard {
+  td {
+    &.blur {
+      color: transparent;
+      text-shadow: 0 0 .6em rgba(0, 0, 0, .8);
+      transition: text-shadow 0.1s linear;
+
+      &:focus,
+      &:hover {
+        text-shadow: 0 0 0 $body-color;
+      }
+    }
+
+    &.col-ballot {
+      button {
+        width: 60px;
+      }
+    }
+  }
+}
+
+#widget-voters {
+  .col-connected {
+    font-size: .6em;
+
+    &:before {
+      content: '\25CF';
+    }
+
+    &.false {
+      color: $danger;
+    }
+
+    &.true {
+      color: $success;
+    }
+  }
+}
+
+@media(min-width: 992px) {
+  #content {
+    padding-left: $sidebar-padding + $grid-gutter-width / 2;
+  }
+
+  #sidebar {
+    padding-top: 56px;
+    position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+    width: $sidebar-padding;
+  }
+}
+
+#sidebar {
+  .card-body {
+    display: none;
+  }
+
+  .card-header {
+    text-transform: uppercase;
+
+    .badge {
+      vertical-align: text-bottom;
+    }
+  }
+} */
 
 /*# sourceMappingURL=style.css.map */
