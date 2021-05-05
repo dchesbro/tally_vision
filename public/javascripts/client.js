@@ -1,5 +1,5 @@
 // ...
-const LOCAL_STORAGE_KEY = 'tallyvisionName';
+const LOCAL_STORAGE = 'tallyvisionName';
 
 // ...
 var socket = io('/client', {
@@ -7,23 +7,28 @@ var socket = io('/client', {
 });
 
 // ...
-socket.on('appBallotClose', function() {
+socket.on('appBallotClose', function() {  
   viewSet('scorecard');
 });
 
 // ...
 socket.on('appBallotOpen', function(contestant) {
-  var ballot = $('.view-ballot .card-body');
+  var ballot = $('#view-ballot');
 
-  $('.contestant-country', ballot).html(contestant.country);
-  $('.contestant-details', ballot).html(contestant.artist + ' – "' + contestant.title + '"');
+  $('form', ballot).show();
+  $('form fieldset', ballot).prop('disabled', false);
+  $('form input[type="radio"]', ballot).prop('checked', false);
+  $('form label', ballot).removeClass('active');
+  $('.card-body .contestant-country', ballot).html(contestant.country);
+  $('.card-body .contestant-details', ballot).html(contestant.artist + ' – "' + contestant.title + '"');
+  $('.card-body .contestant-score', ballot).html('');
 
   viewSet('ballot');
 });
 
 // ...
 socket.on('appVoted', function(score) {
-  var ballot = $('.view-ballot');
+  var ballot = $('#view-ballot');
 
   $('form', ballot).hide();
   $('.card-body .contestant-score', ballot).html(score);
@@ -31,11 +36,20 @@ socket.on('appVoted', function(score) {
 
 // ...
 socket.on('clientConnect', function(name) {
-  localStorage.setItem(LOCAL_STORAGE_KEY, name);
+  localStorage.setItem(LOCAL_STORAGE, name);
 
   $('.navbar-brand').html(name);
 
   viewSet('scorecard');
+});
+
+// ...
+socket.on('clientScorecard', function(scores) {
+  var scorecard = $('#view-scorecard');
+
+  for (let {id, voter, contestant, score} of scores) {
+    $('tr#' + contestant + ' .col-score', scorecard).html(score);
+  }
 });
 
 
@@ -44,17 +58,16 @@ socket.on('clientConnect', function(name) {
 $('form').on('submit', function(event) {
   event.preventDefault();
 
-  $('button[type="submit"]', this).html('<span class="spinner-border spinner-border-sm" role="status"></span>');
   $('fieldset', this).prop('disabled', true);
 });
 
 // ...
-$('.view-ballot form').on('click', function() {
+$('#view-ballot form').on('click', function() {
   formBallotValidate(this);
 });
 
 // ...
-$('.view-ballot form').on('submit', function() {
+$('#view-ballot form').on('submit', function() {
   var checked = $('input[type="radio"]:checked', this);
   var scores = [];
 
@@ -66,12 +79,12 @@ $('.view-ballot form').on('submit', function() {
 });
 
 // ...
-$('.view-join form').on('keyup', function() {
+$('#view-join form').on('keyup', function() {
   formJoinValidate(this);
 });
 
 // ...
-$('.view-join form').on('submit', function() {
+$('#view-join form').on('submit', function() {
   var nameField = $('input#name', this);
 
   formJoinConnect(nameField.val());
@@ -81,8 +94,8 @@ $('.view-join form').on('submit', function() {
 
 // ...
 function __init() {
-  var form = $('.view-join form');
-  var name = localStorage.getItem(LOCAL_STORAGE_KEY);
+  var form = $('#view-join form');
+  var name = localStorage.getItem(LOCAL_STORAGE);
 
   if (name) {
     $('input#name', form).val(name);
@@ -144,8 +157,8 @@ function formSubmitProp(form, error) {
 // ...
 function viewSet(view) {
   $('html').scrollTop(0);
-  $('[class*="view-"]').hide();
-  $('.view-' + view).show();
+  $('[id*="view-"]').hide();
+  $('#view-' + view).show();
 }
 
 __init();

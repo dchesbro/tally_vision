@@ -16,7 +16,7 @@ var client = io.of('/client');
 var host = io.of('/host');
 
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('./' + new Date().toDateString() + '.db');
+var db = new sqlite3.Database('./' + new Date().toISOString().substring(0, 10) + '.db');
 
 // ...
 var appBallot = {};
@@ -64,7 +64,9 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// ...
+
+
+// client auth
 client.use(function(socket, next) {
   var auth = socket.handshake.auth;
 
@@ -77,12 +79,12 @@ client.use(function(socket, next) {
   next();
 });
 
-// ...
+// client events
 client.on('connection', function(socket) {
   clientConnect(socket);
 
   socket.on('clientBallotSubmit', function(scores) {
-    dbInsertVote(socket, scores);
+    dbVoteInsert(socket, scores);
   });
   
   socket.on('disconnect', function() {
@@ -90,25 +92,81 @@ client.on('connection', function(socket) {
   });
 });
 
+
+
+// host events
+host.on('connection', function(socket) {
+  hostConnect();
+
+  socket.on('hostBallotClose', function() {
+    hostBallotClose();
+  });
+
+  socket.on('hostBallotOpen', function(i) {
+    hostBallotOpen(i);
+  });
+});
+
+
+
+// ...
+function isEmpty(a) {
+  return Object.keys(a).length === 0;
+}
+
+
+
+// ...
+function appVoterGet(socket, callback) {
+  callback(appVoters.findIndex(function(a) {
+    return a.name === socket.name;
+  }));
+}
+
+// ...
+function appVoterSort() {
+  appVoters.sort(function(a, b) {
+    return (a.name > b.name) ? 1 : -1;
+  });
+}
+
+
+
+// ...
+function clientBallotOpen(socket, vote) {
+  socket.emit('appBallotOpen', appBallot);
+
+  if (vote) {
+    socket.emit('appVoted', vote.score);
+
+    clientVoted(socket, true);
+  }
+
+  hostVoters();
+}
+
 // ...
 function clientConnect(socket) {
-  var [i, voter] = voterGet(socket);
-
-  if (isEmpty(voter)) {
-    appVoters.push({
-      connected: true,
-      name: socket.name,
-    });
-
-    voterSort();
-  } else {
-    appVoters[i].connected = true;
-  }
+  appVoterGet(socket, function(i) {
+    if (i !== -1) {
+      appVoters[i].connected = true;
+    } else {
+      appVoters.push({
+        connected: true,
+        name: socket.name,
+        voted: false,
+      });
+  
+      appVoterSort();
+    }
+  });
 
   socket.emit('clientConnect', socket.name);
 
+  dbVoterAll(socket, clientScorecard);
+
   if (!isEmpty(appBallot)) {
-    socket.emit('appBallotOpen', appBallot);
+    dbVoterGet(socket, appBallot.code, clientBallotOpen);
   }
 
   hostVoters();
@@ -116,51 +174,162 @@ function clientConnect(socket) {
 
 // ...
 function clientDisconnect(socket) {
-  var [i, voter] = voterGet(socket);
-
-  if (!isEmpty(voter)) {
-    appVoters[i].connected = false;
-  }
-
-  socket.emit('clientDisconnect', socket.name);
+  appVoterGet(socket, function(i) {
+    if (i !== -1) {
+      appVoters[i].connected = false;
+    }
+  });
 
   hostVoters();
 }
 
+// ...
+function clientScorecard(socket, votes) {
+  if (votes) {
+    socket.emit('clientScorecard', votes);
+  }
+}
 
-
-//...
-host.on('connection', function(socket) {
-  hostConnect();
-
-  socket.on('hostBallotClose', function() {
-    appBallot = {};
-
-    client.emit('appBallotClose');
-    host.emit('appBallotClose');
+// ...
+function clientVoted(socket, voted) {
+  appVoterGet(socket, function(i) {
+    if (i !== -1) {
+      appVoters[i].voted = voted;
+    }
   });
+}
 
-  socket.on('hostBallotOpen', function(i) {
-    appBallot = appContestants[i];
 
-    client.emit('appBallotOpen', appBallot);
-    host.emit('appBallotOpen', appBallot);
+
+// ...
+function dbContestantAll(callback) {
+  var sql = `SELECT contestant,COUNT(voter) votes,SUM(score) score FROM votes GROUP BY contestant;`;
+
+  db.all(sql, function(err, rows) {
+    if (!err) {
+      callback(rows);
+    }
   });
-});
+}
+
+// ...
+function dbTablesCreate() {
+  var columns, sql;
+
+  columns = appCategories.map(function(category) {
+    return `category_` + category.title + ` INTEGER NOT NULL`;
+  }).join(`,`);
+
+  sql  = `CREATE TABLE IF NOT EXISTS votes (`;
+  sql += `id INTEGER PRIMARY KEY AUTOINCREMENT,`;
+  sql += `voter TEXT NOT NULL,`;
+  sql += `contestant TEXT NOT NULL,` + columns + `,score INTEGER NOT NULL);`;
+
+  db.run(sql, function(err) {});
+}
+
+// ...
+function dbVoteInsert(socket, scores) {
+  var columns, placeholders, score, sql;
+  var values = [socket.name, appBallot.code].concat(scores);
+
+  columns = appCategories.map(function(category) {
+    return `category_` + category.title;
+  }).join(`,`);
+
+  placeholders = appCategories.map(function() {
+    return `?`;
+  }).join(`,`);
+
+  score = scores.reduce(function(a, b) {
+    return a + b;
+  }, 0);
+
+  sql  = `INSERT INTO votes (`;
+  sql += `voter,`;
+  sql += `contestant,` + columns + `,score) VALUES (?,?,` + placeholders + `,?);`;
+
+  values.push(score);
+
+  db.run(sql, values, function(err) {
+    if (!err) {
+      socket.emit('appVoted', score);
+
+      clientVoted(socket, true);
+      dbContestantAll(hostScoreboard);
+      dbVoterAll(socket, clientScorecard);
+      hostVoters();
+    }
+  });
+}
+
+// ...
+function dbVoterAll(socket, callback) {
+  var sql = `SELECT id,voter,contestant,score FROM votes WHERE voter=?;`;
+
+  db.all(sql, [socket.name], function(err, rows) {
+    if (!err) {
+      callback(socket, rows);
+    }
+  });
+}
+
+// ...
+function dbVoterGet(socket, contestant, callback) {
+  var sql = `SELECT id,voter,contestant,score FROM votes WHERE voter=? AND contestant=?;`;
+
+  db.get(sql, [socket.name, contestant], function(err, row) {
+    if (!err) {
+      callback(socket, row);
+    }
+  });
+}
+
+
+
+// ...
+function hostBallotClose() {
+  appBallot = {};
+
+  for (let [id, socket] of client.sockets) {
+    clientVoted(socket, false);
+  }
+
+  client.emit('appBallotClose');
+  host.emit('appBallotClose');
+
+  hostVoters();
+}
+
+// ...
+function hostBallotOpen(i) {
+  appBallot = appContestants[i];
+
+  for (let [id, socket] of client.sockets) {
+    clientVoted(socket, false);
+    dbVoterGet(socket, appBallot.code, clientBallotOpen);
+  }
+
+  host.emit('appBallotOpen', appBallot);
+
+  hostVoters();
+}
 
 // ...
 function hostConnect() {
-  hostBallot();
-  hostVoters();
-}
-
-// ...
-function hostBallot() {
   if (!isEmpty(appBallot)) {
     host.emit('appBallotOpen', appBallot);
   } else {
     host.emit('appBallotClose');
   }
+
+  dbContestantAll(hostScoreboard);
+  hostVoters();
+}
+
+// ...
+function hostScoreboard(scores) {
+  host.emit('hostScoreboard', scores);
 }
 
 // ...
@@ -172,97 +341,9 @@ function hostVoters() {
 
 
 
-// ...
-function dbCreateTables() {
-  var columns = ``;
-  var sql = ``;
+dbTablesCreate();
 
-  columns = appCategories.map(function(category) {
-    return `category_` + category.title + ` INTEGER NOT NULL`;
-  }).join(`,`);
 
-  sql += `CREATE TABLE IF NOT EXISTS votes (`;
-  sql += `uid INTEGER PRIMARY KEY AUTOINCREMENT,`;
-  sql += `voter_name TEXT NOT NULL,`;
-  sql += `contestant_code TEXT NOT NULL,` + columns + `);`;
-
-  db.run(sql, function(err) {});
-}
-
-dbCreateTables();
-
-// ...
-function dbGetVote(name, code, callback) {
-  var sql = ``;
-
-  sql = `SELECT uid id FROM votes WHERE voter_name=?`;
-
-  db.get(sql, [name], function(err, row) {
-    if (!err) {
-      callback(row.id);
-    }
-  });
-}
-
-// ...
-function dbInsertVote(socket, scores) {
-  var columns = ``;
-  var placeholders = ``;
-  var sql = ``;
-  var values = [socket.name, appBallot.code].concat(scores);
-
-  columns = appCategories.map(function(category) {
-    return `category_` + category.title;
-  }).join(`,`);
-
-  placeholders = appCategories.map(function() {
-    return `?`;
-  }).join(`,`);
-
-  sql += `INSERT INTO votes (`;
-  sql += `voter_name,`;
-  sql += `contestant_code,` + columns + `) VALUES (?,?,` + placeholders + `);`;
-
-  db.run(sql, values, function(err) {
-    if (!err) {
-      socket.emit('appVoted', scores.reduce(function(a, b) {
-        return a + b;
-      }, 0));
-    }
-  });
-}
-
-// ...
-function isEmpty(a) {
-  return Object.keys(a).length === 0;
-}
-
-// ...
-function voterGet(socket) {
-  var result = [null, {}];
-
-  for ([i, voter] of appVoters.entries()) {
-    if (voter.name === socket.name) {
-      result = [i, voter];
-      break;
-    }
-  }
-
-  return result;
-}
-
-// ...
-function voterSort() {
-  appVoters.sort(function(a, b) {
-    var result = -1;
-    
-    if (a.name > b.name) {
-      result = 1;
-    }
-    
-    return result;
-  });
-}
 
 module.exports = {
   app: app,
