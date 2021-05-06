@@ -67,15 +67,12 @@ input {
   }
 }
 
-.col-connected,
-.col-voted {
+.col-connected {
   color: $success;
   font-size: .6em;
-}
 
-.col-connected {
   &:before {
-    content: '\25CF';
+    content: '\25cf';
   }
 
   &.false {
@@ -87,6 +84,19 @@ input {
   img {
     height: 2em;
     width: auto;
+  }
+}
+
+.col-voted {
+  color: $primary;
+
+  &.true {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+
+    &:before {
+      content: '\f00c';
+    }
   }
 }
 

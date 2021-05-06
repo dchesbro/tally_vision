@@ -7217,20 +7217,25 @@ input {
   .card .table th:last-child {
     padding-right: 1.25rem; }
 
-.col-connected,
-.col-voted {
+.col-connected {
   color: #6fd96f;
   font-size: .6em; }
-
-.col-connected:before {
-  content: '\25CF'; }
-
-.col-connected.false {
-  color: #ff5e5e; }
+  .col-connected:before {
+    content: '\25cf'; }
+  .col-connected.false {
+    color: #ff5e5e; }
 
 .col-flag img {
   height: 2em;
   width: auto; }
+
+.col-voted {
+  color: #7571f9; }
+  .col-voted.true {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900; }
+    .col-voted.true:before {
+      content: '\f00c'; }
 
 .contestant-country,
 .contestant-details,

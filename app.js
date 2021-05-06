@@ -138,8 +138,6 @@ function clientBallotOpen(socket, vote) {
 
   if (vote) {
     socket.emit('appVoted', vote.score);
-
-    clientVoted(socket, true);
   }
 
   hostVoters();
@@ -188,15 +186,6 @@ function clientScorecard(socket, votes) {
   if (votes) {
     socket.emit('clientScorecard', votes);
   }
-}
-
-// ...
-function clientVoted(socket, voted) {
-  appVoterGet(socket, function(i) {
-    if (i !== -1) {
-      appVoters[i].voted = voted;
-    }
-  });
 }
 
 
@@ -255,7 +244,12 @@ function dbVoteInsert(socket, scores) {
     if (!err) {
       socket.emit('appVoted', score);
 
-      clientVoted(socket, true);
+      appVoterGet(socket, function(i) {
+        if (i !== -1) {
+          appVoters[i].voted = true;
+        }
+      });
+
       dbContestantAll(hostScoreboard);
       dbVoterAll(socket, clientScorecard);
       hostVoters();
@@ -291,8 +285,8 @@ function dbVoterGet(socket, contestant, callback) {
 function hostBallotClose() {
   appBallot = {};
 
-  for (let [id, socket] of client.sockets) {
-    clientVoted(socket, false);
+  for (let [i, voter] of appVoters.entries()) {
+    appVoters[i].voted = false;
   }
 
   client.emit('appBallotClose');
@@ -305,8 +299,15 @@ function hostBallotClose() {
 function hostBallotOpen(i) {
   appBallot = appContestants[i];
 
+  for (let [i, voter] of appVoters.entries()) {
+    dbVoterGet(voter, appBallot.code, function(voter, vote) {
+      if (vote) {
+        appVoters[i].voted = true;
+      }
+    });
+  }
+
   for (let [id, socket] of client.sockets) {
-    clientVoted(socket, false);
     dbVoterGet(socket, appBallot.code, clientBallotOpen);
   }
 
