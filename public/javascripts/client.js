@@ -19,9 +19,9 @@ socket.on('appBallotOpen', function(contestant) {
   $('form fieldset', ballot).prop('disabled', false);
   $('form input[type="radio"]', ballot).prop('checked', false);
   $('form label', ballot).removeClass('active');
-  $('.card-body .contestant-country', ballot).html(contestant.country);
-  $('.card-body .contestant-details', ballot).html(contestant.artist + ' – "' + contestant.title + '"');
-  $('.card-body .contestant-score', ballot).html('');
+  $('.card-header .contestant-country', ballot).html(contestant.country);
+  $('.card-header .contestant-details', ballot).html(contestant.artist + ' – "' + contestant.title + '"');
+  $('.card-header .contestant-score', ballot).html('');
 
   viewSet('ballot');
 });
@@ -31,7 +31,7 @@ socket.on('appVoted', function(score) {
   var ballot = $('#view-ballot');
 
   $('form', ballot).hide();
-  $('.card-body .contestant-score', ballot).html(score);
+  $('.card-header .contestant-score', ballot).html(score);
 });
 
 // ...

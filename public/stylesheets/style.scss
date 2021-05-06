@@ -1,30 +1,57 @@
 // bs overrides
+// color system
+$primary: #7571f9;
+$success: #6fd96f;
+$danger: #ff5e5e;
+
 // components
 $border-radius: .8rem;
+
+// tables
+$table-accent-bg: #f8f9fa;
 
 // bootstrap
 @import '../../node_modules/bootstrap/scss/bootstrap';
 
 // custom variables
-$navbar-padding: add($grid-gutter-width / 2, 56px);
-$sidebar-padding: 320px;
+$client-content-width: 640px;
+$host-sidebar-width: 320px;
+$navbar-height: 56px;
 
-// global
 body {
-  padding-top: $navbar-padding;
-  padding-bottom: $grid-gutter-width / 2;
+  background-color: #f3f3f9;
+  padding-top: add($grid-gutter-width, $navbar-height);
+  padding-bottom: $grid-gutter-width;
 }
 
 input {
   text-transform: uppercase;
 }
 
+.ballot-close {
+  display: none;
+}
+
 .card {
   overflow: hidden;
+  border: none;
 
-  .btn[type*='submit'] {
+  button[type*='submit'] {
     border-radius: 0;
     text-transform: uppercase;
+  }
+
+  .card-header {
+    background-color: transparent;
+    border: inherit;
+    
+    + .card-body {
+      padding-top: 0;
+    }
+
+    .badge {
+      vertical-align: bottom;
+    }
   }
 
   .table {
@@ -40,9 +67,26 @@ input {
   }
 }
 
-.card-header {
-  .badge {
-    vertical-align: bottom;
+.col-connected,
+.col-voted {
+  color: $success;
+  font-size: .6em;
+}
+
+.col-connected {
+  &:before {
+    content: '\25CF';
+  }
+
+  &.false {
+    color: $danger;
+  }
+}
+
+.col-flag {
+  img {
+    height: 2em;
+    width: auto;
   }
 }
 
@@ -56,12 +100,34 @@ input {
   font-size: .8em;
 }
 
-.navbar-brand {
-  position: absolute;
-    top: .5rem;
-    left: 50%;
-  text-transform: uppercase;
-  transform: translateX(-50%);
+.gnbb {
+  margin-top: $grid-gutter-width / 2;
+  text-align: center;
+
+  button {
+    background-image: url('/images/btn-graham.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 100px;
+    width: 80px;
+
+    &:active {
+      background-size: 80%;
+    }
+  }
+}
+
+.navbar {
+  background: linear-gradient(230deg, #759bff, #843cf6);
+
+  .navbar-brand {
+    position: absolute;
+      top: 50%;
+      left: 50%;
+    text-transform: uppercase;
+    transform: translateX(-50%) translateY(-50%);
+  }
 }
 
 .table {
@@ -91,61 +157,68 @@ input {
   }
 }
 
-// client
-.gnbb {
-  text-align: center;
-
-  button {
-    background: url('/images/btn-graham.png');
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 100%;
-    height: 100px;
-    width: 80px;
-
-    &:active {
-      background-size: 80%;
-    }
-  }
-}
-
-#client [id*='view-'] {
-  display: none;
-}
-
-// host
-[id*='widget-'] {
-  .card-body {
+#client {
+  max-width: $client-content-width;
+  
+  div[id*='view-'] {
     display: none;
   }
-
-  .table {
-    td:first-child,
-    th:first-child {
-      padding-left: 0;
-    }
-
-    td:last-child,
-    th:last-child {
-      padding-right: 0;
-    }
-  }
 }
 
-.ballot-close {
-  display: none;
-}
+#host {
+  div[id*='widget-'] {
+    .card {
+      .card-body {
+        display: none;
 
-.col-connected {
-  color: $success;
-  font-size: .6em;
-
-  &:before {
-    content: '\25CF';
+        .table {
+          td:first-child,
+          th:first-child {
+            padding-left: 0;
+          }
+      
+          td:last-child,
+          th:last-child {
+            padding-right: 0;
+          }
+        }
+      }
+    }
   }
 
-  &.false {
-    color: $danger;
+  #content {
+    @media(min-width: 992px) {
+      padding-left: add($grid-gutter-width / 2, $host-sidebar-width);
+    }
+  }
+
+  #sidebar {
+    .card {
+      margin-bottom: $grid-gutter-width / 2;
+    }
+
+    @media(min-width: 992px) {
+      background-color: $body-bg;
+      padding-top: add($grid-gutter-width, $navbar-height);
+      position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+      width: $host-sidebar-width;
+      z-index: 1;
+  
+      .card {
+        box-shadow: none !important;
+  
+        .card-header {
+          font-size: $font-size-base;
+  
+          + .card-body {
+            padding-bottom: 0;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -154,184 +227,3 @@ input {
     min-width: 60px;
   }
 }
-
-@media(min-width: 992px) {
-  [id*='widget-'] + [id*='widget-'] {
-    margin-top: $grid-gutter-width / 2;
-  }
-
-  #content {
-    padding-left: $sidebar-padding;
-  }
-
-  #sidebar {
-    padding-top: $navbar-padding;
-    position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-    width: $sidebar-padding;
-  }
-}
-
-/*
-
-// global
-body {
-  padding-top: 56px;
-}
-
-input {
-  text-transform: uppercase;
-}
-
-span[class*='contestant-'] {
-  display: block;
-}
-
-.navbar-brand {
-  position: absolute;
-    top: .5rem;
-    left: 50%;
-  text-transform: uppercase;
-  transform: translateX(-50%);
-}
-
-.card {
-  margin: $grid-gutter-width / 2 auto;
-  overflow: hidden;
-
-  button[type='submit'] {
-    border-radius: 0;
-    text-transform: uppercase;
-  }
-
-  .table {
-    margin-bottom: 0;
-  }
-}
-
-.contestant-details {
-  font-size: .8em;
-}
-
-.table {
-  td,
-  th {
-    vertical-align: middle;
-  }
-
-  .col-nowrap {
-    text-align: center;
-    white-space: nowrap;
-    width: 1%;
-  }
-}
-
-// client
-#client {
-  [class*='view-'] {
-    display: none;
-  }
-}
-
-.view-ballot {
-  .graham {
-    text-align: center;
-  
-    button {
-      background: url('/images/btn-graham.png') no-repeat center center;
-      background-size: 100%;
-      height: 100px;
-      width: 80px;
-  
-      &:active {
-        background-size: 80%;
-      }
-    }
-  }
-}
-
-.view-join {
-  label {
-    display: block;
-    text-align: center;
-  }
-
-  .form-group {
-    margin-bottom: 0;
-  }
-}
-
-// host
-.ballot-close {
-  display: none;
-}
-
-.view-scoreboard {
-  td {
-    &.blur {
-      color: transparent;
-      text-shadow: 0 0 .6em rgba(0, 0, 0, .8);
-      transition: text-shadow 0.1s linear;
-
-      &:focus,
-      &:hover {
-        text-shadow: 0 0 0 $body-color;
-      }
-    }
-
-    &.col-ballot {
-      button {
-        width: 60px;
-      }
-    }
-  }
-}
-
-#widget-voters {
-  .col-connected {
-    font-size: .6em;
-
-    &:before {
-      content: '\25CF';
-    }
-
-    &.false {
-      color: $danger;
-    }
-
-    &.true {
-      color: $success;
-    }
-  }
-}
-
-@media(min-width: 992px) {
-  #content {
-    padding-left: $sidebar-padding + $grid-gutter-width / 2;
-  }
-
-  #sidebar {
-    padding-top: 56px;
-    position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-    width: $sidebar-padding;
-  }
-}
-
-#sidebar {
-  .card-body {
-    display: none;
-  }
-
-  .card-header {
-    text-transform: uppercase;
-
-    .badge {
-      vertical-align: text-bottom;
-    }
-  }
-} */

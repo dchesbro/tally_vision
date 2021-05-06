@@ -4,7 +4,7 @@ block content
   div(class='container-fluid' id='client')
     //join
     div(id='view-join')
-      div(class='card')
+      div(class='card shadow-lg')
         form(autocomplete='off')
           fieldset
             div(class='card-body')
@@ -16,16 +16,18 @@ block content
 
     //scorecard
     div(id='view-scorecard')
-      div(class='card')
-        h6(class='card-header border-0') Scorecard
+      div(class='card shadow-lg')
+        h4(class='card-header border-0') Scorecard
         table(class='table table-striped mb-0')
           thead(class='thead-light')
             tr
-              th(class='col-contestant', scope='col') Contestant
+              th(class='col-contestant', colspan='2', scope='col') Contestant
               th(class='col-score text-center text-nowrap', scope='col') Your score
           tbody
             each contestant, i in contestants              
               tr(id=contestant.code)
+                td(class='col-flag text-center text-nowrap')
+                  img(src='/images/flags/' + contestant.code + '.svg')
                 td(class='col-contestant')
                   span(class='contestant-country') #{contestant.country}
                   span(class='contestant-details') #{contestant.artist + ' – "' + contestant.title + '"'}
@@ -33,8 +35,8 @@ block content
 
     //ballot
     div(id='view-ballot')
-      div(class='card')
-        div(class='card-body')
+      div(class='card shadow-lg')
+        div(class='card-header')
           h4
             span(class='contestant-country') Country
             span(class='contestant-details') Artist – "Song"
