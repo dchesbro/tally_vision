@@ -1,11 +1,12 @@
 extends layout
 
 block content
-  div(class='container-fluid' id='host')
+  div(class='container-fluid', id='host')
     div(class='row')
       //sidebar
       div(class='col-lg', id='sidebar')
-        div(id='widget-voters')
+        //voters
+        div(id='ui-voters')
           div(class='card shadow-lg')
             h4(class='card-header')
               | Registered voters 
@@ -13,7 +14,8 @@ block content
             div(class='card-body')
               table(class='table table-borderless table-sm mb-0')
                 tbody
-        div(id='widget-voting')
+        //voting
+        div(id='ui-voting')
           div(class='card shadow-lg')
             h4(class='card-header')
               | Voting 
@@ -24,7 +26,7 @@ block content
       //content
       div(class='col-lg' id='content')
         //scoreboard
-        div(id='view-scoreboard')
+        div(id='ui-scoreboard')
           div(class='card shadow-lg')
             h4(class='card-header border-0') Scoreboard
             table(class='table table-striped table-responsive mb-0')
@@ -38,7 +40,7 @@ block content
                 each contestant, i in contestants
                   tr(id=contestant.code)
                     td(class='col-flag text-center text-nowrap')
-                      img(src='/images/flags/' + contestant.code + '.svg')
+                      img(src='/media/flags/' + contestant.code + '.svg')
                     td(class='col-contestant')
                       span(class='contestant-country') #{contestant.country}
                       span(class='contestant-details') #{contestant.artist + ' – "' + contestant.title + '"'}

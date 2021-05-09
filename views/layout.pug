@@ -8,12 +8,8 @@ html(lang='en')
     link(href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css', rel='stylesheet')
     link(href='/stylesheets/style.css', rel='stylesheet')
   body(ontouchstart)
-    nav(class='navbar navbar-dark fixed-top')
+    nav(class='navbar navbar-dark fixed-top justify-content-center')
       span(class='navbar-brand')= title
-      button(class='navbar-toggler', data-target='#about', data-toggle='collapse', type='button')
-        span(class='navbar-toggler-icon')
-      div(class='collapse navbar-collapse text-center', id='about')
-        <!--todo-->
     block content
     <!--javascripts-->
     script(src='https://code.jquery.com/jquery-3.5.1.slim.min.js')

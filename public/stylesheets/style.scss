@@ -4,8 +4,15 @@ $primary: #7571f9;
 $success: #6fd96f;
 $danger: #ff5e5e;
 
+// body
+$body-bg: #f3f3f9;
+
 // components
 $border-radius: .8rem;
+
+// cards
+$card-border-width: none;
+$card-cap-bg: transparent;
 
 // tables
 $table-accent-bg: #f8f9fa;
@@ -13,13 +20,16 @@ $table-accent-bg: #f8f9fa;
 // bootstrap
 @import '../../node_modules/bootstrap/scss/bootstrap';
 
+// fonts
+@import url('https://fonts.googleapis.com/css2?family=Shrikhand&display=swap');
+
 // custom variables
-$client-content-width: 640px;
+$card-max-width: 640px;
 $host-sidebar-width: 320px;
 $navbar-height: 56px;
 
+// global
 body {
-  background-color: #f3f3f9;
   padding-top: add($grid-gutter-width, $navbar-height);
   padding-bottom: $grid-gutter-width;
 }
@@ -28,55 +38,45 @@ input {
   text-transform: uppercase;
 }
 
-.ballot-close {
-  display: none;
+.navbar {
+  background: linear-gradient(230deg, #759bff, #843cf6);
+}
+
+.navbar-brand {
+  margin-right: 0;
+  text-transform: uppercase;
 }
 
 .card {
+  margin-left: auto;
+  margin-right: auto;
   overflow: hidden;
-  border: none;
 
   button[type*='submit'] {
     border-radius: 0;
     text-transform: uppercase;
   }
 
-  .card-header {
-    background-color: transparent;
-    border: inherit;
-    
-    + .card-body {
-      padding-top: 0;
-    }
-
-    .badge {
-      vertical-align: bottom;
-    }
-  }
-
   .table {
     td:first-child,
     th:first-child {
-      padding-left: 1.25rem;
+      padding-left: $card-spacer-x;
     }
 
     td:last-child,
     th:last-child {
-      padding-right: 1.25rem;
+      padding-right: $card-spacer-x;
     }
   }
 }
 
-.col-connected {
-  color: $success;
-  font-size: .6em;
-
-  &:before {
-    content: '\25cf';
+.card-header {
+  + .card-body {
+    padding-top: 0;
   }
 
-  &.false {
-    color: $danger;
+  .badge {
+    vertical-align: bottom;
   }
 }
 
@@ -84,19 +84,6 @@ input {
   img {
     height: 2em;
     width: auto;
-  }
-}
-
-.col-voted {
-  color: $primary;
-
-  &.true {
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-
-    &:before {
-      content: '\f00c';
-    }
   }
 }
 
@@ -115,7 +102,7 @@ input {
   text-align: center;
 
   button {
-    background-image: url('/images/btn-graham.png');
+    background-image: url('/media/gnbb.png');
     background-position: center center;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -128,37 +115,24 @@ input {
   }
 }
 
-.navbar {
-  background: linear-gradient(230deg, #759bff, #843cf6);
-
-  .navbar-brand {
-    position: absolute;
-      top: 50%;
-      left: 50%;
-    text-transform: uppercase;
-    transform: translateX(-50%) translateY(-50%);
-  }
-}
-
 .table {
   td,
   th {
     vertical-align: middle;
   }
 
+  td.text-hidden,
+  .text-hidden td {
+    filter: blur(.4em) grayscale(1);
+    transition: filter 0.2s linear;
+  }
+
   thead {
     font-size: .8em;
     text-transform: uppercase;
-  }
 
-  .text-blur {
-    color: transparent;
-    text-shadow: 0 0 .6em rgba(0, 0, 0, .8);
-    transition: text-shadow 0.1s linear;
-
-    &:focus,
-    &:hover {
-      text-shadow: 0 0 0 $body-color;
+    th {
+      border-top-width: 2px;
     }
   }
 
@@ -167,39 +141,46 @@ input {
   }
 }
 
+#awards,
 #client {
-  max-width: $client-content-width;
+  .card-header {
+    text-align: center;
+  }
+}
+
+#awards {
+  .card {
+    max-width: $card-max-width;
+  }
+
+  .card-header,
+  .nav-link {
+    text-transform: capitalize;
+  }
   
+  .nav {
+    margin-bottom: $grid-gutter-width / 2;
+  }
+}
+
+#client {
   div[id*='view-'] {
     display: none;
+  }
+
+  .card {
+    max-width: $card-max-width;
   }
 }
 
 #host {
-  div[id*='widget-'] {
-    .card {
-      .card-body {
-        display: none;
-
-        .table {
-          td:first-child,
-          th:first-child {
-            padding-left: 0;
-          }
-      
-          td:last-child,
-          th:last-child {
-            padding-right: 0;
-          }
-        }
-      }
-    }
+  .ballot-close,
+  .ballot-open {
+    min-width: 60px;
   }
 
-  #content {
-    @media(min-width: 992px) {
-      padding-left: add($grid-gutter-width / 2, $host-sidebar-width);
-    }
+  .ballot-close {
+    display: none;
   }
 
   #sidebar {
@@ -207,8 +188,18 @@ input {
       margin-bottom: $grid-gutter-width / 2;
     }
 
-    @media(min-width: 992px) {
-      background-color: $body-bg;
+    .card-body {
+      display: none;
+    }
+  }
+
+  @media(min-width: 992px) {
+    #content {
+      padding-left: add($grid-gutter-width / 2, $host-sidebar-width);
+    }
+
+    #sidebar {
+      background-color: #fff;
       padding-top: add($grid-gutter-width, $navbar-height);
       position: fixed;
         top: 0;
@@ -216,24 +207,71 @@ input {
         left: 0;
       width: $host-sidebar-width;
       z-index: 1;
-  
+
       .card {
         box-shadow: none !important;
-  
-        .card-header {
-          font-size: $font-size-base;
-  
-          + .card-body {
-            padding-bottom: 0;
-          }
-        }
       }
     }
   }
 }
 
-#view-scoreboard {
-  .btn {
-    min-width: 60px;
+#panel-awards {
+  text-align: center;
+
+  h1 {
+    background: linear-gradient(130deg, #759bff, #843cf6);
+    font-family: 'Shrikhand';
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+#ui-scoreboard {
+  .text-hidden {
+    &:focus,
+    &:hover {
+      filter: unset;
+    }
+  }
+}
+
+#ui-voters {
+  .col-connected {
+    color: $success;
+    font-size: .6em;
+  
+    &:before {
+      content: '\25cf';
+    }
+  
+    &.false {
+      color: $danger;
+    }
+  }
+
+  .col-name {
+    text-transform: capitalize;
+  }
+
+  .col-voted {
+    color: $primary;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+  
+    &.true:before {
+      content: '\f00c';
+    }
+  }
+
+  .table {
+    td:first-child,
+    th:first-child {
+      padding-left: 0;
+    }
+
+    td:last-child,
+    th:last-child {
+      padding-right: 0;
+    }
   }
 }

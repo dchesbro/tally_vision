@@ -1,21 +1,21 @@
 extends layout
 
 block content
-  div(class='container-fluid' id='client')
+  div(class='container-fluid', id='client')
     //join
-    div(id='view-join')
+    div(id='ui-join')
       div(class='card shadow-lg')
         form(autocomplete='off')
           fieldset
             div(class='card-body')
-              div(class='form-group')
-                label(class='mb-0', for='name')
-                  h6 Enter your name to join or reconnect:
+              div(class='form-group mb-0')
+                label(class='d-inline mb-0 text-center', for='name')
+                  h6 Enter your name to join or reconnect
                 input(class='form-control', id='name', maxlength='12', required, type='text')
             button(class='btn btn-lg btn-block btn-primary', disabled, type='submit') Join
 
     //scorecard
-    div(id='view-scorecard')
+    div(id='ui-scorecard')
       div(class='card shadow-lg')
         h4(class='card-header border-0') Scorecard
         table(class='table table-striped mb-0')
@@ -27,20 +27,19 @@ block content
             each contestant, i in contestants              
               tr(id=contestant.code)
                 td(class='col-flag text-center text-nowrap')
-                  img(src='/images/flags/' + contestant.code + '.svg')
+                  img(src='/media/flags/' + contestant.code + '.svg')
                 td(class='col-contestant')
                   span(class='contestant-country') #{contestant.country}
                   span(class='contestant-details') #{contestant.artist + ' – "' + contestant.title + '"'}
                 td(class='col-score text-center') --
 
     //ballot
-    div(id='view-ballot')
+    div(id='ui-ballot')
       div(class='card shadow-lg')
-        div(class='card-header')
-          h4
-            span(class='contestant-country') Country
-            span(class='contestant-details') Artist – "Song"
-            span(class='contestant-score')
+        h4(class='card-header')
+          span(class='contestant-country') Country
+          span(class='contestant-details') Artist – "Song"
+          span(class='contestant-score')
         form
           fieldset
             ul(class='list-group list-group-flush')

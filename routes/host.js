@@ -9,4 +9,13 @@ router.get('/', function(req, res, next) {
   });
 });
 
+/* GET awards interface */
+router.get('/pca', function(req, res, next) {
+  res.render('host-pca', {
+    categories: res.app.get('categories'),
+    contestants: res.app.get('contestants'),
+    title: 'TALLYVISION',
+  });
+});
+
 module.exports = router;
