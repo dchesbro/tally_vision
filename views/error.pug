@@ -2,6 +2,6 @@ extends layout
 
 block content
   div(class='container-fluid', id='error')
-    h1= message
-    h2= error.status
+    h4 #{message}
+    h6 #{error.status}
     pre #{error.stack}
