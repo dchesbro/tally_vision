@@ -5,7 +5,6 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('host', {
     contestants: res.app.get('contestants'),
-    title: 'HOSTBOT',
   });
 });
 
@@ -13,8 +12,6 @@ router.get('/', function(req, res, next) {
 router.get('/pca', function(req, res, next) {
   res.render('host-pca', {
     categories: res.app.get('categories'),
-    contestants: res.app.get('contestants'),
-    title: 'TALLYVISION',
   });
 });
 

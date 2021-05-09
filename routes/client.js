@@ -6,7 +6,6 @@ router.get('/', function(req, res, next) {
   res.render('client', {
     categories: res.app.get('categories'),
     contestants: res.app.get('contestants'),
-    title: 'TALLYVISION',
   });
 });
 
