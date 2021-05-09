@@ -7315,6 +7315,7 @@ input {
   #pca #panel-pca h1 {
     background: linear-gradient(130deg, #759bff, #843cf6);
     font-family: 'Shrikhand';
+    font-size: 2.8em;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent; }
 
