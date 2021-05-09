@@ -22,7 +22,7 @@ var db = new sqlite3.Database('./' + new Date().toISOString().substring(0, 10) +
 var appBallot = {};
 var appCategories = require('./categories');
 var appContestants = require('./contestants/2021');
-var appHost = idHost();
+var appHost = hostID();
 var appVoters = [];
 
 // view engine setup
@@ -94,7 +94,8 @@ client.on('connection', function(socket) {
 // host events
 host.on('connection', function(socket) {
   hostConnect();
-  resultCategories();
+  pcaCategories();
+  pcaTotal();
 
   socket.on('hostBallotClose', function() {
     hostBallotClose();
@@ -104,11 +105,6 @@ host.on('connection', function(socket) {
     hostBallotOpen(i);
   });
 });
-
-// ...
-function idHost() {
-  return Math.random().toString(36).substr(2, 4);
-}
 
 // check if defined object is empty
 function isEmpty(a) {
@@ -325,6 +321,11 @@ function hostConnect() {
   hostVoters();
 }
 
+// ...
+function hostID() {
+  return Math.random().toString(36).substr(2, 4);
+}
+
 // emit scorecard events to host
 function hostScoreboard(scores) {
   host.emit('hostScoreboard', scores);
@@ -338,14 +339,7 @@ function hostVoters() {
 }
 
 // ...
-function resultTotal() {
-  dbContestantTotal(function(scores) {
-    console.log(scores);
-  });
-}
-
-// ...
-function resultCategories() {
+function pcaCategories() {
   for (let [i, category] of appCategories.entries()) {
     dbContestantCategory(category.title, function(results) {
       for (let [i, result] of results.entries()) {
@@ -357,6 +351,19 @@ function resultCategories() {
       host.emit('pcaCategory', category.title, results.slice(0, 3));
     });
   }
+}
+
+// ...
+function pcaTotal() {
+  dbContestantTotal(function(results) {
+    for (let [i, result] of results.entries()) {
+      results[i].contestant = appContestants.find(function(a) {
+        return a.code === result.contestant;
+      });
+    }
+    
+    host.emit('pcaTotal', results);
+  });
 }
 
 

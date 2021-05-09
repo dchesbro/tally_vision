@@ -7264,25 +7264,16 @@ input {
 .table .text-nowrap {
   width: 1%; }
 
-#awards .card-header,
-#client .card-header {
-  text-align: center; }
-
-#awards .card {
+#client .card,
+#pca .card {
   max-width: 640px; }
 
-#awards .card-header,
-#awards .nav-link {
-  text-transform: capitalize; }
-
-#awards .nav {
-  margin-bottom: 15px; }
+#client .card-header,
+#pca .card-header {
+  text-align: center; }
 
 #client div[id*='view-'] {
   display: none; }
-
-#client .card {
-  max-width: 640px; }
 
 #host .ballot-close,
 #host .ballot-open {
@@ -7312,13 +7303,23 @@ input {
     #host #sidebar .card {
       box-shadow: none !important; } }
 
-#panel-awards {
+#pca .card-header,
+#pca .nav-link {
+  text-transform: capitalize; }
+
+#pca .nav {
+  margin-bottom: 15px; }
+
+#pca #panel-pca {
   text-align: center; }
-  #panel-awards h1 {
+  #pca #panel-pca h1 {
     background: linear-gradient(130deg, #759bff, #843cf6);
     font-family: 'Shrikhand';
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent; }
+
+#ui-ballot .list-group-item h6 {
+  text-transform: capitalize; }
 
 #ui-scoreboard .text-hidden:focus, #ui-scoreboard .text-hidden:hover {
   filter: unset; }

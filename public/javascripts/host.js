@@ -70,8 +70,28 @@ $('button.ballot-open').on('click', function() {
 
 // ...
 socket.on('pcaCategory', function(category, results) {
+  pcaTablePopulate(category, results);
+});
+
+// ...
+socket.on('pcaTotal', function(results) {
+  pcaTablePopulate('total', results);
+});
+
+// ...
+$('#pca').on('click', 'tr.text-hidden', function() {
+  $(this).removeClass('text-hidden');
+});
+
+$('#pca').on('click', '#panel-pca img', function() {
+  var theme = new Audio('../media/theme.mp3');
+
+  theme.play();
+});
+
+// ...
+function pcaTablePopulate(panel, results) {
   var tbody = '';
-  var panel = $('#panel-' + category);
 
   for (let [i, {contestant, votes, score}] of results.entries()) {
     var place = i + 1;
@@ -88,16 +108,5 @@ socket.on('pcaCategory', function(category, results) {
     tbody += tr + '</tr>';
   }
 
-  $('.table tbody', panel).html(tbody);
-});
-
-//...
-$('#awards').on('click', 'tr.text-hidden', function() {
-  $(this).removeClass('text-hidden');
-});
-
-$('#awards').on('click', '#panel-awards img', function() {
-  var theme = new Audio('../media/theme.mp3');
-
-  theme.play();
-});
+  $('.table tbody', '#panel-' + panel).html(tbody);
+}

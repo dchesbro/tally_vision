@@ -141,35 +141,20 @@ input {
   }
 }
 
-#awards,
-#client {
-  .card-header {
-    text-align: center;
-  }
-}
-
-#awards {
+#client,
+#pca {
   .card {
     max-width: $card-max-width;
   }
 
-  .card-header,
-  .nav-link {
-    text-transform: capitalize;
-  }
-  
-  .nav {
-    margin-bottom: $grid-gutter-width / 2;
+  .card-header {
+    text-align: center;
   }
 }
 
 #client {
   div[id*='view-'] {
     display: none;
-  }
-
-  .card {
-    max-width: $card-max-width;
   }
 }
 
@@ -215,14 +200,33 @@ input {
   }
 }
 
-#panel-awards {
-  text-align: center;
+#pca {
+  .card-header,
+  .nav-link {
+    text-transform: capitalize;
+  }
+  
+  .nav {
+    margin-bottom: $grid-gutter-width / 2;
+  }
 
-  h1 {
-    background: linear-gradient(130deg, #759bff, #843cf6);
-    font-family: 'Shrikhand';
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  #panel-pca {
+    text-align: center;
+  
+    h1 {
+      background: linear-gradient(130deg, #759bff, #843cf6);
+      font-family: 'Shrikhand';
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+}
+
+#ui-ballot {
+  .list-group-item {
+    h6 {
+      text-transform: capitalize;
+    }
   }
 }
 
