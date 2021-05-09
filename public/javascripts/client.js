@@ -8,30 +8,30 @@ var socket = io('/client', {
 
 // ...
 socket.on('appBallotClose', function() {  
-  viewSet('scorecard');
+  uiShow('scorecard');
 });
 
 // ...
 socket.on('appBallotOpen', function(contestant) {
-  var ballot = $('#view-ballot');
+  var ui = $('#ui-ballot');
 
-  $('form', ballot).show();
-  $('form fieldset', ballot).prop('disabled', false);
-  $('form input[type="radio"]', ballot).prop('checked', false);
-  $('form label', ballot).removeClass('active');
-  $('.card-header .contestant-country', ballot).html(contestant.country);
-  $('.card-header .contestant-details', ballot).html(contestant.artist + ' – "' + contestant.title + '"');
-  $('.card-header .contestant-score', ballot).html('');
+  $('form', ui).show();
+  $('form fieldset', ui).prop('disabled', false);
+  $('form input[type="radio"]', ui).prop('checked', false);
+  $('form label', ui).removeClass('active');
+  $('.card-header .contestant-country', ui).html(contestant.country);
+  $('.card-header .contestant-details', ui).html(contestant.artist + ' – "' + contestant.title + '"');
+  $('.card-header .contestant-score', ui).html('');
 
-  viewSet('ballot');
+  uiShow('ballot');
 });
 
 // ...
 socket.on('appVoted', function(score) {
-  var ballot = $('#view-ballot');
+  var ui = $('#ui-ballot');
 
-  $('form', ballot).hide();
-  $('.card-header .contestant-score', ballot).html(score);
+  $('form', ui).hide();
+  $('.card-header .contestant-score', ui).html(score);
 });
 
 // ...
@@ -40,19 +40,17 @@ socket.on('clientConnect', function(name) {
 
   $('.navbar-brand').html(name);
 
-  viewSet('scorecard');
+  uiShow('scorecard');
 });
 
 // ...
 socket.on('clientScorecard', function(scores) {
-  var scorecard = $('#view-scorecard');
+  var ui = $('#ui-scorecard');
 
   for (let {id, voter, contestant, score} of scores) {
-    $('tr#' + contestant + ' .col-score', scorecard).html(score);
+    $('tr#' + contestant + ' .col-score', ui).html(score);
   }
 });
-
-
 
 // ...
 $('form').on('submit', function(event) {
@@ -62,12 +60,12 @@ $('form').on('submit', function(event) {
 });
 
 // ...
-$('#view-ballot form').on('click', function() {
+$('#ui-ballot form').on('click', function() {
   formBallotValidate(this);
 });
 
 // ...
-$('#view-ballot form').on('submit', function() {
+$('#ui-ballot form').on('submit', function() {
   var checked = $('input[type="radio"]:checked', this);
   var scores = [];
 
@@ -79,35 +77,33 @@ $('#view-ballot form').on('submit', function() {
 });
 
 // ...
-$('#view-join form').on('keyup', function() {
+$('#ui-join form').on('keyup', function() {
   formJoinValidate(this);
 });
 
 // ...
-$('#view-join form').on('submit', function() {
-  var nameField = $('input#name', this);
+$('#ui-join form').on('submit', function() {
+  var nameInput = $('input#name', this);
 
-  formJoinConnect(nameField.val());
+  formJoinConnect(nameInput.val());
 });
-
-
 
 // ...
 function __init() {
-  var form = $('#view-join form');
-  var name = localStorage.getItem(LOCAL_STORAGE);
+  var form = $('#ui-join form');
+  var nameLocal = localStorage.getItem(LOCAL_STORAGE);
 
-  if (name) {
-    $('input#name', form).val(name);
+  if (nameLocal) {
+    $('input#name', form).val(nameLocal);
   }
 
   formJoinValidate(form);
-  viewSet('join');
+  uiShow('join');
 
-  /* if (name) {
-    formJoinConnect(name);
+  /* if (nameLocal) {
+    formJoinConnect(nameLocal);
   } else {
-    viewSet('join');
+    uiShow('join');
   } */
 }
 
@@ -136,9 +132,9 @@ function formJoinConnect(name) {
 // ...
 function formJoinValidate(form) {
   var error = false;
-  var nameField = $('input#name', form);
+  var nameInput = $('input#name', form);
 
-  if (!nameField.val()) {
+  if (!nameInput.val()) {
     error = true;
   };
 
@@ -155,10 +151,10 @@ function formSubmitProp(form, error) {
 }
 
 // ...
-function viewSet(view) {
+function uiShow(ui) {
   $('html').scrollTop(0);
-  $('[id*="view-"]').hide();
-  $('#view-' + view).show();
+  $('[id*="ui-"]').hide();
+  $('#ui-' + ui).show();
 }
 
 __init();
