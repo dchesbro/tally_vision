@@ -7233,19 +7233,6 @@ input {
 .contestant-details {
   font-size: .8em; }
 
-.gnbb {
-  margin-top: 15px;
-  text-align: center; }
-  .gnbb button {
-    background-image: url("/media/gnbb.png");
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 100%;
-    height: 100px;
-    width: 80px; }
-    .gnbb button:active {
-      background-size: 80%; }
-
 .table td,
 .table th {
   vertical-align: middle; }
@@ -7319,8 +7306,24 @@ input {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent; }
 
+#pca #tab-gnbp {
+  text-transform: uppercase; }
+
 #ui-ballot .list-group-item h6 {
   text-transform: capitalize; }
+
+#ui-ballot #gnbb {
+  margin-top: 15px;
+  text-align: center; }
+  #ui-ballot #gnbb button {
+    background-image: url("/media/gnbb.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 100px;
+    width: 80px; }
+    #ui-ballot #gnbb button:active {
+      background-size: 80%; }
 
 #ui-scoreboard .text-hidden:focus, #ui-scoreboard .text-hidden:hover {
   filter: unset; }
