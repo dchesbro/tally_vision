@@ -74,6 +74,11 @@ socket.on('pcaCategory', function(category, results) {
 });
 
 // ...
+socket.on('pcaGNBP', function(results) {
+  pcaTablePopulate('gnbp', results);
+});
+
+// ...
 socket.on('pcaTotal', function(results) {
   pcaTablePopulate('total', results);
 });

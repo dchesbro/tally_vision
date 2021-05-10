@@ -60,6 +60,11 @@ $('form').on('submit', function(event) {
 });
 
 // ...
+$('#gnbb button').on('click', function() {
+  socket.emit('clientGNBB');
+});
+
+// ...
 $('#ui-ballot form').on('click', function() {
   formBallotValidate(this);
 });

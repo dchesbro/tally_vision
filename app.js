@@ -15,7 +15,7 @@ var io = require('socket.io')(server);
 var client = io.of('/client');
 var host = io.of('/host');
 
-var sqlite3 = require('sqlite3').verbose();
+var sqlite3 = require('sqlite3');
 var db = new sqlite3.Database('./' + new Date().toISOString().substring(0, 10) + '.db');
 
 // app variables
@@ -32,7 +32,7 @@ app.set('view engine', 'pug');
 app.set('categories', appCategories);
 app.set('contestants', appContestants);
 
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({
   extended: false,
@@ -81,13 +81,25 @@ client.use(function(socket, next) {
 // client events
 client.on('connection', function(socket) {
   clientConnect(socket);
+  dbVoterAll(socket, clientScorecard);
+
+  if (!isEmpty(appBallot)) {
+    dbVoterSingle(socket, appBallot.code, clientBallotOpen);
+  }
+
+  hostVoters();
 
   socket.on('clientBallotSubmit', function(scores) {
     dbVoteInsert(socket, scores);
   });
+
+  socket.on('clientGNBB', function() {
+    dbGNBPInsert(socket);
+  });
   
   socket.on('disconnect', function() {
     clientDisconnect(socket);
+    hostVoters();
   });
 });
 
@@ -95,6 +107,7 @@ client.on('connection', function(socket) {
 host.on('connection', function(socket) {
   hostConnect();
   pcaCategories();
+  pcaGNBP();
   pcaTotal();
 
   socket.on('hostBallotClose', function() {
@@ -146,14 +159,6 @@ function clientConnect(socket) {
   });
 
   socket.emit('clientConnect', socket.name);
-
-  dbVoterAll(socket, clientScorecard);
-
-  if (!isEmpty(appBallot)) {
-    dbVoterSingle(socket, appBallot.code, clientBallotOpen);
-  }
-
-  hostVoters();
 }
 
 // update list of voters for defined socket
@@ -163,8 +168,6 @@ function clientDisconnect(socket) {
       appVoters[i].connected = false;
     }
   });
-
-  hostVoters();
 }
 
 // emit scorecard events to defined socket
@@ -196,20 +199,47 @@ function dbContestantCategory(category, callback) {
   });
 }
 
+// get GNBP for all contestants
+function dbContestantGNBP(callback) {
+  var sql = `SELECT contestant,COUNT(voter) score FROM gnbp GROUP BY contestant ORDER BY score DESC;`;
+
+  db.all(sql, function(err, rows) {
+    if (!err) {
+      callback(rows);
+    }
+  });
+}
+
 // create database tables
 function dbTableCreate() {
-  var columns, sql;
+  var columns, gnbp, votes;
+
+  gnbp  = `CREATE TABLE IF NOT EXISTS gnbp (`;
+  gnbp += `id INTEGER PRIMARY KEY AUTOINCREMENT,`;
+  gnbp += `voter TEXT NOT NULL,`;
+  gnbp += `contestant TEXT NOT NULL);`;
+
+  db.run(gnbp, function(err) {});
 
   columns = appCategories.map(function(category) {
     return `category_` + category.title + ` INTEGER NOT NULL`;
   }).join(`,`);
 
-  sql  = `CREATE TABLE IF NOT EXISTS votes (`;
-  sql += `id INTEGER PRIMARY KEY AUTOINCREMENT,`;
-  sql += `voter TEXT NOT NULL,`;
-  sql += `contestant TEXT NOT NULL,` + columns + `,score INTEGER NOT NULL);`;
+  votes  = `CREATE TABLE IF NOT EXISTS votes (`;
+  votes += `id INTEGER PRIMARY KEY AUTOINCREMENT,`;
+  votes += `voter TEXT NOT NULL,`;
+  votes += `contestant TEXT NOT NULL,` + columns + `,`;
+  votes += `score INTEGER NOT NULL);`;
 
-  db.run(sql, function(err) {});
+  db.run(votes, function(err) {});
+}
+
+// ...
+function dbGNBPInsert(socket) {
+  var sql  = `INSERT INTO gnbp (voter,contestant) VALUES (?,?)`;
+  var values = [socket.name, appBallot.code];
+
+  db.run(sql, values, function(err) {});
 }
 
 // add vote for defined socket and current contestant
@@ -237,13 +267,13 @@ function dbVoteInsert(socket, scores) {
 
   db.run(sql, values, function(err) {
     if (!err) {
-      socket.emit('appVoted', total);
-
       appVoterGet(socket, function(i) {
         if (i !== -1) {
           appVoters[i].voted = true;
         }
       });
+
+      socket.emit('appVoted', total);
 
       dbContestantTotal(hostScoreboard);
       dbVoterAll(socket, clientScorecard);
@@ -354,6 +384,19 @@ function pcaCategories() {
 }
 
 // ...
+function pcaGNBP() {
+  dbContestantGNBP(function(results) {
+    for (let [i, result] of results.entries()) {
+      results[i].contestant = appContestants.find(function(a) {
+        return a.code === result.contestant;
+      });
+    }
+    
+    host.emit('pcaGNBP', results.slice(0, 3));
+  });
+}
+
+// ...
 function pcaTotal() {
   dbContestantTotal(function(results) {
     for (let [i, result] of results.entries()) {
@@ -368,7 +411,7 @@ function pcaTotal() {
 
 
 
-console.log(appHost);
+console.log('Host access code: ' + appHost + '\n');
 
 dbTableCreate();
 
