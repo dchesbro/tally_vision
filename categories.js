@@ -2,14 +2,14 @@ var categories = [
   {
     title: 'song',
     max: 5,
-    labelmax: '...',
-    labelmin: '...',
+    labelmax: 'Totally slaps',
+    labelmin: 'Absolute crap',
   },
   {
     title: 'performance',
     max: 5,
-    labelmax: '...',
-    labelmin: '...',
+    labelmax: 'ABBA in 1974',
+    labelmin: '"Imagine" COVID version',
   },
   {
     title: 'staging',
@@ -20,8 +20,8 @@ var categories = [
   {
     title: 'wardrobe',
     max: 5,
-    labelmax: '...',
-    labelmin: '...',
+    labelmax: 'Nice drip',
+    labelmin: 'What are those?!',
   },
 ];
 
