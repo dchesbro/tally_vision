@@ -7259,7 +7259,7 @@ input {
 #pca .card-header {
   text-align: center; }
 
-#client div[id*='view-'] {
+#client div[id*='ui-'] {
   display: none; }
 
 #host .ballot-close,
