@@ -55,18 +55,18 @@ socket.on('hostScoreboard', function(scores) {
 });
 
 // ...
-socket.on('pcaCategory', function(category, results) {
-  pcaTableBody(category, results);
+socket.on('pcaCategory', function(category, scores) {
+  pcaTableBody(category, scores);
 });
 
 // ...
-socket.on('pcaGNBP', function(results) {
-  pcaTableBody('gnbp', results);
+socket.on('pcaGNBP', function(scores) {
+  pcaTableBody('gnbp', scores);
 });
 
 // ...
-socket.on('pcaTotal', function(results) {
-  pcaTableBody('total', results);
+socket.on('pcaTotal', function(scores) {
+  pcaTableBody('total', scores);
 });
 
 //...
@@ -93,10 +93,10 @@ $('#pca').on('click', '#panel-pca img', function() {
 });
 
 // ...
-function pcaTableBody(panel, results) {
+function pcaTableBody(panel, scores) {
   var tbody = '';
 
-  for (let [i, {contestant, votes, score}] of results.entries()) {
+  for (let [i, {contestant, votes, score}] of scores.entries()) {
     var place = i + 1;
     var tr = '<tr class="text-hidden" id="' + contestant.code + '">';
 
