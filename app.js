@@ -112,7 +112,6 @@ host.on('connection', function(socket) {
 
   dbContestantTotal(hostScoreboard);
   hostVoters();
-  
   pcaCategories();
   pcaGNBP();
   pcaTotal();
@@ -125,6 +124,13 @@ host.on('connection', function(socket) {
     hostBallotOpen(i);
   });
 });
+
+// initialize app instance.
+function __init() {
+  console.log('Host access code: ' + appHost + '\n');
+
+  dbTableCreate();
+}
 
 // check if defined object is empty
 function isEmpty(a) {
@@ -241,7 +247,7 @@ function dbTableCreate() {
   db.run(votes, function(err) {});
 }
 
-// ...
+// add GNBP for defined socket and current contestant
 function dbGNBPInsert(socket) {
   var sql  = `INSERT INTO gnbp (voter,contestant) VALUES (?,?)`;
   var values = [socket.name, appBallot.code];
@@ -346,7 +352,7 @@ function hostBallotOpen(i) {
   host.emit('appBallotOpen', appBallot);
 }
 
-// ...
+// generate host access code
 function hostID() {
   return Math.random().toString(36).substr(2, 4);
 }
@@ -363,54 +369,48 @@ function hostVoters() {
   }
 }
 
-// ...
+// get defined category score for all contestants and emit events
 function pcaCategories() {
   for (let [i, category] of appCategories.entries()) {
-    dbContestantCategory(category.title, function(results) {
-      for (let [i, result] of results.entries()) {
-        results[i].contestant = appContestants.find(function(a) {
-          return a.code === result.contestant;
+    dbContestantCategory(category.title, function(scores) {
+      for (let [i, score] of scores.entries()) {
+        scores[i].contestant = appContestants.find(function(a) {
+          return a.code === score.contestant;
         });
       }
       
-      host.emit('pcaCategory', category.title, results.slice(0, 3));
+      host.emit('pcaCategory', category.title, scores.slice(0, 3));
     });
   }
 }
 
-// ...
+// get GNBP for all contestants and emit events
 function pcaGNBP() {
-  dbContestantGNBP(function(results) {
-    for (let [i, result] of results.entries()) {
-      results[i].contestant = appContestants.find(function(a) {
-        return a.code === result.contestant;
+  dbContestantGNBP(function(scores) {
+    for (let [i, score] of scores.entries()) {
+      scores[i].contestant = appContestants.find(function(a) {
+        return a.code === score.contestant;
       });
     }
     
-    host.emit('pcaGNBP', results.slice(0, 3));
+    host.emit('pcaGNBP', scores.slice(0, 3));
   });
 }
 
-// ...
+// get total score for all contestants and emit events
 function pcaTotal() {
-  dbContestantTotal(function(results) {
-    for (let [i, result] of results.entries()) {
-      results[i].contestant = appContestants.find(function(a) {
-        return a.code === result.contestant;
+  dbContestantTotal(function(scores) {
+    for (let [i, score] of scores.entries()) {
+      scores[i].contestant = appContestants.find(function(a) {
+        return a.code === score.contestant;
       });
     }
     
-    host.emit('pcaTotal', results);
+    host.emit('pcaTotal', scores);
   });
 }
 
-
-
-console.log('Host access code: ' + appHost + '\n');
-
-dbTableCreate();
-
-
+__init();
 
 module.exports = {
   app: app,
