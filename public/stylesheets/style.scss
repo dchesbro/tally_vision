@@ -97,6 +97,10 @@ input {
   font-size: .8em;
 }
 
+.contestant-score {
+  margin-top: $grid-gutter-width / 2;
+}
+
 .table {
   td,
   th {

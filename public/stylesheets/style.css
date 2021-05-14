@@ -7233,6 +7233,9 @@ input {
 .contestant-details {
   font-size: .8em; }
 
+.contestant-score {
+  margin-top: 15px; }
+
 .table td,
 .table th {
   vertical-align: middle; }
