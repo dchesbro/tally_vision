@@ -14,8 +14,8 @@ var categories = [
   {
     title: 'staging',
     max: 5,
-    labelmax: '...',
-    labelmin: '...',
+    labelmax: 'Final Destination',
+    labelmin: 'Pac-Land',
   },
   {
     title: 'wardrobe',
