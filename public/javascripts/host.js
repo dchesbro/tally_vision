@@ -54,6 +54,21 @@ socket.on('hostScoreboard', function(scores) {
   }
 });
 
+// ...
+socket.on('pcaCategory', function(category, results) {
+  pcaTableBody(category, results);
+});
+
+// ...
+socket.on('pcaGNBP', function(results) {
+  pcaTableBody('gnbp', results);
+});
+
+// ...
+socket.on('pcaTotal', function(results) {
+  pcaTableBody('total', results);
+});
+
 //...
 $('button.ballot-close').on('click', function() {
     socket.emit('hostBallotClose');
@@ -64,23 +79,6 @@ $('button.ballot-open').on('click', function() {
   var i = $(this).attr('data-index');
 
   socket.emit('hostBallotOpen', i);
-});
-
-
-
-// ...
-socket.on('pcaCategory', function(category, results) {
-  pcaTablePopulate(category, results);
-});
-
-// ...
-socket.on('pcaGNBP', function(results) {
-  pcaTablePopulate('gnbp', results);
-});
-
-// ...
-socket.on('pcaTotal', function(results) {
-  pcaTablePopulate('total', results);
 });
 
 // ...
@@ -95,7 +93,7 @@ $('#pca').on('click', '#panel-pca img', function() {
 });
 
 // ...
-function pcaTablePopulate(panel, results) {
+function pcaTableBody(panel, results) {
   var tbody = '';
 
   for (let [i, {contestant, votes, score}] of results.entries()) {
