@@ -65,7 +65,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// client auth
+// client events
 client.use(function(socket, next) {
   var auth = socket.handshake.auth;
 
@@ -78,7 +78,6 @@ client.use(function(socket, next) {
   next();
 });
 
-// client events
 client.on('connection', function(socket) {
   clientConnect(socket);
   dbVoterAll(socket, clientScorecard);
@@ -105,7 +104,15 @@ client.on('connection', function(socket) {
 
 // host events
 host.on('connection', function(socket) {
-  hostConnect();
+  if (!isEmpty(appBallot)) {
+    host.emit('appBallotOpen', appBallot);
+  } else {
+    host.emit('appBallotClose');
+  }
+
+  dbContestantTotal(hostScoreboard);
+  hostVoters();
+  
   pcaCategories();
   pcaGNBP();
   pcaTotal();
@@ -337,18 +344,6 @@ function hostBallotOpen(i) {
   }
 
   host.emit('appBallotOpen', appBallot);
-}
-
-// emit host connected events
-function hostConnect() {
-  if (!isEmpty(appBallot)) {
-    host.emit('appBallotOpen', appBallot);
-  } else {
-    host.emit('appBallotClose');
-  }
-
-  dbContestantTotal(hostScoreboard);
-  hostVoters();
 }
 
 // ...
