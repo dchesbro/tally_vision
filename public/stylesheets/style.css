@@ -7188,14 +7188,14 @@ a.text-dark:hover, a.text-dark:focus {
     border-color: #dee2e6; } }
 
 body {
-  padding-top: 86px;
+  padding-top: 30px;
   padding-bottom: 30px; }
 
 input {
   text-transform: uppercase; }
 
 .navbar {
-  background: linear-gradient(230deg, #759bff, #843cf6); }
+  background: linear-gradient(130deg, #af2896, #509bf5); }
 
 .navbar-brand {
   margin-right: 0;
@@ -7254,6 +7254,11 @@ input {
 .table .text-nowrap {
   width: 1%; }
 
+#client,
+#host,
+#pca {
+  padding-top: 56px; }
+
 #client .card,
 #pca .card {
   max-width: 640px; }
@@ -7293,6 +7298,10 @@ input {
     #host #sidebar .card {
       box-shadow: none !important; } }
 
+#pca,
+#pca .navbar {
+  min-width: 640px; }
+
 #pca .card-header,
 #pca .nav-link {
   text-transform: capitalize; }
@@ -7303,7 +7312,7 @@ input {
 #pca #panel-pca {
   text-align: center; }
   #pca #panel-pca h1 {
-    background: linear-gradient(130deg, #759bff, #843cf6);
+    background: linear-gradient(230deg, #af2896, #509bf5);
     font-family: 'Shrikhand';
     font-size: 2.8em;
     -webkit-background-clip: text;

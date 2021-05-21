@@ -3,6 +3,8 @@
 $primary: #7571f9;
 $success: #6fd96f;
 $danger: #ff5e5e;
+$gradient-a: #af2896;
+$gradient-b: #509bf5;
 
 // body
 $body-bg: #f3f3f9;
@@ -30,7 +32,7 @@ $navbar-height: 56px;
 
 // global
 body {
-  padding-top: add($grid-gutter-width, $navbar-height);
+  padding-top: $grid-gutter-width;
   padding-bottom: $grid-gutter-width;
 }
 
@@ -39,7 +41,7 @@ input {
 }
 
 .navbar {
-  background: linear-gradient(230deg, #759bff, #843cf6);
+  background: linear-gradient(130deg, $gradient-a, $gradient-b);
 }
 
 .navbar-brand {
@@ -128,6 +130,12 @@ input {
 }
 
 #client,
+#host,
+#pca {
+  padding-top: $navbar-height;
+}
+
+#client,
 #pca {
   .card {
     max-width: $card-max-width;
@@ -186,6 +194,11 @@ input {
   }
 }
 
+#pca,
+#pca .navbar {
+  min-width: $card-max-width;
+}
+
 #pca {
   .card-header,
   .nav-link {
@@ -200,7 +213,7 @@ input {
     text-align: center;
   
     h1 {
-      background: linear-gradient(130deg, #759bff, #843cf6);
+      background: linear-gradient(230deg, $gradient-a, $gradient-b);
       font-family: 'Shrikhand';
       font-size: 2.8em;
       -webkit-background-clip: text;
