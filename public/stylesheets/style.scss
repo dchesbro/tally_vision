@@ -196,7 +196,7 @@ input {
 
 #pca,
 #pca .navbar {
-  min-width: $card-max-width;
+  min-width: add($card-max-width, $grid-gutter-width);
 }
 
 #pca {
