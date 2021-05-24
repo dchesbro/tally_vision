@@ -111,7 +111,7 @@ function pcaTableBody(panel, scores) {
     tr += '<td class="col-flag text-center text-nowrap"><img src="/media/flags/' + contestant.code + '.svg"></td>';
     tr += '<td class="col-contestant">';
     tr += '<span class="contestant-country">' + contestant.country + '</span>';
-    tr += '<span class="contestant-details">' + contestant.artist + ' – "' + contestant.title + '</span>';
+    tr += '<span class="contestant-details">' + contestant.artist + ' – "' + contestant.title + '"</span>';
     tr += '</td>';
     tr += '<td class="col-score text-center">' + score + '</td>';
 
